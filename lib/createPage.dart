@@ -793,6 +793,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   'name': e['name'],
                   'net': e['net']
                 });
+                if (e['uid'] as int == uId) 
+                  alreadyIn = false;
                 idx++;
               }
             }
@@ -911,62 +913,34 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           thAlignment: TextAlign.center,
                           columnRatio: 0.16,
                           columns: [
-                            {
-                              'title': Language.of(context).rank,
-                              'index': 1,
-                              'key': 'rank',
-                              'editable': false
-                            },
-                            {
-                              'title': Language.of(context).total,
-                              'index': 2,
-                              'key': 'total',
-                              'editable': false
-                            },
-                            {
-                              'title': Language.of(context).name,
-                              'index': 3,
-                              'key': 'name',
-                              'editable': false,
-                              'widthFactor': 0.25
-                            },
-                            {
-                              'title': Language.of(context).net,
-                              'index': 4,
-                              'key': 'net',
-                              'editable': false,
-                              'widthFactor': 0.2
-                            }
+                            {'title': Language.of(context).rank, 'index': 1, 'key': 'rank',  'editable': false},
+                            {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
+                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.25},
+                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.2}
                           ],
                           rows: buildScoreRows(),
                         )),
-                  teeOffPass && !alreadyIn
-                      ? const SizedBox(height: 10.0)
+                  teeOffPass && !alreadyIn ? const SizedBox(height: 10.0)
                       : ElevatedButton(
-                          child: Text(teeOffPass && alreadyIn
-                              ? Language.of(context).enterScore
-                              : alreadyIn
-                                  ? Language.of(context).cancel
-                                  : Language.of(context).apply),
+                          child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
+                                      : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
                           onPressed: () async {
                             if (teeOffPass && alreadyIn) {
                               if ((course["zones"]).length > 2) {
                                 List zones = await selectZones(context, course);
                                 if (zones.isNotEmpty)
-                                  Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
+                                  Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1]))
+                                  .then((value) {
                                     if (value ?? false) updateScore();
                                   });
                               } else {
-                                Navigator.push(context, newScorePage(course, uName)).then((value) {
+                                Navigator.push(context, newScorePage(course, uName))
+                                .then((value) {
                                   if (value ?? false) updateScore();
                                 });
                               }
                             } else {
-                              Navigator.of(context).pop(teeOffPass
-                                  ? 0
-                                  : alreadyIn
-                                      ? -1
-                                      : 1);
+                              Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
                             }
                           }),
                   const SizedBox(height: 16.0),
@@ -1033,21 +1007,10 @@ Future<List> selectZones(BuildContext context, Map course, {int zone0 = 0, int z
         });
       }).then((value) {
     int zone0, zone1;
-    zone0 = _zone0!
-        ? 0
-        : _zone1!
-            ? 1
-            : 2;
-    zone1 = _zone3!
-        ? 3
-        : _zone2!
-            ? 2
-            : 1;
+    zone0 = _zone0! ? 0 : _zone1! ? 1 : 2;
+    zone1 = _zone3! ? 3 : _zone2! ? 2 : 1;
     if (value)
-      return [
-        zone0,
-        zone1
-      ];
+      return [zone0,zone1];
     return [];
   });
 }
@@ -1061,40 +1024,12 @@ class _NewScorePage extends MaterialPageRoute<bool> {
       : super(builder: (BuildContext context) {
           final _editableKey = GlobalKey<EditableState>();
           var columns = [
-            {
-              'title': 'Out',
-              'index': 0,
-              'key': 'zone1',
-              'editable': false
-            },
-            {
-              'title': "Par",
-              'index': 1,
-              'key': 'par1',
-              'editable': false
-            },
-            {
-              'title': " ",
-              'index': 2,
-              'key': 'score1'
-            },
-            {
-              'title': 'In',
-              'index': 3,
-              'key': 'zone2',
-              'editable': false
-            },
-            {
-              'title': "Par",
-              'index': 4,
-              'key': 'par2',
-              'editable': false
-            },
-            {
-              'title': " ",
-              'index': 5,
-              'key': 'score2'
-            }
+            {'title': 'Out', 'index': 0, 'key': 'zone1', 'editable': false},
+            {'title': "Par", 'index': 1, 'key': 'par1', 'editable': false},
+            {'title': " ", 'index': 2, 'key': 'score1'},
+            {'title': 'In', 'index': 3, 'key': 'zone2', 'editable': false},
+            {'title': "Par", 'index': 4, 'key': 'par2', 'editable': false},
+            {'title': " ", 'index': 5, 'key': 'score2'}
           ];
           var rows = [
             {
