@@ -934,7 +934,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                               'title': Language.of(context).net,
                               'index': 4,
                               'key': 'net',
-                              'editable': false
+                              'editable': false,
+                              'widthFactor': 0.2
                             }
                           ],
                           rows: buildScoreRows(),
