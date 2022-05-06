@@ -333,7 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(
           height: 8.0,
         ),
-        Text(isRegistered ? Language.of(context).handicap + ": " + _handicap.toString().substring(0, 5) : '', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(isRegistered ? Language.of(context).handicap + ": " + _handicap.toString().substring(0, _handicap.toString().length > 4 ? 5 : 4) : '', style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(
           height: 10.0,
         ),
