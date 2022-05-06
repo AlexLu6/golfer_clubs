@@ -931,12 +931,18 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                                 if (zones.isNotEmpty)
                                   Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1]))
                                   .then((value) {
-                                    if (value ?? false) updateScore();
+                                    if (value ?? false) {
+                                      updateScore();
+                                      Navigator.of(context).pop(0);
+                                    }
                                   });
                               } else {
                                 Navigator.push(context, newScorePage(course, uName))
                                 .then((value) {
-                                  if (value ?? false) updateScore();
+                                  if (value ?? false) {
+                                    updateScore();
+                                    Navigator.of(context).pop(0);
+                                  }
                                 });
                               }
                             } else {
