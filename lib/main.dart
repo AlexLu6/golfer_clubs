@@ -58,14 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
   int _golferID = 0, _gID = 1;
   String _name = '', _phone = '';
   gendre _sex = gendre.Male;
-  double _handicap = 14.2;
+  double _handicap = 14.25;
   bool isRegistered = false, isUpdate = false;
   var _golferDoc;
 
   @override
   void initState() {
     _golferID = prefs!.getInt('golferID') ?? 0;
-    _handicap = prefs!.getDouble('handicap') ?? 14.2;
+    _handicap = prefs!.getDouble('handicap') ?? 14.25;
     loadMyGroup();
     loadMyActivities();
     loadMyScores();
