@@ -19,8 +19,8 @@ void main() async {
   await Firebase.initializeApp(/*options: DefaultFirebaseOptions.currentPlatform*/);
   prefs = await SharedPreferences.getInstance();
 
-  Position _here = await determinePosition();
-  print(_here);
+//  Position _here = await determinePosition();
+//  print(_here);
   runApp(MyApp());
 }
 
