@@ -9,6 +9,8 @@ import 'dataModel.dart';
 import 'createPage.dart';
 //import 'firebase_options.dart';
 import 'locale/language.dart';
+import 'package:geolocator/geolocator.dart';
+import 'geoLocator.dart';
 import 'locale/app_localizations_delegate.dart';
 
 void main() async {
@@ -17,6 +19,8 @@ void main() async {
   await Firebase.initializeApp(/*options: DefaultFirebaseOptions.currentPlatform*/);
   prefs = await SharedPreferences.getInstance();
 
+  Position _here = await determinePosition();
+  print(_here);
   runApp(MyApp());
 }
 
