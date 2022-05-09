@@ -1,14 +1,20 @@
 //import 'package:flutter/cupertino.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
+import 'firebase_options.dart';
 import 'locale/language.dart';
 import 'locale/app_localizations_delegate.dart';
 
-Future<void> main() async {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   prefs = await SharedPreferences.getInstance();
 
   runApp(MyApp());
@@ -58,14 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
   int _golferID = 0, _gID = 1;
   String _name = '', _phone = '';
   gendre _sex = gendre.Male;
-  double _handicap = 18.4;
+  double _handicap = 14.2;
   bool isRegistered = false, isUpdate = false;
   var _golferDoc;
 
   @override
   void initState() {
     _golferID = prefs!.getInt('golferID') ?? 0;
-    _handicap = prefs!.getDouble('handicap') ?? 18.35;
+    _handicap = prefs!.getDouble('handicap') ?? 14.2;
     loadMyGroup();
     loadMyActivities();
     loadMyScores();
@@ -77,11 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _phone = items['phone'];
         _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
         setState(() => isRegistered = true);
-        _currentPageIndex = myActivities.length > 0
-            ? 3
-            : myGroups.length > 0
-                ? 2
-                : 1;
+        _currentPageIndex = myActivities.length > 0 ? 3 : myGroups.length > 0 ? 2 : 1;
       });
     });
     super.initState();
@@ -103,21 +105,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(appTitle[_currentPageIndex]),
       ),
       body: Center(
-          child: _currentPageIndex == 0
-              ? registerBody()
-              : _currentPageIndex == 1
-                  ? groupBody()
-                  : _currentPageIndex == 2
-                      ? myGroupBody()
-                      : _currentPageIndex == 3
-                          ? activityBody()
-                          : _currentPageIndex == 4
-                              ? golfCourseBody()
-                              : _currentPageIndex == 5
-                                  ? myScoreBody()
-                                  : _currentPageIndex == 6
-                                      ? groupActivityBody(_gID)
-                                      : null),
+          child: _currentPageIndex == 0 ? registerBody()
+              : _currentPageIndex == 1 ? groupBody()
+              : _currentPageIndex == 2 ? myGroupBody()
+              : _currentPageIndex == 3  ? activityBody()
+              : _currentPageIndex == 4  ? golfCourseBody()
+              : _currentPageIndex == 5  ? myScoreBody()
+              : _currentPageIndex == 6  ? groupActivityBody(_gID)  : null),
       drawer: isRegistered ? golfDrawer() : null,
       floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4 || _currentPageIndex == 6)
           ? FloatingActionButton(
@@ -333,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(
           height: 8.0,
         ),
-        Text(isRegistered ? Language.of(context).handicap + ": " + _handicap.toString().substring(0, 5) : '', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(isRegistered ? Language.of(context).handicap + ": " + _handicap.toString().substring(min(_handicap.toString().length, 5)) : '', style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(
           height: 10.0,
         ),
@@ -593,14 +587,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }
                                 }
                               }
-                              FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update(found
-                                  ? {
-                                      'golfers': glist,
-                                      'subgroups': subGroups
-                                    }
-                                  : {
-                                      'golfers': glist
-                                    });
+                              FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update(
+                                  found ? {'golfers': glist, 'subgroups': subGroups} : {'golfers': glist}
+                              );
                             }
                           });
                         }));

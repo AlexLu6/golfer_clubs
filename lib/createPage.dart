@@ -85,7 +85,8 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
             FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
-                if (items['uid'] as int != uID) golfers.add(NameID(items['name'] as String, items['uid'] as int));
+                if (((groupDoc.data()! as Map)['managers'] as List).indexOf(items['uid'] as int) < 0)
+                  golfers.add(NameID(items['name'] as String, items['uid'] as int));
               });
             });
           }
@@ -141,7 +142,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             title: Language.of(context).selectManager,
                             items: golfers,
                             showDivider: false,
-                            selectedItem: _selectedGolfer,
+                            selectedItem: golfers[0],
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
@@ -165,7 +166,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             title: Language.of(context).selectKickMember,
                             items: golfers,
                             showDivider: false,
-                            selectedItem: _selectedGolfer,
+                            selectedItem: golfers[0],
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
@@ -248,7 +249,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             title: Language.of(context).selectCourse,
                             items: coursesItems,
                             showDivider: false,
-                            selectedItem: _selectedCourse,
+                            selectedItem: coursesItems[0], //_selectedCourse,
                             onChanged: (value) => setState(() => _selectedCourse = value),
                           ).then((value) => setState(() => _courseName = value.toString()));
                         }),
@@ -743,7 +744,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 if (idx >= (activity.data()!['max'] as int))
                   oneRow['row'] = Language.of(context).waiting;
                 else
-                  oneRow['row'] = idx / 4 + 1;
+                  oneRow['row'] = (idx >> 2) + 1;
                 oneRow['c1'] = e['name'];
                 oneRow['c2'] = '';
                 oneRow['c3'] = '';
