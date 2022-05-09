@@ -50,12 +50,8 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
                             "Name": _groupName,
                             "region": _region,
                             "Remarks": _remarks,
-                            "managers": [
-                              golferID
-                            ],
-                            "members": [
-                              golferID
-                            ],
+                            "managers": [golferID],
+                            "members": [golferID],
                             "gid": gID
                           });
                           myGroups.add(gID);
@@ -85,7 +81,8 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
             FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
-                if (items['uid'] as int != uID) golfers.add(NameID(items['name'] as String, items['uid'] as int));
+                if (((groupDoc.data()! as Map)['managers'] as List).indexOf(items['uid'] as int) < 0)
+                  golfers.add(NameID(items['name'] as String, items['uid'] as int));
               });
             });
           }
@@ -141,7 +138,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             title: Language.of(context).selectManager,
                             items: golfers,
                             showDivider: false,
-                            selectedItem: _selectedGolfer,
+                            selectedItem: golfers[0],
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
@@ -165,7 +162,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             title: Language.of(context).selectKickMember,
                             items: golfers,
                             showDivider: false,
-                            selectedItem: _selectedGolfer,
+                            selectedItem: golfers[0],
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
@@ -248,7 +245,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             title: Language.of(context).selectCourse,
                             items: coursesItems,
                             showDivider: false,
-                            selectedItem: _selectedCourse,
+                            selectedItem: coursesItems[0], //_selectedCourse,
                             onChanged: (value) => setState(() => _selectedCourse = value),
                           ).then((value) => setState(() => _courseName = value.toString()));
                         }),
@@ -346,15 +343,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             "fee": _fee,
                             "remarks": _remarks,
                             'subgroups': [],
-                            "golfers": _includeMe
-                                ? [
-                                    {
-                                      "uid": uid,
-                                      "name": name,
-                                      "scores": []
-                                    }
-                                  ]
-                                : []
+                            "golfers": _includeMe ? [{"uid": uid, "name": name, "scores": []}] : []
                           }).then((value) {
                             if (_includeMe) {
                               myActivities.add(value.id);
@@ -479,17 +468,7 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
             print(row);
             _courseZones.add({
               'name': row['zoName'],
-              'holes': [
-                row['h1'],
-                row['h2'],
-                row['h3'],
-                row['h4'],
-                row['h5'],
-                row['h6'],
-                row['h7'],
-                row['h8'],
-                row['h9']
-              ],
+              'holes': [row['h1'], row['h2'], row['h3'], row['h4'], row['h5'], row['h6'], row['h7'], row['h8'], row['h9']],
             });
           }
 
@@ -543,60 +522,19 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                   createButtonColor: Colors.blue,
                   columnRatio: 0.15,
                   columns: [
-                    {
-                      "title": "Zone",
-                      'index': 1,
-                      'key': 'zoName'
-                    },
-                    {
-                      "title": "1",
-                      'index': 2,
-                      'key': 'h1'
-                    },
-                    {
-                      "title": "2",
-                      'index': 3,
-                      'key': 'h2'
-                    },
-                    {
-                      "title": "3",
-                      'index': 4,
-                      'key': 'h3'
-                    },
-                    {
-                      "title": "4",
-                      'index': 5,
-                      'key': 'h4'
-                    },
-                    {
-                      "title": "5",
-                      'index': 6,
-                      'key': 'h5'
-                    },
-                    {
-                      "title": "6",
-                      'index': 7,
-                      'key': 'h6'
-                    },
-                    {
-                      "title": "7",
-                      'index': 8,
-                      'key': 'h7'
-                    },
-                    {
-                      "title": "8",
-                      'index': 9,
-                      'key': 'h8'
-                    },
-                    {
-                      "title": "9",
-                      'index': 10,
-                      'key': 'h9'
-                    }
+                    {"title": "Zone", 'index': 1, 'key': 'zoName'},
+                    {"title": "1", 'index': 2, 'key': 'h1'},
+                    {"title": "2", 'index': 3, 'key': 'h2'},
+                    {"title": "3", 'index': 4, 'key': 'h3'},
+                    {"title": "4", 'index': 5, 'key': 'h4'},
+                    {"title": "5", 'index': 6, 'key': 'h5'},
+                    {"title": "6", 'index': 7, 'key': 'h6'},
+                    {"title": "7", 'index': 8, 'key': 'h7'},
+                    {"title": "8", 'index': 9, 'key': 'h8'},
+                    {"title": "9", 'index': 10, 'key': 'h9'}
                   ],
                   rows: [
-                    {
-                      'zoName': 'Ou',
+                    {'zoName': 'Ou',
                       'h1': '',
                       'h2': '',
                       'h3': '',
@@ -607,8 +545,7 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                       'h8': '',
                       'h9': ''
                     },
-                    {
-                      'zoName': 'I',
+                    {'zoName': 'I',
                       'h1': '',
                       'h2': '',
                       'h3': '',
@@ -695,16 +632,8 @@ class SubGroupPage extends MaterialPageRoute<bool> {
                                 else
                                   return Text(Language.of(context).name + snapshot.data!.toString(), style: TextStyle(fontWeight: FontWeight.bold));
                               }),
-                      trailing: (alreadyIn == i)
-                          ? Icon(
-                              Icons.remove,
-                              color: Colors.red,
-                            )
-                          : (!isfull && alreadyIn < 0)
-                              ? Icon(
-                                  Icons.add,
-                                  color: Colors.blue,
-                                )
+                      trailing: (alreadyIn == i) ? Icon(Icons.remove, color: Colors.red,)
+                              : (!isfull && alreadyIn < 0) ? Icon(Icons.add, color: Colors.blue,)
                               : Icon(Icons.stop, color: Colors.grey),
                       onTap: () {
                         if (alreadyIn == i) {
@@ -743,7 +672,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 if (idx >= (activity.data()!['max'] as int))
                   oneRow['row'] = Language.of(context).waiting;
                 else
-                  oneRow['row'] = idx / 4 + 1;
+                  oneRow['row'] = (idx >> 2) + 1;
                 oneRow['c1'] = e['name'];
                 oneRow['c2'] = '';
                 oneRow['c3'] = '';
@@ -793,8 +722,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   'name': e['name'],
                   'net': e['net']
                 });
-                if (e['uid'] as int == uId) 
-                  alreadyIn = false;
                 idx++;
               }
             }
@@ -858,37 +785,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                     thAlignment: TextAlign.center,
                     columnRatio: 0.2,
                     columns: [
-                      {
-                        "title": Language.of(context).tableGroup,
-                        'index': 1,
-                        'key': 'row',
-                        'editable': false,
-                        'widthFactor': 0.14
-                      },
-                      {
-                        "title": "A",
-                        'index': 2,
-                        'key': 'c1',
-                        'editable': false
-                      },
-                      {
-                        "title": "B",
-                        'index': 3,
-                        'key': 'c2',
-                        'editable': false
-                      },
-                      {
-                        "title": "C",
-                        'index': 4,
-                        'key': 'c3',
-                        'editable': false
-                      },
-                      {
-                        "title": "D",
-                        'index': 5,
-                        'key': 'c4',
-                        'editable': false
-                      }
+                      {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
+                      {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
+                      {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
+                      {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
+                      {"title": "D", 'index': 5, 'key': 'c4', 'editable': false}
                     ],
                     rows: buildRows(),
                   )),
@@ -911,38 +812,31 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           trHeight: 16,
                           tdAlignment: TextAlign.center,
                           thAlignment: TextAlign.center,
-                          columnRatio: 0.16,
+                          columnRatio: 0.14,
                           columns: [
-                            {'title': Language.of(context).rank, 'index': 1, 'key': 'rank',  'editable': false},
+                            {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.25},
-                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.2}
+                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false}
                           ],
                           rows: buildScoreRows(),
                         )),
-                  teeOffPass && !alreadyIn ? const SizedBox(height: 10.0)
+                  teeOffPass && !alreadyIn
+                      ? const SizedBox(height: 10.0)
                       : ElevatedButton(
                           child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
-                                      : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
+                                                  : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
                           onPressed: () async {
                             if (teeOffPass && alreadyIn) {
                               if ((course["zones"]).length > 2) {
                                 List zones = await selectZones(context, course);
                                 if (zones.isNotEmpty)
-                                  Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1]))
-                                  .then((value) {
-                                    if (value ?? false) {
-                                      updateScore();
-                                      Navigator.of(context).pop(0);
-                                    }
+                                  Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
+                                    if (value ?? false) updateScore();
                                   });
                               } else {
-                                Navigator.push(context, newScorePage(course, uName))
-                                .then((value) {
-                                  if (value ?? false) {
-                                    updateScore();
-                                    Navigator.of(context).pop(0);
-                                  }
+                                Navigator.push(context, newScorePage(course, uName)).then((value) {
+                                  if (value ?? false) updateScore();
                                 });
                               }
                             } else {
@@ -1016,7 +910,7 @@ Future<List> selectZones(BuildContext context, Map course, {int zone0 = 0, int z
     zone0 = _zone0! ? 0 : _zone1! ? 1 : 2;
     zone1 = _zone3! ? 3 : _zone2! ? 2 : 1;
     if (value)
-      return [zone0,zone1];
+      return [zone0, zone1];
     return [];
   });
 }
@@ -1038,86 +932,16 @@ class _NewScorePage extends MaterialPageRoute<bool> {
             {'title': " ", 'index': 5, 'key': 'score2'}
           ];
           var rows = [
-            {
-              'zone1': '1',
-              'par1': '4',
-              'score1': '',
-              'zone2': '10',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '2',
-              'par1': '4',
-              'score1': '',
-              'zone2': '11',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '3',
-              'par1': '4',
-              'score1': '',
-              'zone2': '12',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '4',
-              'par1': '4',
-              'score1': '',
-              'zone2': '13',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '5',
-              'par1': '4',
-              'score1': '',
-              'zone2': '14',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '6',
-              'par1': '4',
-              'score1': '',
-              'zone2': '15',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '7',
-              'par1': '4',
-              'score1': '',
-              'zone2': '16',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '8',
-              'par1': '4',
-              'score1': '',
-              'zone2': '17',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': '9',
-              'par1': '4',
-              'score1': '',
-              'zone2': '18',
-              'par2': '4',
-              'score2': ''
-            },
-            {
-              'zone1': 'Sum',
-              'par1': '',
-              'score1': '',
-              'zone2': 'Sum',
-              'par2': '4',
-              'score2': ''
-            }
+            {'zone1': '1', 'par1': '4', 'score1': '', 'zone2': '10', 'par2': '4', 'score2': ''},
+            {'zone1': '2', 'par1': '4', 'score1': '', 'zone2': '11', 'par2': '4', 'score2': ''},
+            {'zone1': '3', 'par1': '4', 'score1': '', 'zone2': '12', 'par2': '4', 'score2': ''},
+            {'zone1': '4', 'par1': '4', 'score1': '', 'zone2': '13', 'par2': '4', 'score2': ''},
+            {'zone1': '5', 'par1': '4', 'score1': '', 'zone2': '14', 'par2': '4', 'score2': ''},
+            {'zone1': '6', 'par1': '4', 'score1': '', 'zone2': '15', 'par2': '4', 'score2': ''},
+            {'zone1': '7', 'par1': '4', 'score1': '', 'zone2': '16', 'par2': '4', 'score2': ''},
+            {'zone1': '8', 'par1': '4', 'score1': '', 'zone2': '17', 'par2': '4', 'score2': ''},
+            {'zone1': '9', 'par1': '4', 'score1': '', 'zone2': '18', 'par2': '4', 'score2': ''},
+            {'zone1': 'Sum', 'par1': '', 'score1': '', 'zone2': 'Sum', 'par2': '4', 'score2': ''}
           ];
           List<int> pars = List.filled(18, 0), scores = List.filled(18, 0);
           int sum1 = 0, sum2 = 0;
