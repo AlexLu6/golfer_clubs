@@ -709,7 +709,11 @@ class _MyHomePageState extends State<MyHomePage> {
           _handicap = (_handicap / cnt) * 0.9;
           prefs!.setDouble('handicap', _handicap);
         }
-        return ListTile(leading: CircleAvatar(child: Text(myScores[i]['total'].toString())), title: Text(myScores[i]['date'] + ' ' + myScores[i]['course'], style: TextStyle(fontWeight: FontWeight.bold)), subtitle: Text(myScores[i]['pars'].toString() + '\n' + myScores[i]['scores'].toString()));
+        return ListTile(
+          leading: CircleAvatar(child: Text(myScores[i]['total'].toString())), 
+          title: Text(myScores[i]['date'] + ' ' + myScores[i]['course'], style: TextStyle(fontWeight: FontWeight.bold)), 
+          subtitle: Text(myScores[i]['pars'].toString() + '\n' + myScores[i]['scores'].toString(), style: TextStyle(fontWeight: FontWeight.w200))
+        );
       },
     );
   }
