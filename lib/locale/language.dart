@@ -70,4 +70,7 @@ abstract class Language {
   String get applyGroup;
   String get hint;
   String get reply;
+  String get scoreNote;
+  String get usage;
+  String get helpImage;
 }

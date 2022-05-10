@@ -82,7 +82,8 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
               value.docs.forEach((result) {
                 var items = result.data();
                 if (((groupDoc.data()! as Map)['managers'] as List).indexOf(items['uid'] as int) < 0)
-                  golfers.add(NameID(items['name'] as String, items['uid'] as int));
+                  golfers.add(NameID(items['name'] + '(' + items['phone'] + ')',
+                      items['uid'] as int));
               });
             });
           }
@@ -844,7 +845,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             }
                           }),
                   const SizedBox(height: 16.0),
-                  Text(Language.of(context).actRemarks + ': ' + activity.data()!['remarks']),
+                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
                   const SizedBox(height: 16.0)
                 ]));
               }),
@@ -1008,6 +1009,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                             });
                             setState(() {});
                           })),
+                      Text(Language.of(context).scoreNote, style: TextStyle(fontSize: 18)),
                   const SizedBox(height: 6.0),
                   (sum1 + sum2) == 0 ? const SizedBox(height: 6.0) : Text(Language.of(context).total + ': ' + (sum1 + sum2).toString(), style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 16.0),

@@ -66,4 +66,7 @@ class LanguageEn extends Language {
   String get applyGroup => ' is applying this group!';
   String get hint => 'Hint';
   String get reply => 'Reply';
+  String get scoreNote => 'Note: Press Enter after all inputs!';
+  String get usage => 'Help';
+  String get helpImage => 'golferUsage_en.jpg';
 }
