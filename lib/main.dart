@@ -2,7 +2,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,6 +58,7 @@ class MyHomePage extends StatefulWidget {
 enum gendre { Male, Female }
 final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea1225b46c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=713&q=80';
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
+final String drawerCourse = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
 String? _golferAvatar;
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -149,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).pop();
                 },
                 child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer))),
-            decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage("https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"))),
+            decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerCourse))),
             onDetailsPressed: () {
               setState(() => isUpdate = true);
               _currentPageIndex = 0;
@@ -239,11 +239,9 @@ class _MyHomePageState extends State<MyHomePage> {
       tag: 'golfer',
       child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer), radius: 140),
     );
-//    final logo2 = Image.file(path:
 
     final golferName = TextFormField(
       initialValue: _name,
-//      key: Key(_name),
       showCursor: true,
       onChanged: (String value) => setState(() => _name = value),
       //keyboardType: TextInputType.name,
@@ -252,7 +250,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final golferPhone = TextFormField(
       initialValue: _phone,
-//      key: Key(_phone),
       onChanged: (String value) => setState(() => _phone = value),
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(labelText: Language.of(context).mobile, icon: Icon(Icons.phone), border: UnderlineInputBorder()),
@@ -663,7 +660,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   else
                                     return Image.network(snapshot3.data!.toString(), fit: BoxFit.fitHeight);
                                 }),
-                            /*Image.network(coursePhoto((doc.data()! as Map)["cid"] as int)!),*/
                             trailing: Icon(Icons.keyboard_arrow_right),
                             onTap: () async {
                               Navigator.push(context, showActivityPage(doc, _golferID, await groupName((doc.data()! as Map)['gid'] as int)!, await isManager((doc.data()! as Map)['gid'] as int, _golferID), _handicap)).then((value) async {
@@ -785,8 +781,8 @@ class _MyHomePageState extends State<MyHomePage> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('Notice'),
-                  content: Text('Only group manager can add new activity!'),
+                  title: Text(Language.of(context).hint),
+                  content: Text(Language.of(context).managerOnly),
                   actions: <Widget>[
                     TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
                   ],
