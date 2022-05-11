@@ -226,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return const CircularProgressIndicator();
         else
           return InteractiveViewer(
-            panEnabled: false,
+            //panEnabled: false,
             minScale: 0.8,
             maxScale: 2.5,
             child: Image.network(snapshot.data!.toString())
