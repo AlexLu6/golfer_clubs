@@ -8,14 +8,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
-//import 'firebase_options.dart';
+import 'firebase_options.dart';
 import 'locale/language.dart';
 import 'locale/app_localizations_delegate.dart';
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(/*options: DefaultFirebaseOptions.currentPlatform*/);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   prefs = await SharedPreferences.getInstance();
 
 //  Position _here = await determinePosition();
