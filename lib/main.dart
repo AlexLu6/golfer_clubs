@@ -279,6 +279,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       _golferID = items['uid'];
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
+                      prefs!.setInt('golferID', _golferID);
+                      storeMyGroup();
+                      storeMyActivities();
+                      storeMyScores();
                     });
                   }).whenComplete(() {
                     if (_golferID == 0) {
@@ -307,32 +311,18 @@ class _MyHomePageState extends State<MyHomePage> {
       shrinkWrap: true,
       padding: EdgeInsets.only(left: 24.0, right: 24.0),
       children: <Widget>[
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0,),
         logo,
-        SizedBox(
-          height: 24.0,
-        ),
-        SizedBox(
-          height: 24.0,
-        ),
+        SizedBox(height: 24.0,),
+        SizedBox(height: 24.0,),
         golferName,
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0,),
         golferPhone,
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0,),
         golferSex,
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0,),
         Text(isRegistered ? Language.of(context).handicap + ": " + _handicap.toString().substring(0, min(_handicap.toString().length, 5)) : '', style: TextStyle(fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: 10.0,
-        ),
+        SizedBox(height: 10.0,),
         loginButton
       ],
     );
