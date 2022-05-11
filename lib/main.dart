@@ -789,8 +789,8 @@ class _MyHomePageState extends State<MyHomePage> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('Notice'),
-                  content: Text('Only group manager can add new activity!'),
+                  title: Text(Language.of(context).hint),
+                  content: Text(Language.of(context).managerOnly),
                   actions: <Widget>[
                     TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
                   ],
