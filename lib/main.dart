@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     _golferID = prefs!.getInt('golferID') ?? 0;
     _handicap = prefs!.getDouble('handicap') ?? 14.2;
-    _expired = prefs!.getString('expired')!;
+//    _expired = prefs!.getString('expired')!;
     loadMyGroup();
     loadMyActivities();
     loadMyScores();
