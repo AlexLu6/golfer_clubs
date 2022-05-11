@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
 //import 'firebase_options.dart';
@@ -218,7 +219,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget usageBody() {
-    return Text('This a Help');
+    return FutureBuilder(
+      future: FirebaseStorage.instance.ref().child(Language.of(context).hlepImage).getDownloadURL(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return const CircularProgressIndicator();
+        else
+          return InteractiveViewer(
+            panEnabled: false,
+            minScale: 0.8,
+            maxScale: 2.5,
+            child: Image.network(snapshot.data!.toString())
+          );
+      }
+    );
   }
 
   ListView registerBody() {
