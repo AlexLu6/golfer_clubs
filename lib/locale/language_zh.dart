@@ -69,4 +69,5 @@ class LanguageZh extends Language {
   String get scoreNote => '注意：輸入成績後要按Enter!';
   String get usage => '使用說明';
   String get hlepImage => 'golferUsage_zh.jpg';
+  String get managerOnly => '只有總幹事能建立新活動！';
 }
