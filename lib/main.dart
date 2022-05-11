@@ -64,16 +64,17 @@ String? _golferAvatar;
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _golferID = 0, _gID = 1;
-  String _name = '', _phone = '';
+  String _name = '', _phone = '', _expired = '';
   gendre _sex = gendre.Male;
   double _handicap = 14.2;
-  bool isRegistered = false, isUpdate = false;
+  bool isRegistered = false, isUpdate = false, isExpired = false;
   var _golferDoc;
 
   @override
   void initState() {
     _golferID = prefs!.getInt('golferID') ?? 0;
     _handicap = prefs!.getDouble('handicap') ?? 14.2;
+    _expired = prefs!.getString('expired')!;
     loadMyGroup();
     loadMyActivities();
     loadMyScores();
@@ -84,6 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
         _name = items['name'];
         _phone = items['phone'];
         _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
+        if (_expired == '') {
+          _expired = items['expired'].toDate().toString();
+          prefs!.setString('expired', _expired);
+        }
+        isExpired = items['expired'].compareTo(Timestamp.now()) < 0;
         setState(() => isRegistered = true);
         _currentPageIndex = myActivities.length > 0 ? 3 : myGroups.length > 0 ? 2 : 1;
       });
@@ -100,7 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).activities, //"My Activities",
       Language.of(context).golfCourses, //"Golf courses",
       Language.of(context).myScores, //"My Scores",
-      Language.of(context).groupActivity //"Group Activities"
+      Language.of(context).groupActivity, //"Group Activities"
+      Language.of(context).usage  // "Program Usage"
     ];
     return Scaffold(
       appBar: AppBar(
@@ -113,7 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
               : _currentPageIndex == 3  ? activityBody()
               : _currentPageIndex == 4  ? golfCourseBody()
               : _currentPageIndex == 5  ? myScoreBody()
-              : _currentPageIndex == 6  ? groupActivityBody(_gID)  : null),
+              : _currentPageIndex == 6  ? groupActivityBody(_gID)  
+              : usageBody()),
       drawer: isRegistered ? golfDrawer() : null,
       floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4 || _currentPageIndex == 6)
           ? FloatingActionButton(
@@ -197,9 +205,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 _currentPageIndex = 0;
                 Navigator.of(context).pop();
               }),
+          ListTile(
+              title: Text(Language.of(context).usage),
+              leading: Icon(Icons.help),
+              onTap: () {
+                setState(() => _currentPageIndex = 7);
+                Navigator.of(context).pop();
+              })
         ],
       ),
     );
+  }
+
+  Widget usageBody() {
+    return Text('This a Help');
   }
 
   ListView registerBody() {
@@ -287,9 +306,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   }).whenComplete(() {
                     if (_golferID == 0) {
                       _golferID = uuidTime();
-                      DateTime today = DateTime.now();
+                      DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
                       int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
-                      Timestamp expire = Timestamp.fromDate(DateTime(today.year + 1, today.month, today.day - leap));
+                      Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
                       FirebaseFirestore.instance.collection('Golfers').add({
                         "name": _name,
                         "phone": _phone,
@@ -297,7 +316,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         "uid": _golferID,
                         "expired": expire
                       });
+                      if (_expired == '') {
+                        _expired = expire.toDate().toString();
+                        prefs!.setString('expired', _expired);
+                      }
                     }
+
                     prefs!.setInt('golferID', _golferID);
                     _currentPageIndex = 1;
                     setState(() => isRegistered = true);
@@ -334,11 +358,9 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context) {
           return AlertDialog(
             title: Text(Language.of(context).hint),
-            content: Text(applying == 1
-                ? Language.of(context).applyWaiting
-                : applying == 0
-                    ? Language.of(context).applyFirst
-                    : Language.of(context).applyRejected),
+            content: Text(applying == 1 ? Language.of(context).applyWaiting
+                      : applying == 0 ? Language.of(context).applyFirst
+                      : Language.of(context).applyRejected),
             actions: <Widget>[
               TextButton(child: Text(applying == 0 ? "Apply" : "OK"), onPressed: () => Navigator.of(context).pop(applying == 0)),
               TextButton(child: Text("Cancel"), onPressed: () => Navigator.of(context).pop(false))
@@ -548,7 +570,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () async {
                           Navigator.push(context, showActivityPage(doc, _golferID, await groupName(gID)!, await isManager(gID, _golferID), _handicap)).then((value) {
                             var glist = doc.get('golfers');
-                            if (value! == 1) {
+                            if ((value?? 0) == 1) {
                               glist.add({
                                 'uid': _golferID,
                                 'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),

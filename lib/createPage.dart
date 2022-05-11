@@ -82,7 +82,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
               value.docs.forEach((result) {
                 var items = result.data();
                 if (((groupDoc.data()! as Map)['managers'] as List).indexOf(items['uid'] as int) < 0)
-                  golfers.add(NameID(items['name'] as String, items['uid'] as int));
+                  golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
               });
             });
           }
@@ -534,28 +534,8 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                     {"title": "9", 'index': 10, 'key': 'h9'}
                   ],
                   rows: [
-                    {'zoName': 'Ou',
-                      'h1': '',
-                      'h2': '',
-                      'h3': '',
-                      'h4': '',
-                      'h5': '',
-                      'h6': '',
-                      'h7': '',
-                      'h8': '',
-                      'h9': ''
-                    },
-                    {'zoName': 'I',
-                      'h1': '',
-                      'h2': '',
-                      'h3': '',
-                      'h4': '',
-                      'h5': '',
-                      'h6': '',
-                      'h7': '',
-                      'h8': '',
-                      'h9': ''
-                    },
+                    {'zoName': 'Ou', 'h1': '', 'h2': '', 'h3': '', 'h4': '', 'h5': '', 'h6': '', 'h7': '', 'h8': '', 'h9': ''},
+                    {'zoName': 'I', 'h1': '', 'h2': '', 'h3': '', 'h4': '', 'h5': '', 'h6': '', 'h7': '', 'h8': '', 'h9': ''},
                   ],
                 )),
                 const SizedBox(height: 16.0),
@@ -844,7 +824,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             }
                           }),
                   const SizedBox(height: 16.0),
-                  Text(Language.of(context).actRemarks + ': ' + activity.data()!['remarks']),
+                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
                   const SizedBox(height: 16.0)
                 ]));
               }),

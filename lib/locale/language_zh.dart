@@ -48,7 +48,7 @@ class LanguageZh extends Language {
   String get groupName => '群組名稱:';
   String get groupActRegion => '活動地區';
   String get groupRemarks => '群組備註';
-  String get actRemarks => '活動備註';
+  String get actRemarks => '活動備註:';
   String get select2Courses => '選兩個球區';
   String get quitGroup => '確定要退出此群組嗎?';
   String get addManager => '新增總幹事';
@@ -67,4 +67,6 @@ class LanguageZh extends Language {
   String get hint => '提示';
   String get reply => '回復';
   String get scoreNote => '注意：輸入成績後要按Enter!';
+  String get usage => '使用說明';
+  String get hlepImage => 'golferUsage_zh.jpg';
 }

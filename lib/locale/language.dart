@@ -71,4 +71,6 @@ abstract class Language {
   String get hint;
   String get reply;
   String get scoreNote;
+  String get usage;
+  String get hlepImage;
 }
