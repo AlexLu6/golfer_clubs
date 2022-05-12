@@ -51,11 +51,11 @@ class LanguageZh extends Language {
   String get actRemarks => '活動備註:';
   String get select2Courses => '選兩個球區';
   String get quitGroup => '確定要退出此群組嗎?';
-  String get addManager => '新增總幹事';
+  String get addManager => '選總幹事';
   String get selectManager => '選一位當總幹事';
-  String get quitManager => '辭去總幹事';
+  String get quitManager => '辭職';
   String get kickMember => '管理組員';
-  String get selectKickMember => '選一位組員剔除';
+  String get selectKickMember => '選一位組員踢除';
   String get selectCourse => '選一高球場';
   String get pickDate => '選日期';
   String get pickTime => '選時間';

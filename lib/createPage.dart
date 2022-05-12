@@ -5,6 +5,7 @@ import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
 import 'dataModel.dart';
+import 'editable2.dart';
 import 'locale/language.dart';
 
 _NewGroupPage newGroupPage(int golferID) {
@@ -18,8 +19,7 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).createNewGolfGroup), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   TextFormField(
                     showCursor: true,
                     onChanged: (String value) => setState(() => _groupName = value),
@@ -59,7 +59,7 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
                           Navigator.of(context).pop(true);
                         }
                       })
-                ]));
+                ]);
               }));
         });
 }
@@ -91,8 +91,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).modify + ' ' + (groupDoc.data()! as Map)['Name']), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   TextFormField(
                     showCursor: true,
                     initialValue: (groupDoc.data()! as Map)['Name'],
@@ -115,11 +114,11 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                     maxLines: 5,
                     decoration: InputDecoration(labelText: Language.of(context).groupRemarks, border: OutlineInputBorder()),
                   ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 12.0),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                     const SizedBox(width: 5),
                     ElevatedButton(
-                        child: Text(Language.of(context).modify, style: TextStyle(fontSize: 20)),
+                        child: Text(Language.of(context).modify, style: TextStyle(fontSize: 18)),
                         onPressed: () {
                           if (_groupName != '' && _region != '') {
                             FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
@@ -132,7 +131,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         }),
                     const SizedBox(width: 5),
                     ElevatedButton(
-                        child: Text(Language.of(context).addManager, style: TextStyle(fontSize: 20)),
+                        child: Text(Language.of(context).addManager, style: TextStyle(fontSize: 18)),
                         onPressed: () {
                           showMaterialScrollPicker<NameID>(
                             context: context,
@@ -156,7 +155,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         }),
                     const SizedBox(width: 5),
                     ElevatedButton(
-                        child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 20)),
+                        child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 18)),
                         onPressed: () {
                           showMaterialScrollPicker<NameID>(
                             context: context,
@@ -178,12 +177,12 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             }
                           });
                         }),
-                  ]),
-                  const SizedBox(height: 24.0),
+          //        ]),
+                  const SizedBox(width: 5),
                   ((groupDoc.data()! as Map)['managers'] as List).length == 1
                       ? const SizedBox(width: 5)
                       : ElevatedButton(
-                          child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 20)),
+                          child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
                           onPressed: () {
                             var mlist = (groupDoc.data()! as Map)['managers'] as List;
                             mlist.remove(uID);
@@ -192,7 +191,8 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             });
                             Navigator.of(context).pop(true);
                           }),
-                ]));
+                  ]),
+                ]);
               }));
         });
 }
@@ -233,9 +233,8 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).createNewActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  const SizedBox(height: 24.0),
+                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                  const SizedBox(height: 12.0),
                   Flexible(
                       child: Row(children: <Widget>[
                     ElevatedButton(
@@ -248,7 +247,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             showDivider: false,
                             selectedItem: coursesItems[0], //_selectedCourse,
                             onChanged: (value) => setState(() => _selectedCourse = value),
-                          ).then((value) => setState(() => _courseName = value.toString()));
+                          ).then((value) => setState(() => _courseName = value == null ? '' : value.toString()));
                         }),
                     const SizedBox(width: 5),
                     Flexible(
@@ -257,12 +256,12 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                       key: Key(_courseName),
                       showCursor: true,
                       onChanged: (String value) => setState(() => print(_courseName = value)),
-                      //keyboardType: TextInputType.name,
-                      decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(labelText: Language.of(context).courseName, border: UnderlineInputBorder()),
                     )),
                     const SizedBox(width: 5)
                   ])),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   Flexible(
                       child: Row(children: <Widget>[
                     ElevatedButton(
@@ -291,7 +290,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                     )),
                     const SizedBox(width: 5)
                   ])),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   Flexible(
                       child: Row(children: <Widget>[
                     const SizedBox(width: 5),
@@ -314,16 +313,16 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                     )),
                     const SizedBox(width: 5)
                   ])),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 12),
                   TextFormField(
                     showCursor: true,
                     initialValue: _remarks,
                     onChanged: (String value) => setState(() => _remarks = value),
                     //keyboardType: TextInputType.name,
-                    maxLines: 5,
+                    maxLines: 3,
                     decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   Flexible(
                       child: Row(children: <Widget>[
                     const SizedBox(width: 5),
@@ -331,7 +330,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                     const SizedBox(width: 5),
                     const Text('Include myself')
                   ])),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 12),
                   ElevatedButton(
                       child: Text(Language.of(context).create, style: TextStyle(fontSize: 24)),
                       onPressed: () async {
@@ -355,7 +354,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                           });
                         }
                       })
-                ]));
+                ]);
               }));
         });
 }
@@ -370,11 +369,10 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).editActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  const SizedBox(height: 24.0),
+                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                  const SizedBox(height: 12),
                   Text(Language.of(context).courseName + _courseName, style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   Flexible(
                       child: Row(children: <Widget>[
                     ElevatedButton(
@@ -403,7 +401,7 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                     )),
                     const SizedBox(width: 5)
                   ])),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   Flexible(
                       child: Row(children: <Widget>[
                     const SizedBox(width: 5),
@@ -426,16 +424,16 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                     )),
                     const SizedBox(width: 5)
                   ])),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 12),
                   TextFormField(
                     showCursor: true,
                     initialValue: _remarks,
                     onChanged: (String value) => _remarks = value,
                     //keyboardType: TextInputType.name,
-                    maxLines: 5,
+                    maxLines: 3,
                     decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
                   ElevatedButton(
                       child: Text(Language.of(context).modify, style: TextStyle(fontSize: 24)),
                       onPressed: () async {
@@ -448,7 +446,7 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                           Navigator.of(context).pop(true);
                         });
                       })
-                ]));
+                ]);
               }));
         });
 }
@@ -477,8 +475,7 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
           return Scaffold(
             appBar: AppBar(title: Text(Language.of(context).createNewCourse), elevation: 1.0),
             body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-              return Center(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+              return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                 TextFormField(
                   showCursor: true,
                   onChanged: (String value) => _courseName = value,
@@ -574,7 +571,7 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                       });
                       Navigator.of(context).pop(true);
                     }),
-              ]));
+              ]);
             }),
           );
         });
@@ -923,7 +920,7 @@ _NewScorePage newScorePage(Map course, String golfer, {int zone0 = 0, int zone1 
 class _NewScorePage extends MaterialPageRoute<bool> {
   _NewScorePage(Map course, String golfer, int zone0, int zone1)
       : super(builder: (BuildContext context) {
-          final _editableKey = GlobalKey<EditableState>();
+          final _editableKey = GlobalKey<Editable2State>();
           var columns = [
             {'title': 'Out', 'index': 0, 'key': 'zone1', 'editable': false},
             {'title': "Par", 'index': 1, 'key': 'par1', 'editable': false},
@@ -987,7 +984,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                   Text('Course: ' + course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 16.0),
                   Flexible(
-                      child: Editable(
+                      child: Editable2(
                           key: _editableKey,
                           borderColor: Colors.black,
                           tdStyle: TextStyle(fontSize: 16),

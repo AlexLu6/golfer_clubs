@@ -51,9 +51,9 @@ class LanguageEn extends Language {
   String get actRemarks => 'Activity Remarks:';
   String get select2Courses => 'Select 2 zones';
   String get quitGroup => 'Are you sure to quit this group ?';
-  String get addManager => 'Add Manager';
+  String get addManager => 'Add Man';
   String get selectManager => 'Select a golfer as manager';
-  String get quitManager => 'Quit Manager';
+  String get quitManager => 'Quit';
   String get kickMember => 'Members';
   String get selectKickMember => 'Select a golfer to kick out';
   String get selectCourse => 'Select a course';
@@ -66,7 +66,7 @@ class LanguageEn extends Language {
   String get applyGroup => ' is applying this group!';
   String get hint => 'Hint';
   String get reply => 'Reply';
-  String get scoreNote => 'Note: Press Enter after all inputs!';
+  String get scoreNote => 'Note: Press Done after all inputs!';
   String get usage => 'Help';
   String get helpImage => 'golferUsage_en.jpg';
   String get managerOnly => 'Only group manager can add new activity!';
