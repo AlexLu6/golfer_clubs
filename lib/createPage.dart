@@ -237,7 +237,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                 return ListView(
                   children: <Widget> [ 
                     const SizedBox(height: 24.0),
-                    Row(children: <Widget>[
+                    Flexible(child: Row(children: <Widget>[
                       ElevatedButton(
                         child: Text(Language.of(context).golfCourses),
                         onPressed: () {
@@ -252,18 +252,18 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         }
                       ),
                       const SizedBox(width: 5),
-                      Flexible(child: TextFormField(
+                      TextFormField(
                         initialValue: _courseName,
                         key: Key(_courseName),
                         showCursor: true,
                         onChanged: (String value) => setState(() => print(_courseName = value)),
                         //keyboardType: TextInputType.number,
                         decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
-                      )),
+                      ),
                       const SizedBox(width: 5)
-                    ]),
+                    ])),
                     const SizedBox(height: 24),
-                    Row(children: <Widget>[
+                    Flexible(child: Row(children: <Widget>[
                       ElevatedButton(
                         child: Text(Language.of(context).teeOff),
                         onPressed: () {
@@ -280,18 +280,18 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         }
                       ),
                       const SizedBox(width: 5),
-                      Flexible(child: TextFormField(
+                      TextFormField(
                         initialValue: _selectedDate.toString().substring(0, 16),
                         key: Key(_selectedDate.toString().substring(0, 16)),
                         showCursor: true,
                         onChanged: (String? value) => _selectedDate = DateTime.parse(value!),
                         keyboardType: TextInputType.datetime,
                         decoration: InputDecoration(labelText: Language.of(context).teeOffTime, border: OutlineInputBorder()),
-                      )),
+                      ),
                       const SizedBox(width: 5)
-                    ]),             
+                    ])),             
                     const SizedBox(height: 24),
-                    Row(children: <Widget>[
+                    Flexible(child: Row(children: <Widget>[
                       const SizedBox(width: 5),
                       Flexible(child: TextFormField(
                         initialValue: _max.toString(),
@@ -310,13 +310,13 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                       )),
                       const SizedBox(width: 5)
                       ]
-                    ),
+                    )),
                     const SizedBox(height: 24.0),
                     Flexible(child: TextFormField(
                       showCursor: true,
                       onChanged: (String value) => setState(() => _remarks = value),
                       maxLines: 5,
-                      decoration: InputDecoration(labelText: Language.of(context).actRemarks, border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                     )),
                     const SizedBox(height: 24),
                     Row(children: <Widget>[
