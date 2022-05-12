@@ -257,7 +257,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                       key: Key(_courseName),
                       showCursor: true,
                       onChanged: (String value) => setState(() => print(_courseName = value)),
-                      //keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
                     )),
                     const SizedBox(width: 5)
