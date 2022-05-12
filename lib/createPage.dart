@@ -233,12 +233,12 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).createNewActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  const SizedBox(height: 24.0),
-                  Flexible(
+                return ListView(
+                  children: <Widget> [ 
+                    const SizedBox(height: 24.0),
+                    Flexible(
                       child: Row(children: <Widget>[
-                    ElevatedButton(
+                        ElevatedButton(
                         child: Text(Language.of(context).golfCourses),
                         onPressed: () {
                           showMaterialScrollPicker<NameID>(
@@ -250,22 +250,23 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             onChanged: (value) => setState(() => _selectedCourse = value),
                           ).then((value) => setState(() => _courseName = value.toString()));
                         }),
-                    const SizedBox(width: 5),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: TextFormField(
+                          initialValue: _courseName,
+                          key: Key(_courseName),
+                          showCursor: true,
+                          onChanged: (String value) => setState(() => print(_courseName = value)),
+                          //keyboardType: TextInputType.number,
+                          decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
+                        )),
+                        const SizedBox(width: 5)
+                      ])
+                    ),
+                    const SizedBox(height: 24),
                     Flexible(
-                        child: TextFormField(
-                      initialValue: _courseName,
-                      key: Key(_courseName),
-                      showCursor: true,
-                      onChanged: (String value) => setState(() => print(_courseName = value)),
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
-                    )),
-                    const SizedBox(width: 5)
-                  ])),
-                  const SizedBox(height: 24),
-                  Flexible(
                       child: Row(children: <Widget>[
-                    ElevatedButton(
+                        ElevatedButton(
                         child: Text(Language.of(context).teeOff),
                         onPressed: () {
                           showMaterialDatePicker(
@@ -279,59 +280,57 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             if (date != null) showMaterialTimePicker(context: context, title: Language.of(context).pickTime, selectedTime: TimeOfDay.now()).then((time) => setState(() => print(_selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))));
                           });
                         }),
-                    const SizedBox(width: 5),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: TextFormField(
+                          initialValue: _selectedDate.toString().substring(0, 16),
+                          key: Key(_selectedDate.toString().substring(0, 16)),
+                          showCursor: true,
+                          onChanged: (String? value) => _selectedDate = DateTime.parse(value!),
+                          keyboardType: TextInputType.datetime,
+                          decoration: InputDecoration(labelText: Language.of(context).teeOffTime, border: OutlineInputBorder()),
+                        )),
+                        const SizedBox(width: 5)
+                      ])
+                    ),
+                    const SizedBox(height: 24),
                     Flexible(
-                        child: TextFormField(
-                      initialValue: _selectedDate.toString().substring(0, 16),
-                      key: Key(_selectedDate.toString().substring(0, 16)),
-                      showCursor: true,
-                      onChanged: (String? value) => _selectedDate = DateTime.parse(value!),
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(labelText: Language.of(context).teeOffTime, border: OutlineInputBorder()),
-                    )),
-                    const SizedBox(width: 5)
-                  ])),
-                  const SizedBox(height: 24),
-                  Flexible(
                       child: Row(children: <Widget>[
-                    const SizedBox(width: 5),
-                    Flexible(
-                        child: TextFormField(
-                      initialValue: _max.toString(),
+                        const SizedBox(width: 5),
+                        TextFormField(
+                          initialValue: _max.toString(),
+                          showCursor: true,
+                          onChanged: (String value) => setState(() => _max = int.parse(value)),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(labelText: Language.of(context).max, icon: Icon(Icons.group), border: OutlineInputBorder()),
+                        ),
+                        const SizedBox(width: 5),
+                        TextFormField(
+                          initialValue: _fee.toString(),
+                          showCursor: true,
+                          onChanged: (String value) => setState(() => _fee = int.parse(value)),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(labelText: Language.of(context).fee, icon: Icon(Icons.money), border: OutlineInputBorder()),
+                        ),
+                        const SizedBox(width: 5)
+                      ])
+                    ),
+                    const SizedBox(height: 24.0),
+                    TextFormField(
                       showCursor: true,
-                      onChanged: (String value) => setState(() => _max = int.parse(value)),
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(labelText: Language.of(context).max, icon: Icon(Icons.group), border: OutlineInputBorder()),
-                    )),
-                    const SizedBox(width: 5),
-                    Flexible(
-                        child: TextFormField(
-                      initialValue: _fee.toString(),
-                      showCursor: true,
-                      onChanged: (String value) => setState(() => _fee = int.parse(value)),
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(labelText: Language.of(context).fee, icon: Icon(Icons.money), border: OutlineInputBorder()),
-                    )),
-                    const SizedBox(width: 5)
-                  ])),
-                  const SizedBox(height: 24.0),
-                  TextFormField(
-                    showCursor: true,
-                    onChanged: (String value) => setState(() => _remarks = value),
-                    //keyboardType: TextInputType.name,
-                    maxLines: 5,
-                    decoration: InputDecoration(labelText: Language.of(context).actRemarks, border: OutlineInputBorder()),
-                  ),
-                  const SizedBox(height: 24),
-                  Flexible(
-                      child: Row(children: <Widget>[
-                    const SizedBox(width: 5),
-                    Checkbox(value: _includeMe, onChanged: (bool? value) => setState(() => _includeMe = value!)),
-                    const SizedBox(width: 5),
-                    const Text('Include myself')
-                  ])),
-                  const SizedBox(height: 24.0),
-                  ElevatedButton(
+                      onChanged: (String value) => setState(() => _remarks = value),
+                      maxLines: 5,
+                      decoration: InputDecoration(labelText: Language.of(context).actRemarks, border: OutlineInputBorder()),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(children: <Widget>[
+                      const SizedBox(width: 5),
+                      Checkbox(value: _includeMe, onChanged: (bool? value) => setState(() => _includeMe = value!)),
+                      const SizedBox(width: 5),
+                      const Text('Include myself')
+                    ]),         
+                    const SizedBox(height: 24.0),
+                    ElevatedButton(
                       child: Text(Language.of(context).create, style: TextStyle(fontSize: 24)),
                       onPressed: () async {
                         var name = await golferName(uid);
@@ -353,8 +352,10 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             Navigator.of(context).pop(true);
                           });
                         }
-                      })
-                ]));
+                      }
+                    )
+                  ]
+                );
               }));
         });
 }
