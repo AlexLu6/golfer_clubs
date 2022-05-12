@@ -1,111 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:editable/editable.dart';
 import 'package:editable/widgets/table_header.dart';
-import 'package:editable/widgets/table_body.dart';
 import 'package:editable/commons/helpers.dart';
 
-class Editable2 extends Editable {
+class Editable2 extends StatefulWidget {
   Editable2(
       {Key? key,
-      columns,
-      rows,
-      columnRatio = 0.20,
-      onSubmitted,
-      onRowSaved,
-      columnCount = 0,
-      rowCount = 0,
-      borderColor = Colors.grey,
-      tdPaddingLeft = 8.0,
-      tdPaddingTop = 8.0,
-      tdPaddingRight = 8.0,
-      tdPaddingBottom = 12.0,
-      thPaddingLeft = 8.0,
-      thPaddingTop = 0.0,
-      thPaddingRight = 8.0,
-      thPaddingBottom = 0.0,
-      trHeight = 50.0,
-      borderWidth = 0.5,
-      thWeight = FontWeight.w600,
-      thSize = 18,
-      showSaveIcon = false,
-      saveIcon = Icons.save,
-      saveIconColor = Colors.black12,
-      saveIconSize = 18,
-      tdAlignment = TextAlign.start,
-      tdStyle,
-      tdEditableMaxLines = 1,
-      thAlignment = TextAlign.start,
-      thStyle,
-      thVertAlignment = CrossAxisAlignment.center,
-      showCreateButton = false,
-      createButtonAlign = CrossAxisAlignment.start,
-      createButtonIcon,
-      createButtonColor,
-      createButtonShape,
-      createButtonLabel,
-      stripeColor1 = Colors.white,
-      stripeColor2 = Colors.black12,
-      zebraStripe = false,
-      focusedBorder})
-      : super(key: key,
-      columns: columns,
-      rows: rows,
-      columnRatio: columnRatio,
-      onSubmitted: onSubmitted,
-      onRowSaved: onRowSaved,
-      columnCount: columnCount,
-      rowCount: rowCount,
-      borderColor: borderColor,
-      tdPaddingLeft: tdPaddingLeft,
-      tdPaddingTop: tdPaddingTop,
-      tdPaddingRight: thPaddingRight,
-      tdPaddingBottom: thPaddingBottom,
-      thPaddingLeft: thPaddingLeft,
-      thPaddingTop: thPaddingTop,
-      thPaddingRight: thPaddingRight,
-      thPaddingBottom: thPaddingBottom,
-      trHeight: trHeight,
-      borderWidth: borderWidth,
-      thWeight: thWeight,
-      thSize: thSize,
-      showSaveIcon: showSaveIcon,
-      saveIcon: saveIcon,
-      saveIconColor: saveIconColor,
-      saveIconSize: saveIconSize,
-      tdAlignment: tdAlignment,
-      tdStyle: tdStyle,
-      tdEditableMaxLines: tdEditableMaxLines,
-      thAlignment: thAlignment,
-      thStyle: thStyle,
-      thVertAlignment: thVertAlignment,
-      showCreateButton: showCreateButton,
-      createButtonAlign: createButtonAlign,
-      createButtonIcon: createButtonIcon,
-      createButtonColor: createButtonColor,
-      createButtonShape: createButtonShape,
-      createButtonLabel: createButtonLabel,
-      stripeColor1: stripeColor1,
-      stripeColor2: stripeColor2,
-      zebraStripe: zebraStripe,
-      focusedBorder: focusedBorder
-      );
+      this.columns,
+      this.rows,
+      this.columnRatio = 0.20,
+      this.onSubmitted,
+      this.onRowSaved,
+      this.columnCount = 0,
+      this.rowCount = 0,
+      this.borderColor = Colors.grey,
+      this.tdPaddingLeft = 8.0,
+      this.tdPaddingTop = 8.0,
+      this.tdPaddingRight = 8.0,
+      this.tdPaddingBottom = 12.0,
+      this.thPaddingLeft = 8.0,
+      this.thPaddingTop = 0.0,
+      this.thPaddingRight = 8.0,
+      this.thPaddingBottom = 0.0,
+      this.trHeight = 50.0,
+      this.borderWidth = 0.5,
+      this.thWeight = FontWeight.w600,
+      this.thSize = 18,
+      this.showSaveIcon = false,
+      this.saveIcon = Icons.save,
+      this.saveIconColor = Colors.black12,
+      this.saveIconSize = 18,
+      this.tdAlignment = TextAlign.start,
+      this.tdStyle,
+      this.tdEditableMaxLines = 1,
+      this.thAlignment = TextAlign.start,
+      this.thStyle,
+      this.thVertAlignment = CrossAxisAlignment.center,
+      this.showCreateButton = false,
+      this.createButtonAlign = CrossAxisAlignment.start,
+      this.createButtonIcon,
+      this.createButtonColor,
+      this.createButtonShape,
+      this.createButtonLabel,
+      this.stripeColor1 = Colors.white,
+      this.stripeColor2 = Colors.black12,
+      this.zebraStripe = false,
+      this.focusedBorder}) : super(key: key);
+
+  final List? columns;
+  final List? rows;
+  final int rowCount;
+  final int columnCount;
+  final double columnRatio;
+  final Color borderColor;
+  final double borderWidth;
+  final double tdPaddingLeft;
+  final double tdPaddingTop;
+  final double tdPaddingRight;
+  final double tdPaddingBottom;
+  final TextAlign tdAlignment;
+  final TextStyle? tdStyle;
+  final int tdEditableMaxLines;
+  final double thPaddingLeft;
+  final double thPaddingTop;
+  final double thPaddingRight;
+  final double thPaddingBottom;
+  final TextAlign thAlignment;
+  final TextStyle? thStyle;
+  final FontWeight thWeight;
+  final CrossAxisAlignment thVertAlignment;
+  final double thSize;
+  final double trHeight;
+  final bool showSaveIcon;
+  final IconData saveIcon;
+  final Color saveIconColor;
+  final double saveIconSize;
+  final bool showCreateButton;
+  final CrossAxisAlignment createButtonAlign;
+  final Icon? createButtonIcon;
+  final Color? createButtonColor;
+  final BoxShape? createButtonShape;
+  final Widget? createButtonLabel;
+  final Color stripeColor1;
+  final Color stripeColor2;
+  final bool zebraStripe;
+  final InputBorder? focusedBorder;
+  final ValueChanged<String>? onSubmitted;
+  final ValueChanged<dynamic>? onRowSaved;
+
   @override
   Editable2State createState() => Editable2State(
-      rows: rows,
-      columns: columns,
-      rowCount: rowCount,
-      columnCount: columnCount);
+      rows: this.rows,
+      columns: this.columns,
+      rowCount: this.rowCount,
+      columnCount: this.columnCount);
 }
 
-class Editable2State extends EditableState {
+class Editable2State extends State<Editable2> {
+  List? rows, columns;
+  int? columnCount;
+  int? rowCount;
+  ///Get all edited rows
+  List get editedRows => _editedRows;
 
-  Editable2State({rows, columns, columnCount, rowCount}) {
-    super.rows = rows;
-    super.columns = columns;
-    super.columnCount = columnCount;
-    super.rowCount = rowCount;
-  }
-//    : super(rows: rows, columns: columns, columnCount: columnCount, rowCount: rowCount);
+  ///Create a row after the last row
+  createRow() => addOneRow(columns, rows);
+  Editable2State({this.rows, this.columns, this.columnCount, this.rowCount});
+
+  /// Temporarily holds all edited rows
+  List _editedRows = [];
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +228,33 @@ class Editable2State extends EditableState {
           }),
         );
       });
+    }
+    Widget createButton() {
+      return Visibility(
+        visible: widget.showCreateButton,
+        child: Padding(
+          padding: EdgeInsets.only(left: 4.0, bottom: 4),
+          child: InkWell(
+            onTap: () {
+              rows = addOneRow(columns, rows);
+              rowCount = rowCount! + 1;
+              setState(() {});
+            },
+            child: Container(
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: widget.createButtonColor ?? Colors.white,
+                boxShadow: [
+                  BoxShadow(blurRadius: 2, color: Colors.grey.shade400)
+                ],
+                borderRadius: BorderRadius.circular(10),
+                shape: BoxShape.rectangle,
+              ),
+              child: widget.createButtonIcon ?? Icon(Icons.add),
+            ),
+          ),
+        ),
+      );
     }
     return Material(
       color: Colors.transparent,
