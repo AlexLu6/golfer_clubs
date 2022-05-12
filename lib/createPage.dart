@@ -236,9 +236,8 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                 return ListView(
                   children: <Widget> [ 
                     const SizedBox(height: 24.0),
-                    Flexible(
-                      child: Row(children: <Widget>[
-                        ElevatedButton(
+                    Row(children: <Widget>[
+                      ElevatedButton(
                         child: Text(Language.of(context).golfCourses),
                         onPressed: () {
                           showMaterialScrollPicker<NameID>(
@@ -249,24 +248,22 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             selectedItem: coursesItems[0], //_selectedCourse,
                             onChanged: (value) => setState(() => _selectedCourse = value),
                           ).then((value) => setState(() => _courseName = value.toString()));
-                        }),
-                        const SizedBox(width: 5),
-                        Flexible(
-                          child: TextFormField(
-                          initialValue: _courseName,
-                          key: Key(_courseName),
-                          showCursor: true,
-                          onChanged: (String value) => setState(() => print(_courseName = value)),
-                          //keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
-                        )),
-                        const SizedBox(width: 5)
-                      ])
-                    ),
+                        }
+                      ),
+                      const SizedBox(width: 5),
+                      TextFormField(
+                        initialValue: _courseName,
+                        key: Key(_courseName),
+                        showCursor: true,
+                        onChanged: (String value) => setState(() => print(_courseName = value)),
+                        //keyboardType: TextInputType.number,
+                        decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(width: 5)
+                    ]),
                     const SizedBox(height: 24),
-                    Flexible(
-                      child: Row(children: <Widget>[
-                        ElevatedButton(
+                    Row(children: <Widget>[
+                      ElevatedButton(
                         child: Text(Language.of(context).teeOff),
                         onPressed: () {
                           showMaterialDatePicker(
@@ -279,41 +276,39 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                           ).then((date) {
                             if (date != null) showMaterialTimePicker(context: context, title: Language.of(context).pickTime, selectedTime: TimeOfDay.now()).then((time) => setState(() => print(_selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))));
                           });
-                        }),
-                        const SizedBox(width: 5),
-                        Flexible(
-                          child: TextFormField(
-                          initialValue: _selectedDate.toString().substring(0, 16),
-                          key: Key(_selectedDate.toString().substring(0, 16)),
-                          showCursor: true,
-                          onChanged: (String? value) => _selectedDate = DateTime.parse(value!),
-                          keyboardType: TextInputType.datetime,
-                          decoration: InputDecoration(labelText: Language.of(context).teeOffTime, border: OutlineInputBorder()),
-                        )),
-                        const SizedBox(width: 5)
-                      ])
-                    ),
+                        }
+                      ),
+                      const SizedBox(width: 5),
+                      TextFormField(
+                        initialValue: _selectedDate.toString().substring(0, 16),
+                        key: Key(_selectedDate.toString().substring(0, 16)),
+                        showCursor: true,
+                        onChanged: (String? value) => _selectedDate = DateTime.parse(value!),
+                        keyboardType: TextInputType.datetime,
+                        decoration: InputDecoration(labelText: Language.of(context).teeOffTime, border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(width: 5)
+                    ]),             
                     const SizedBox(height: 24),
-                    Flexible(
-                      child: Row(children: <Widget>[
-                        const SizedBox(width: 5),
-                        TextFormField(
-                          initialValue: _max.toString(),
-                          showCursor: true,
-                          onChanged: (String value) => setState(() => _max = int.parse(value)),
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: Language.of(context).max, icon: Icon(Icons.group), border: OutlineInputBorder()),
-                        ),
-                        const SizedBox(width: 5),
-                        TextFormField(
-                          initialValue: _fee.toString(),
-                          showCursor: true,
-                          onChanged: (String value) => setState(() => _fee = int.parse(value)),
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: Language.of(context).fee, icon: Icon(Icons.money), border: OutlineInputBorder()),
-                        ),
-                        const SizedBox(width: 5)
-                      ])
+                    Row(children: <Widget>[
+                      const SizedBox(width: 5),
+                      TextFormField(
+                        initialValue: _max.toString(),
+                        showCursor: true,
+                        onChanged: (String value) => setState(() => _max = int.parse(value)),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(labelText: Language.of(context).max, icon: Icon(Icons.group), border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(width: 5),
+                      TextFormField(
+                        initialValue: _fee.toString(),
+                        showCursor: true,
+                        onChanged: (String value) => setState(() => _fee = int.parse(value)),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(labelText: Language.of(context).fee, icon: Icon(Icons.money), border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(width: 5)
+                      ]
                     ),
                     const SizedBox(height: 24.0),
                     TextFormField(
