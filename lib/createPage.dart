@@ -251,14 +251,14 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         }
                       ),
                       const SizedBox(width: 5),
-                      TextFormField(
+                      Expanded(child: TextFormField(
                         initialValue: _courseName,
                         key: Key(_courseName),
                         showCursor: true,
                         onChanged: (String value) => setState(() => print(_courseName = value)),
                         //keyboardType: TextInputType.number,
                         decoration: InputDecoration(labelText: Language.of(context).courseName, border: OutlineInputBorder()),
-                      ),
+                      )),
                       const SizedBox(width: 5)
                     ]),
                     const SizedBox(height: 24),
@@ -279,44 +279,44 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         }
                       ),
                       const SizedBox(width: 5),
-                      TextFormField(
+                      Expanded(child: TextFormField(
                         initialValue: _selectedDate.toString().substring(0, 16),
                         key: Key(_selectedDate.toString().substring(0, 16)),
                         showCursor: true,
                         onChanged: (String? value) => _selectedDate = DateTime.parse(value!),
                         keyboardType: TextInputType.datetime,
                         decoration: InputDecoration(labelText: Language.of(context).teeOffTime, border: OutlineInputBorder()),
-                      ),
+                      )),
                       const SizedBox(width: 5)
                     ]),             
                     const SizedBox(height: 24),
                     Row(children: <Widget>[
                       const SizedBox(width: 5),
-                      TextFormField(
+                      Expanded(child: TextFormField(
                         initialValue: _max.toString(),
                         showCursor: true,
                         onChanged: (String value) => setState(() => _max = int.parse(value)),
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(labelText: Language.of(context).max, icon: Icon(Icons.group), border: OutlineInputBorder()),
-                      ),
+                      )),
                       const SizedBox(width: 5),
-                      TextFormField(
+                      Expanded(child: TextFormField(
                         initialValue: _fee.toString(),
                         showCursor: true,
                         onChanged: (String value) => setState(() => _fee = int.parse(value)),
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(labelText: Language.of(context).fee, icon: Icon(Icons.money), border: OutlineInputBorder()),
-                      ),
+                      )),
                       const SizedBox(width: 5)
                       ]
                     ),
                     const SizedBox(height: 24.0),
-                    TextFormField(
+                    Expanded(child: TextFormField(
                       showCursor: true,
                       onChanged: (String value) => setState(() => _remarks = value),
                       maxLines: 5,
                       decoration: InputDecoration(labelText: Language.of(context).actRemarks, border: OutlineInputBorder()),
-                    ),
+                    )),
                     const SizedBox(height: 24),
                     Row(children: <Widget>[
                       const SizedBox(width: 5),
