@@ -967,7 +967,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                   Text('Course: ' + course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 16.0),
                   Flexible(
-                      child: Editable2(
+                      child: Editable(
                           key: _editableKey,
                           borderColor: Colors.black,
                           tdStyle: TextStyle(fontSize: 16),
@@ -979,8 +979,8 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                           rows: buildRows(),
                           onSubmitted: (value) {
                             sum1 = sum2 = 0;
+                            print(_editableKey.currentState!.editedRows);
                             _editableKey.currentState!.editedRows.forEach((element) {
-                              print(element);
                               if (element['row'] != 9) {
                                 sum1 += int.parse(element['score1'] ?? '0');
                                 sum2 += int.parse(element['score2'] ?? '0');
