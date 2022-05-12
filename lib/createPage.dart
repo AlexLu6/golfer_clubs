@@ -1,4 +1,5 @@
 //import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
@@ -251,7 +252,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         }
                       ),
                       const SizedBox(width: 5),
-                      Expanded(child: TextFormField(
+                      Flexible(child: TextFormField(
                         initialValue: _courseName,
                         key: Key(_courseName),
                         showCursor: true,
@@ -279,7 +280,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         }
                       ),
                       const SizedBox(width: 5),
-                      Expanded(child: TextFormField(
+                      Flexible(child: TextFormField(
                         initialValue: _selectedDate.toString().substring(0, 16),
                         key: Key(_selectedDate.toString().substring(0, 16)),
                         showCursor: true,
@@ -292,7 +293,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                     const SizedBox(height: 24),
                     Row(children: <Widget>[
                       const SizedBox(width: 5),
-                      Expanded(child: TextFormField(
+                      Flexible(child: TextFormField(
                         initialValue: _max.toString(),
                         showCursor: true,
                         onChanged: (String value) => setState(() => _max = int.parse(value)),
@@ -300,7 +301,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         decoration: InputDecoration(labelText: Language.of(context).max, icon: Icon(Icons.group), border: OutlineInputBorder()),
                       )),
                       const SizedBox(width: 5),
-                      Expanded(child: TextFormField(
+                      Flexible(child: TextFormField(
                         initialValue: _fee.toString(),
                         showCursor: true,
                         onChanged: (String value) => setState(() => _fee = int.parse(value)),
@@ -311,7 +312,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                       ]
                     ),
                     const SizedBox(height: 24.0),
-                    Expanded(child: TextFormField(
+                    Flexible(child: TextFormField(
                       showCursor: true,
                       onChanged: (String value) => setState(() => _remarks = value),
                       maxLines: 5,
@@ -325,7 +326,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                       const Text('Include myself')
                     ]),         
                     const SizedBox(height: 24.0),
-                    ElevatedButton(
+                    Center(child: ElevatedButton(
                       child: Text(Language.of(context).create, style: TextStyle(fontSize: 24)),
                       onPressed: () async {
                         var name = await golferName(uid);
@@ -348,7 +349,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                           });
                         }
                       }
-                    )
+                    ))
                   ]
                 );
               }));
