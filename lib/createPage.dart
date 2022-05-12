@@ -5,6 +5,7 @@ import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
 import 'dataModel.dart';
+import 'editable2.dart';
 import 'locale/language.dart';
 
 _NewGroupPage newGroupPage(int golferID) {
@@ -966,7 +967,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                   Text('Course: ' + course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 16.0),
                   Flexible(
-                      child: Editable(
+                      child: Editable2(
                           key: _editableKey,
                           borderColor: Colors.black,
                           tdStyle: TextStyle(fontSize: 16),
