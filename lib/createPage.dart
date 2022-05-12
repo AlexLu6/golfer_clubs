@@ -967,7 +967,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                   Text('Course: ' + course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 16.0),
                   Flexible(
-                      child: Editable(
+                      child: Editable2(
                           key: _editableKey,
                           borderColor: Colors.black,
                           tdStyle: TextStyle(fontSize: 16),
