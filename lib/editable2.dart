@@ -283,7 +283,6 @@ class Editable2State extends State<Editable2> {
           ),
         ),
       );
-    }
   }
 }
 
