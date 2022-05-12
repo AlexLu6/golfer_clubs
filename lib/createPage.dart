@@ -234,8 +234,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).createNewActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   const SizedBox(height: 24.0),
                   Flexible(
                       child: Row(children: <Widget>[
@@ -356,7 +355,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                           });
                         }
                       })
-                ]));
+                ]);
               }));
         });
 }
