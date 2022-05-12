@@ -903,7 +903,7 @@ _NewScorePage newScorePage(Map course, String golfer, {int zone0 = 0, int zone1 
 class _NewScorePage extends MaterialPageRoute<bool> {
   _NewScorePage(Map course, String golfer, int zone0, int zone1)
       : super(builder: (BuildContext context) {
-          final _editableKey = GlobalKey<EditableState>();
+          final _editableKey = GlobalKey<Editable2State>();
           var columns = [
             {'title': 'Out', 'index': 0, 'key': 'zone1', 'editable': false},
             {'title': "Par", 'index': 1, 'key': 'par1', 'editable': false},
@@ -979,7 +979,6 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                           rows: buildRows(),
                           onSubmitted: (value) {
                             sum1 = sum2 = 0;
-                            print(_editableKey.currentState!.editedRows);
                             _editableKey.currentState!.editedRows.forEach((element) {
                               if (element['row'] != 9) {
                                 sum1 += int.parse(element['score1'] ?? '0');
