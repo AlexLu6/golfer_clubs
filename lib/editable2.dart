@@ -372,7 +372,7 @@ class _RowBuilderState2 extends State<RowBuilder2> {
                 onChanged: widget.onChanged,
                 textAlignVertical: TextAlignVertical.center,
                 maxLines: widget.tdEditableMaxLines,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                 //inputFormatters: [],
                 decoration: InputDecoration(
                   filled: widget.zebraStripe,
