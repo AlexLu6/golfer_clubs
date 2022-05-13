@@ -691,7 +691,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               oneRow['c1'] = oneRow['c2'] = oneRow['c3'] = oneRow['c4'] = '';
               rows.add(oneRow);
             }
-
             return rows;
           }
 
