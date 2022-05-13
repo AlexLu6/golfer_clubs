@@ -112,7 +112,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                     initialValue: (groupDoc.data()! as Map)['Remarks'],
                     onChanged: (String value) => setState(() => _remarks = value),
                     maxLines: 5,
-                    decoration: InputDecoration(labelText: Language.of(context).groupRemarks, border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: Language.of(context).groupRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 12.0),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
@@ -223,7 +223,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
           var activity = FirebaseFirestore.instance.collection('ClubActivities');
 
           if (coursesItems.isEmpty)
-            FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
+            FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
                 coursesItems.add(NameID(items['name'] as String, items['cid'] as int));
@@ -656,7 +656,7 @@ ShowActivityPage showActivityPage(var activity, int uId, String title, bool edit
 class ShowActivityPage extends MaterialPageRoute<int> {
   ShowActivityPage(var activity, int uId, String title, bool editable, double handicap)
       : super(builder: (BuildContext context) {
-          bool alreadyIn = false, scoreReady = false;
+          bool alreadyIn = false, scoreReady = false, scoreDone = false;
           String uName = '';
           int uIdx = 0;
           var rows = [];
@@ -693,11 +693,14 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   storeMyActivities();
                 }
               }
-              if ((e['scores'] as List).length > 0) {
+              if ((e['scores'] as List).length > 0)
                 scoreReady = true;
-              }
               idx++;
-              if (idx == (activity.data()!['max'] as int)) while (idx % 4 != 0) idx++;
+              if (idx == (activity.data()!['max'] as int)) {
+                if (idx % 4 != 0)
+                  rows.add(oneRow);
+                while (idx % 4 != 0) idx++;
+              }
             }
             if ((idx % 4) != 0)
               rows.add(oneRow);
@@ -711,10 +714,12 @@ class ShowActivityPage extends MaterialPageRoute<int> {
 
           List buildScoreRows() {
             var scoreRows = [];
-            int idx = 1;
+            int idx = 1, i=0;
 
             for (var e in activity.data()!['golfers']) {
+
               if ((e['scores'] as List).length > 0) {
+                if (uIdx == i) scoreDone = true;
                 scoreRows.add({
                   'rank': idx,
                   'total': e['total'],
@@ -723,9 +728,12 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 });
                 idx++;
               }
+              i++;
             }
+            print(scoreRows);
+            scoreRows.sort((a, b) => a['total'] - b['total']);
             // bubble sort rank
-            for (int i = 0; i < scoreRows.length; i++)
+/*            for (int i = 0; i < scoreRows.length; i++)
               for (int j = i + 1; j < scoreRows.length; j++) {
                 if ((scoreRows[i]['total'] > scoreRows[j]['total']) || (scoreRows[i]['total'] == scoreRows[j]['total'] && scoreRows[i]['net'] > scoreRows[j]['net'])) {
                   var tt = scoreRows[i]['total'];
@@ -738,13 +746,14 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   scoreRows[j]['name'] = nn;
                   scoreRows[j]['net'] = ee;
                 }
-              }
+              }*/
             return scoreRows;
           }
 
           bool teeOffPass = activity.data()!['teeOff'].compareTo(Timestamp.now()) < 0;
           Map course = {};
           void updateScore() {
+            print('updateScore');
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).get().then((value) {
               var glist = value.get('golfers');
               glist[uIdx]['scores'] = myScores[0]['scores'];
@@ -819,10 +828,10 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           ],
                           rows: buildScoreRows(),
                         )),
-                  teeOffPass && !alreadyIn
-                      ? const SizedBox(height: 10.0)
+                      (teeOffPass && !alreadyIn) || scoreDone ?
+                      const SizedBox(height: 10.0)
                       : ElevatedButton(
-                          child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
+                          child: Text(teeOffPass && alreadyIn && !scoreDone ? Language.of(context).enterScore
                                                   : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
                           onPressed: () async {
                             if (teeOffPass && alreadyIn) {
