@@ -39,7 +39,7 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
                     onChanged: (String value) => setState(() => _remarks = value),
                     //keyboardType: TextInputType.name,
                     maxLines: 5,
-                    decoration: InputDecoration(labelText: Language.of(context).groupRemarks, border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: Language.of(context).groupRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 24.0),
                   ElevatedButton(
@@ -113,7 +113,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                     initialValue: (groupDoc.data()! as Map)['Remarks'],
                     onChanged: (String value) => setState(() => _remarks = value),
                     maxLines: 5,
-                    decoration: InputDecoration(labelText: Language.of(context).groupRemarks, border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: Language.of(context).groupRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 24.0),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
@@ -432,7 +432,7 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                     onChanged: (String value) => _remarks = value,
                     //keyboardType: TextInputType.name,
                     maxLines: 5,
-                    decoration: InputDecoration(labelText: Language.of(context).actRemarks, border: OutlineInputBorder()),
+                    decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
