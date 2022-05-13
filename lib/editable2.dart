@@ -372,8 +372,7 @@ class _RowBuilderState2 extends State<RowBuilder2> {
                 onChanged: widget.onChanged,
                 textAlignVertical: TextAlignVertical.center,
                 maxLines: widget.tdEditableMaxLines,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.datetime,
                 //inputFormatters: [],
                 decoration: InputDecoration(
                   filled: widget.zebraStripe,
