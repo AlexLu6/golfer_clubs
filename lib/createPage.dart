@@ -646,7 +646,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           List buildRows() {
             var oneRow = {};
             int idx = 0;
-            for (int i=0; i<12; i++) {
+
             for (var e in activity.data()!['golfers']) {
               if (idx % 4 == 0) {
                 oneRow = Map();
@@ -684,8 +684,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   rows.add(oneRow);
                 while (idx % 4 != 0) idx++;
               }
-            }}
-            print(idx); print(rows);
+            }
             if ((idx % 4) != 0)
               rows.add(oneRow);
             else if (idx == 0) {
