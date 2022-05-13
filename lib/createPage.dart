@@ -1,5 +1,4 @@
 //import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
@@ -707,8 +706,9 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 idx++;
               }
             }
+            scoreRows.sort((a, b) => a['total'] - b['total']);
             // bubble sort rank
-            for (int i = 0; i < scoreRows.length; i++)
+/*            for (int i = 0; i < scoreRows.length; i++)
               for (int j = i + 1; j < scoreRows.length; j++) {
                 if ((scoreRows[i]['total'] > scoreRows[j]['total']) || (scoreRows[i]['total'] == scoreRows[j]['total'] && scoreRows[i]['net'] > scoreRows[j]['net'])) {
                   var tt = scoreRows[i]['total'];
@@ -721,7 +721,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   scoreRows[j]['name'] = nn;
                   scoreRows[j]['net'] = ee;
                 }
-              }
+              }*/
             return scoreRows;
           }
 
