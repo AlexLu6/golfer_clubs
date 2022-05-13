@@ -223,7 +223,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
           var activity = FirebaseFirestore.instance.collection('ClubActivities');
 
           if (coursesItems.isEmpty)
-            FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
+            FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
                 coursesItems.add(NameID(items['name'] as String, items['cid'] as int));
