@@ -679,7 +679,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 scoreReady = true;
               }
               idx++;
-              if (idx == (activity.data()!['max'] as int)) while (idx % 4 != 0) idx++;
+              if (idx == (activity.data()!['max'] as int)) {
+                if (idx % 4 == 0)
+                  rows.add(oneRow);
+                while (idx % 4 != 0) idx++;
+              }
             }}
             print(idx); print(rows);
             if ((idx % 4) != 0)
