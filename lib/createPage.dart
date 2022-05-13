@@ -730,7 +730,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               }
               i++;
             }
-            print(scoreRows);
+
             scoreRows.sort((a, b) => a['total'] - b['total']);
             // bubble sort rank
 /*            for (int i = 0; i < scoreRows.length; i++)
@@ -831,7 +831,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       (teeOffPass && !alreadyIn) || scoreDone ?
                       const SizedBox(height: 10.0)
                       : ElevatedButton(
-                          child: Text(teeOffPass && alreadyIn && !scoreDone ? Language.of(context).enterScore
+                          child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
                                                   : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
                           onPressed: () async {
                             if (teeOffPass && alreadyIn) {
