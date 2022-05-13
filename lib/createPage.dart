@@ -714,7 +714,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
 
           List buildScoreRows() {
             var scoreRows = [];
-            int idx = 1, i=0;
+            int idx = 1;
 
             for (var e in activity.data()!['golfers']) {
 
@@ -728,7 +728,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 });
                 idx++;
               }
-              i++;
             }
 
             scoreRows.sort((a, b) => a['total'] - b['total']);
@@ -753,7 +752,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           bool teeOffPass = activity.data()!['teeOff'].compareTo(Timestamp.now()) < 0;
           Map course = {};
           void updateScore() {
-            print('updateScore');
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).get().then((value) {
               var glist = value.get('golfers');
               glist[uIdx]['scores'] = myScores[0]['scores'];
