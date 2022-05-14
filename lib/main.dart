@@ -344,7 +344,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     Locale myLocale = Localizations.localeOf(context);
-    print('my locale ${myLocale}');
+    print('my locale ${myLocale} country: ${myLocale.countryCode}');
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.only(left: 24.0, right: 24.0),
