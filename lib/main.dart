@@ -329,7 +329,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         "sex": _sex == gendre.Male ? 1 : 2,
                         "uid": _golferID,
                         "expired": expire,
-                        "locale": myLocale
+                        "locale": myLocale.toString()
                       });
                       if (_expired == '') {
                         _expired = expire.toDate().toString();
