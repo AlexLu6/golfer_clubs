@@ -638,7 +638,7 @@ ShowActivityPage showActivityPage(var activity, int uId, String title, bool edit
 class ShowActivityPage extends MaterialPageRoute<int> {
   ShowActivityPage(var activity, int uId, String title, bool editable, double handicap)
       : super(builder: (BuildContext context) {
-          bool alreadyIn = false, scoreReady = false;
+          bool alreadyIn = false, scoreReady = false, scoreDone = false;
           String uName = '';
           int uIdx = 0;
           var rows = [];
@@ -675,9 +675,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   storeMyActivities();
                 }
               }
-              if ((e['scores'] as List).length > 0) {
+              if ((e['scores'] as List).length > 0)
                 scoreReady = true;
-              }
               idx++;
               if (idx == (activity.data()!['max'] as int)) {
                 if (idx % 4 != 0)
@@ -806,7 +805,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           ],
                           rows: buildScoreRows(),
                         )),
-                  teeOffPass && !alreadyIn
+                  (teeOffPass && !alreadyIn) || scoreDone
                       ? const SizedBox(height: 10.0)
                       : ElevatedButton(
                           child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
