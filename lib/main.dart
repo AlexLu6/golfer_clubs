@@ -319,6 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       storeMyScores();
                     });
                   }).whenComplete(() {
+                    print('Try to add new user $_golferID');
                     if (_golferID == 0) {
                       _golferID = uuidTime();
                       DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
