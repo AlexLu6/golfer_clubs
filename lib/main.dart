@@ -397,6 +397,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if ((doc.data()! as Map)["Name"] == null) {
                   return const LinearProgressIndicator();
                 } else {
+                  print(_locale);
                   _gID = (doc.data()! as Map)["gid"] as int;
                   if (((doc.data()! as Map)["members"] as List).indexOf(_golferID) >= 0) {
                     if (myGroups.indexOf(_gID) < 0) {
