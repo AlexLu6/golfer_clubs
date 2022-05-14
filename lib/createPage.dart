@@ -88,9 +88,10 @@ class _GroupActPage extends MaterialPageRoute<bool> {
         }
       );
     }
-
-    void doAddActivity() async {
-      int _gID = (groupDoc.data()! as Map)['gid'];
+    int _gID = (groupDoc.data()! as Map)['gid'];
+    String _gName = (groupDoc.data()! as Map)['Name'];
+    bool isManager = ((groupDoc.data()! as Map)['managers'] as List).indexOf(uID) >= 0;
+    void doAddActivity() async {     
       FirebaseFirestore.instance.collection('ApplyQueue').where('gid', isEqualTo: _gID).where('response', isEqualTo: 'waiting').get().then((value) {
         value.docs.forEach((result) async {
               // grant or refuse the apply of e['uid']
@@ -110,10 +111,10 @@ class _GroupActPage extends MaterialPageRoute<bool> {
     DateTime today = DateTime.now();
     Timestamp deadline = Timestamp.fromDate(DateTime(today.year, today.month, today.day));
     return Scaffold(
-      appBar: AppBar(title: Text(Language.of(context).groupActivity + ':' + (groupDoc.data()! as Map)['Name']), elevation: 1.0),
+      appBar: AppBar(title: Text(Language.of(context).groupActivity + ':' + _gName), elevation: 1.0),
       body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
         return StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: (groupDoc.data()! as Map)['gid']).snapshots(),
+          stream: FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: _gID).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();
@@ -149,7 +150,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                           ),
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () async {
-                          Navigator.push(context, showActivityPage(doc, uID, (groupDoc.data()! as Map)['Name'], ((groupDoc.data()! as Map)['managers'] as List).indexOf(uID) >= 0, _handicap)).then((value) {
+                          Navigator.push(context, showActivityPage(doc, uID, _gName, isManager, _handicap)).then((value) {
                             var glist = doc.get('golfers');
                             if ((value?? 0) == 1) {
                               glist.add({
@@ -197,7 +198,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
           );
         }
       ),
-      floatingActionButton: ((groupDoc.data()! as Map)['managers'] as List).indexOf(uID) < 0 ? null :
+      floatingActionButton: !isManager ? null :
         FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () => doAddActivity()  
