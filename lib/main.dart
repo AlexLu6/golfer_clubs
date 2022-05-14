@@ -1,5 +1,6 @@
 //import 'package:flutter/cupertino.dart';
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -406,7 +407,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         value.docs.forEach((result) => FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id).delete());
                       });
                     }
-                  }
+                  } else if ((doc.data()! as Map)['locale'] != _locale)
+                    return SizedBox(height: 1);
                   return Card(
                       child: ListTile(
                     title: Text((doc.data()! as Map)["Name"], style: TextStyle(fontSize: 20)),
