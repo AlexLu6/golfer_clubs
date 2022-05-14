@@ -208,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text(Language.of(context).usage),
               leading: Icon(Icons.help),
               onTap: () {
-                setState(() => _currentPageIndex = 7);
+                setState(() => _currentPageIndex = 6);
                 Navigator.of(context).pop();
               })
         ],
