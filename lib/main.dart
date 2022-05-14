@@ -238,7 +238,9 @@ class _MyHomePageState extends State<MyHomePage> {
       tag: 'golfer',
       child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer), radius: 140),
     );
-//    final logo2 = Image.file(path:
+
+    Locale myLocale = Localizations.localeOf(context);
+//    print('my locale ${myLocale} country: ${myLocale.countryCode} language: ${myLocale.languageCode}');
 
     final golferName = TextFormField(
       initialValue: _name,
@@ -326,7 +328,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         "phone": _phone,
                         "sex": _sex == gendre.Male ? 1 : 2,
                         "uid": _golferID,
-                        "expired": expire
+                        "expired": expire,
+                        "locale": myLocale
                       });
                       if (_expired == '') {
                         _expired = expire.toDate().toString();
@@ -343,8 +346,6 @@ class _MyHomePageState extends State<MyHomePage> {
             }),
       ),
     );
-    Locale myLocale = Localizations.localeOf(context);
-    print('my locale ${myLocale} country: ${myLocale.countryCode} language: ${myLocale.languageCode}');
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.only(left: 24.0, right: 24.0),
@@ -560,7 +561,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   else
                                     return Text(snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
                                 }),
-                            subtitle: Text(Language.of(context).teeOff + ((doc.data()! as Map)['teeOff']).toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
+                            subtitle: Text(Language.of(context).teeOff + ((doc.data()! as Map)['teeOff']).toDate().toString().substring(0, 16) + '\n' + 
+                                          Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + 
+                                          Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + "\t" + 
+                                          Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
                             leading: FutureBuilder(
                                 future: coursePhoto((doc.data()! as Map)['cid'] as int),
                                 builder: (context, snapshot3) {
