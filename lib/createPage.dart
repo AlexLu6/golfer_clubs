@@ -127,6 +127,8 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                   } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                     FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).delete(); //anyone can delete outdated activity
                     return LinearProgressIndicator();
+                  } else if (myActivities.indexOf(doc.id) >= 0) {
+                    return LinearProgressIndicator();
                   } else {
                     return Card(
                       child: ListTile(
