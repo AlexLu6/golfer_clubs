@@ -306,6 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               } else {
                 if (_name != '' && _phone != '') {
+                  _golferID = 0;
                   FirebaseFirestore.instance.collection('Golfers').where('name', isEqualTo: _name).where('phone', isEqualTo: _phone).get().then((value) {
                     value.docs.forEach((result) {
                       var items = result.data();
@@ -321,30 +322,30 @@ class _MyHomePageState extends State<MyHomePage> {
                       storeMyScores();
                     });
                   }).whenComplete(() {
-                    _golferID = uuidTime();
-                    DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
-                    int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
-                    Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
-                    _locale = myLocale.toString();
-                    FirebaseFirestore.instance.collection('Golfers').add({
-                      "name": _name,
-                      "phone": _phone,
-                      "sex": _sex == gendre.Male ? 1 : 2,
-                      "uid": _golferID,
-                      "expired": expire,
-                      "locale": _locale
-                    }).whenComplete(() { 
-                      print('Add new user $_name using $_locale');
-                      if (_expired == '') {
-                        _expired = expire.toDate().toString();
-                        prefs!.setString('expired', _expired);
-                      }
-                      _currentPageIndex = 1;
-                      setState(() => isRegistered = true);
-                    });
-
-                    prefs!.setInt('golferID', _golferID);
-                    
+                    if (_golferID == 0) {
+                      _golferID = uuidTime();
+                      DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
+                      int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
+                      Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
+                      _locale = myLocale.toString();
+                      FirebaseFirestore.instance.collection('Golfers').add({
+                        "name": _name,
+                        "phone": _phone,
+                        "sex": _sex == gendre.Male ? 1 : 2,
+                        "uid": _golferID,
+                        "expired": expire,
+                        "locale": _locale
+                      }).whenComplete(() { 
+                        print('Add new user $_name using $_locale');
+                        if (_expired == '') {
+                          _expired = expire.toDate().toString();
+                          prefs!.setString('expired', _expired);
+                        }
+                        _currentPageIndex = 1;
+                        setState(() => isRegistered = true);
+                      });
+                      prefs!.setInt('golferID', _golferID);
+                    }
                   });
                 }
               }
