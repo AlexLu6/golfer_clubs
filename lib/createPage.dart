@@ -108,6 +108,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
         Navigator.push(context, newActivityPage(true, _gID, uID));
       });
     }
+    
     DateTime today = DateTime.now();
     Timestamp deadline = Timestamp.fromDate(DateTime(today.year, today.month, today.day));
     return Scaffold(
