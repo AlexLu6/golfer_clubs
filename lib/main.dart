@@ -319,8 +319,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       storeMyScores();
                     });
                   }).whenComplete(() {
-                    print('Try to add new user $_name');
-//                    if (_golferID == 0) {
                       _golferID = uuidTime();
                       DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
                       int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
@@ -340,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           prefs!.setString('expired', _expired);
                         }
                       });
-//                  }
+
                     prefs!.setInt('golferID', _golferID);
                     _currentPageIndex = 1;
                     setState(() => isRegistered = true);
@@ -399,8 +397,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if ((doc.data()! as Map)["Name"] == null) {
                   return const LinearProgressIndicator();
                 } else {
-                  print(_locale);
-                  _gID = (doc.data()! as Map)["gid"] as int;
+                   _gID = (doc.data()! as Map)["gid"] as int;
                   if (((doc.data()! as Map)["members"] as List).indexOf(_golferID) >= 0) {
                     if (myGroups.indexOf(_gID) < 0) {
                       myGroups.add(_gID);
