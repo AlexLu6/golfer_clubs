@@ -842,10 +842,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
 
           List buildScoreRows() {
             var scoreRows = [];
-            int idx = 1;
+            int idx = 1, i=0;
 
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
+                if (uIdx == i) scoreDone = true;
                 scoreRows.add({
                   'rank': idx,
                   'total': e['total'],
@@ -854,6 +855,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 });
                 idx++;
               }
+              i++;
             }
             scoreRows.sort((a, b) => a['total'] - b['total']);
             // bubble sort rank
