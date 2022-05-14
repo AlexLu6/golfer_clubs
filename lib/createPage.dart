@@ -1,4 +1,5 @@
 //import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
@@ -128,7 +129,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                     FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).delete(); //anyone can delete outdated activity
                     return LinearProgressIndicator();
                   } else if (myActivities.indexOf(doc.id) >= 0) {
-                    return LinearProgressIndicator();
+                    return SizedBox(height: 1);
                   } else {
                     return Card(
                       child: ListTile(
