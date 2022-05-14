@@ -325,6 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
                       Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
                       _locale = myLocale.toString();
+                      print(_locale);
                       FirebaseFirestore.instance.collection('Golfers').add({
                         "name": _name,
                         "phone": _phone,
