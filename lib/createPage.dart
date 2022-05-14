@@ -1,5 +1,4 @@
 //import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
@@ -9,12 +8,12 @@ import 'dataModel.dart';
 import 'editable2.dart';
 import 'locale/language.dart';
 
-_NewGroupPage newGroupPage(int golferID) {
-  return _NewGroupPage(golferID);
+_NewGroupPage newGroupPage(int golferID, String locale) {
+  return _NewGroupPage(golferID, locale);
 }
 
 class _NewGroupPage extends MaterialPageRoute<bool> {
-  _NewGroupPage(int golferID)
+  _NewGroupPage(int golferID, String _locale)
       : super(builder: (BuildContext context) {
           String _groupName = '', _region = '', _remarks = '';
           return Scaffold(
@@ -54,6 +53,7 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
                             "Remarks": _remarks,
                             "managers": [golferID],
                             "members": [golferID],
+                            "locale": _locale,
                             "gid": gID
                           });
                           myGroups.add(gID);

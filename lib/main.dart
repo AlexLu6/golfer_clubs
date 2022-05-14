@@ -65,7 +65,7 @@ String? _golferAvatar;
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _golferID = 0, _gID = 1;
-  String _name = '', _phone = '', _expired = '';
+  String _name = '', _phone = '', _expired = '', _locale ='';
   gendre _sex = gendre.Male;
   double _handicap = 14.2;
   bool isRegistered = false, isUpdate = false, isExpired = false;
@@ -85,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
         var items = result.data();
         _name = items['name'];
         _phone = items['phone'];
+        _locale = items['locale'];
         _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
         if (_expired == '') {
           _expired = items['expired'].toDate().toString();
@@ -655,7 +656,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void doBodyAdd(int index) async {
     switch (index) {
       case 1:
-        Navigator.push(context, newGroupPage(_golferID)).then((ret) {
+        Navigator.push(context, newGroupPage(_golferID, _locale)).then((ret) {
           if (ret ?? false) setState(() => index = 1);
         });
         break;
