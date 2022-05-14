@@ -311,6 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       var items = result.data();
                       _golferDoc = result.id;
                       _golferID = items['uid'];
+                      _locale = items['locale'];
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
                       prefs!.setInt('golferID', _golferID);
@@ -319,25 +320,25 @@ class _MyHomePageState extends State<MyHomePage> {
                       storeMyScores();
                     });
                   }).whenComplete(() {
-                      _golferID = uuidTime();
-                      DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
-                      int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
-                      Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
-                      _locale = myLocale.toString();
-                      FirebaseFirestore.instance.collection('Golfers').add({
-                        "name": _name,
-                        "phone": _phone,
-                        "sex": _sex == gendre.Male ? 1 : 2,
-                        "uid": _golferID,
-                        "expired": expire,
-                        "locale": _locale
-                      }).whenComplete(() { 
-                        print('Add new user $_name using $_locale');
-                        if (_expired == '') {
-                          _expired = expire.toDate().toString();
-                          prefs!.setString('expired', _expired);
-                        }
-                      });
+                    _golferID = uuidTime();
+                    DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
+                    int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
+                    Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
+                    _locale = myLocale.toString();
+                    FirebaseFirestore.instance.collection('Golfers').add({
+                      "name": _name,
+                      "phone": _phone,
+                      "sex": _sex == gendre.Male ? 1 : 2,
+                      "uid": _golferID,
+                      "expired": expire,
+                      "locale": _locale
+                    }).whenComplete(() { 
+                      print('Add new user $_name using $_locale');
+                      if (_expired == '') {
+                        _expired = expire.toDate().toString();
+                        prefs!.setString('expired', _expired);
+                      }
+                    });
 
                     prefs!.setInt('golferID', _golferID);
                     _currentPageIndex = 1;
