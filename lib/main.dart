@@ -312,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       _golferDoc = result.id;
                       _golferID = items['uid'];
                       _locale = items['locale'];
+                      _expired = items['expired'].toDate().toString();
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
                       prefs!.setInt('golferID', _golferID);
