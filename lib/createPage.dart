@@ -65,13 +65,114 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
         });
 }
 
+_GroupActPage groupActPage(var groupDoc, int uID, String uName, int uSex, double uHandicap) {
+  return _GroupActPage(groupDoc, uID, uName, uSex, uHandicap);
+}
+
+class _GroupActPage extends MaterialPageRoute<bool> {
+  _GroupActPage(var groupDoc, int uID, String _name, int _sex, double _handicap)
+      : super(builder: (BuildContext context) {
+    DateTime today = DateTime.now();
+    Timestamp deadline = Timestamp.fromDate(DateTime(today.year, today.month, today.day));
+    return Scaffold(
+      appBar: AppBar(title: Text(Language.of(context).groupActivity + ':' + (groupDoc.data()! as Map)['Name']), elevation: 1.0),
+      body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+        return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: (groupDoc.data()! as Map)['gid']).snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            } else {
+              return ListView(
+                children: snapshot.data!.docs.map((doc) {
+                  if ((doc.data()! as Map)["teeOff"] == null) {
+                    return LinearProgressIndicator();
+                  } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
+                    FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).delete(); //anyone can delete outdated activity
+                    return LinearProgressIndicator();
+                  } else {
+                    return Card(
+                      child: ListTile(
+                        title: FutureBuilder(
+                          future: courseName((doc.data()! as Map)['cid'] as int),
+                            builder: (context, snapshot2) {
+                              if (!snapshot2.hasData)
+                                return const LinearProgressIndicator();
+                              else
+                                return Text(snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
+                            }
+                          ),
+                        subtitle: Text(Language.of(context).teeOff + (doc.data()! as Map)['teeOff']!.toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List<dynamic>).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
+                        leading: FutureBuilder(
+                          future: coursePhoto((doc.data()! as Map)['cid'] as int),
+                            builder: (context, snapshot3) {
+                              if (!snapshot3.hasData)
+                                return const CircularProgressIndicator();
+                              else
+                                return Image.network(snapshot3.data!.toString());
+                            }
+                          ),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap: () async {
+                          Navigator.push(context, showActivityPage(doc, uID, (groupDoc.data()! as Map)["Name"], ((groupDoc.data()! as Map)["manager"] as List).indexOf(uID) >= 0, _handicap)).then((value) {
+                            var glist = doc.get('golfers');
+                            if ((value?? 0) == 1) {
+                              glist.add({
+                                'uid': uID,
+                                'name': _name + ((_sex == 0) ? Language.of(context).femaleNote : ''),
+                                'scores': []
+                              });
+                              myActivities.add(doc.id);
+                              storeMyActivities();
+                              FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
+                                'golfers': glist
+                              });
+                            } else if (value == -1) {
+                              glist.removeWhere((item) => item['uid'] == uID);
+                              myActivities.remove(doc.id);
+                              storeMyActivities();
+                              // check if golfer is subgroups
+                              bool found = false;
+                              var subGroups = doc.get('subgroups') as List;
+                              for (int i = 0; i < subGroups.length; i++) {
+                                for (int j = 0; j < (subGroups[i] as Map).length; j++) {
+                                  if ((subGroups[i] as Map)[j.toString()] == uID) {
+                                    if ((subGroups[i] as Map).length == 1)
+                                      subGroups.removeAt(i);
+                                    else {
+                                      (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[((subGroups[i] as Map).length - 1).toString()];
+                                      (subGroups[i] as Map).remove(((subGroups[i] as Map).length - 1).toString());
+                                    }
+                                    found = true;
+                                  }
+                                }
+                              }
+                              FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update(
+                                  found ? {'golfers': glist, 'subgroups': subGroups} : {'golfers': glist}
+                              );
+                            }
+                          });
+                        }
+                      )
+                    );
+                  }
+                }).toList());
+              }
+            }
+          );
+        }
+      )
+    );
+  });
+}
+
 _EditGroupPage editGroupPage(var groupDoc, int uID) {
   return _EditGroupPage(groupDoc, uID);
 }
 
 class _EditGroupPage extends MaterialPageRoute<bool> {
   _EditGroupPage(var groupDoc, int uID)
-      : super(builder: (BuildContext context) {
+    : super(builder: (BuildContext context) {
           List<NameID> golfers = [];
           var _selectedGolfer;
           String _groupName = (groupDoc.data()! as Map)['Name'], _region = (groupDoc.data()! as Map)['region'], _remarks = (groupDoc.data()! as Map)['Remarks'];
@@ -89,10 +190,10 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
           }
 
           return Scaffold(
-              appBar: AppBar(title: Text(Language.of(context).modify + ' ' + (groupDoc.data()! as Map)['Name']), elevation: 1.0),
-              body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Center(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+            appBar: AppBar(title: Text(Language.of(context).modify + ' ' + (groupDoc.data()! as Map)['Name']), elevation: 1.0),
+            body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+              return Center(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   TextFormField(
                     showCursor: true,
                     initialValue: (groupDoc.data()! as Map)['Name'],
@@ -193,8 +294,9 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             Navigator.of(context).pop(true);
                           }),
                 ]));
-              }));
-        });
+              })
+          );
+    });
 }
 
 class NameID {
