@@ -114,7 +114,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                           ),
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () async {
-                          Navigator.push(context, showActivityPage(doc, uID, (groupDoc.data()! as Map)["Name"], ((groupDoc.data()! as Map)["manager"] as List).indexOf(uID) >= 0, _handicap)).then((value) {
+                          Navigator.push(context, showActivityPage(doc, uID, (groupDoc.data()! as Map)['Name'], ((groupDoc.data()! as Map)['managers'] as List).indexOf(uID) >= 0, _handicap)).then((value) {
                             var glist = doc.get('golfers');
                             if ((value?? 0) == 1) {
                               glist.add({
