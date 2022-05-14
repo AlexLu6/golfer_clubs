@@ -307,37 +307,41 @@ class _MyHomePageState extends State<MyHomePage> {
                       var items = result.data();
                       _golferDoc = result.id;
                       _golferID = items['uid'];
+                      _locale = items['loale'];
+                      _expired = items['expired'].toDate().toString();
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
                     });
                   }).whenComplete(() {
-                    if (_golferID == 0) {
-                      _golferID = uuidTime();
-                      DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
-                      //DateTime today = DateTime.now();
-                      int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
-                      Timestamp expire = Timestamp.fromDate(DateTime(_expired == '' ? today.year + 1 : today.year, today.month, today.day - leap));
-                      FirebaseFirestore.instance.collection('Golfers').add({
-                        "name": _name,
-                        "phone": _phone,
-                        "sex": _sex == gendre.Male ? 1 : 2,
-                        "uid": _golferID,
-                        "expired": expire,
-                        "locale": myLocale.toString()
-                      });
+                    _golferID = uuidTime();
+                    DateTime today = _expired == '' ? DateTime.now() : DateTime
+                        .parse(_expired);
+                    //DateTime today = DateTime.now();
+                    int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
+                    Timestamp expire = Timestamp.fromDate(DateTime(
+                        _expired == '' ? today.year + 1 : today.year,
+                        today.month, today.day - leap));
+                    FirebaseFirestore.instance.collection('Golfers').add({
+                      "name": _name,
+                      "phone": _phone,
+                      "sex": _sex == gendre.Male ? 1 : 2,
+                      "uid": _golferID,
+                      "expired": expire,
+                      "locale": myLocale.toString()
+                    }).whenComplete(() {
                       if (_expired == '') {
                         _expired = expire.toDate().toString();
                         prefs!.setString('expired', _expired);
+                        _currentPageIndex = 1;
+                        setState(() => isRegistered = true);
                       }
-
-                    }
+                    });
                     prefs!.setInt('golferID', _golferID);
-                    _currentPageIndex = 1;
-                    setState(() => isRegistered = true);
                   });
+                  }
                 }
               }
-            }),
+            ),
       ),
     );
     return ListView(
