@@ -355,7 +355,6 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(height: 8.0,),
         logo,
         SizedBox(height: 24.0,),
-        SizedBox(height: 24.0,),
         golferName,
         SizedBox(height: 8.0,),
         golferPhone,
