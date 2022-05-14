@@ -107,7 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).activities, //"My Activities",
       Language.of(context).golfCourses, //"Golf courses",
       Language.of(context).myScores, //"My Scores",
-      Language.of(context).groupActivity, //"Group Activities"
       Language.of(context).usage  // "Program Usage"
     ];
     return Scaffold(
@@ -382,21 +381,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  Future<bool?> grantApplyDialog(String name) {
-    return showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(Language.of(context).reply),
-            content: Text(name + Language.of(context).applyGroup),
-            actions: <Widget>[
-              TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
-              TextButton(child: Text("Reject"), onPressed: () => Navigator.of(context).pop(true))
-            ],
-          );
-        });
-  }
-
   Widget? groupBody() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('GolferClubs').snapshots(),
@@ -543,89 +527,6 @@ class _MyHomePageState extends State<MyHomePage> {
             });
   }
 
-  Widget? groupActivityBody(int gID) {
-    DateTime today = DateTime.now();
-    Timestamp deadline = Timestamp.fromDate(DateTime(today.year, today.month, today.day));
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: gID).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          } else {
-            return ListView(
-                children: snapshot.data!.docs.map((doc) {
-              if ((doc.data()! as Map)["teeOff"] == null) {
-                return LinearProgressIndicator();
-              } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
-                FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).delete(); //anyone can delete outdated activity
-                return LinearProgressIndicator();
-              } else {
-                return Card(
-                    child: ListTile(
-                        title: FutureBuilder(
-                            future: courseName((doc.data()! as Map)['cid'] as int),
-                            builder: (context, snapshot2) {
-                              if (!snapshot2.hasData)
-                                return const LinearProgressIndicator();
-                              else
-                                return Text(snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
-                            }),
-                        subtitle: Text(Language.of(context).teeOff + (doc.data()! as Map)['teeOff']!.toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List<dynamic>).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
-                        leading: FutureBuilder(
-                            future: coursePhoto((doc.data()! as Map)['cid'] as int),
-                            builder: (context, snapshot3) {
-                              if (!snapshot3.hasData)
-                                return const CircularProgressIndicator();
-                              else
-                                return Image.network(snapshot3.data!.toString());
-                            }),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                        onTap: () async {
-                          Navigator.push(context, showActivityPage(doc, _golferID, await groupName(gID)!, await isManager(gID, _golferID), _handicap)).then((value) {
-                            var glist = doc.get('golfers');
-                            if ((value?? 0) == 1) {
-                              glist.add({
-                                'uid': _golferID,
-                                'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),
-                                'scores': []
-                              });
-                              myActivities.add(doc.id);
-                              storeMyActivities();
-                              FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
-                                'golfers': glist
-                              });
-                            } else if (value == -1) {
-                              glist.removeWhere((item) => item['uid'] == _golferID);
-                              myActivities.remove(doc.id);
-                              storeMyActivities();
-                              // check if golfer is subgroups
-                              bool found = false;
-                              var subGroups = doc.get('subgroups') as List;
-                              for (int i = 0; i < subGroups.length; i++) {
-                                for (int j = 0; j < (subGroups[i] as Map).length; j++) {
-                                  if ((subGroups[i] as Map)[j.toString()] == _golferID) {
-                                    if ((subGroups[i] as Map).length == 1)
-                                      subGroups.removeAt(i);
-                                    else {
-                                      (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[((subGroups[i] as Map).length - 1).toString()];
-                                      (subGroups[i] as Map).remove(((subGroups[i] as Map).length - 1).toString());
-                                    }
-                                    found = true;
-                                  }
-                                }
-                              }
-                              FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update(
-                                  found ? {'golfers': glist, 'subgroups': subGroups} : {'golfers': glist}
-                              );
-                            }
-                          });
-                        }));
-              }
-            }).toList());
-          }
-        });
-  }
-
   Widget activityBody() {
     Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
     var allActivities = [];
@@ -752,50 +653,10 @@ class _MyHomePageState extends State<MyHomePage> {
           if (ret ?? false) setState(() => index = 1);
         });
         break;
-      case 3:
-        Navigator.push(context, newActivityPage(false, _golferID, _golferID)).then((ret) {
-          if (ret ?? false) setState(() => index = 3);
-        });
-        break;
       case 4:
         Navigator.push(context, newGolfCoursePage()).then((ret) {
           if (ret ?? false) setState(() => index = 4);
         });
-        break;
-      case 6:
-        if (await isManager(_gID, _golferID)) {
-          FirebaseFirestore.instance.collection('ApplyQueue').where('gid', isEqualTo: _gID).where('response', isEqualTo: 'waiting').get().then((value) {
-            value.docs.forEach((result) async {
-              // grant or refuse the apply of e['uid']
-              var e = result.data();
-              bool? ans = await grantApplyDialog(await golferName(e['uid'] as int)!);
-              if (ans!) {
-                FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id).update({
-                  'response': 'OK'
-                });
-                addMember(_gID, e['uid'] as int);
-              } else
-                FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id).update({
-                  'response': 'No'
-                });
-            });
-          });
-          Navigator.push(context, newActivityPage(true, _gID, _golferID)).then((ret) {
-            if (ret ?? false) setState(() => index = 6);
-          });
-        } else {
-          showDialog<bool>(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text(Language.of(context).hint),
-                  content: Text(Language.of(context).managerOnly),
-                  actions: <Widget>[
-                    TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
-                  ],
-                );
-              });
-        }
         break;
     }
   }
