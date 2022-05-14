@@ -475,7 +475,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         return const LinearProgressIndicator();
                       }
                       return Card(
-                          child: ListTile(
+                        child: ListTile(
                         title: Text((doc.data()! as Map)["Name"], style: TextStyle(fontSize: 20)),
                         subtitle: FutureBuilder(
                             future: golferNames((doc.data()! as Map)["managers"] as List),
