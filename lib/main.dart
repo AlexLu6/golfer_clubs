@@ -339,11 +339,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         _expired = expire.toDate().toString();
                         prefs!.setString('expired', _expired);
                       }
+                      _currentPageIndex = 1;
+                      setState(() => isRegistered = true);
                     });
 
                     prefs!.setInt('golferID', _golferID);
-                    _currentPageIndex = 1;
-                    setState(() => isRegistered = true);
+                    
                   });
                 }
               }
