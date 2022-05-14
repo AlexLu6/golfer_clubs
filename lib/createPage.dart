@@ -72,6 +72,41 @@ _GroupActPage groupActPage(var groupDoc, int uID, String uName, int uSex, double
 class _GroupActPage extends MaterialPageRoute<bool> {
   _GroupActPage(var groupDoc, int uID, String _name, int _sex, double _handicap)
       : super(builder: (BuildContext context) {
+
+    Future<bool?> grantApplyDialog(String name) {
+      return showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(Language.of(context).reply),
+            content: Text(name + Language.of(context).applyGroup),
+            actions: <Widget>[
+              TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
+              TextButton(child: Text("Reject"), onPressed: () => Navigator.of(context).pop(true))
+            ],
+          );
+        }
+      );
+    }
+
+    void doAddActivity() async {
+      int _gID = (groupDoc.data()! as Map)['gid'];
+      FirebaseFirestore.instance.collection('ApplyQueue').where('gid', isEqualTo: _gID).where('response', isEqualTo: 'waiting').get().then((value) {
+        value.docs.forEach((result) async {
+              // grant or refuse the apply of e['uid']
+          var e = result.data();
+          bool? ans = await grantApplyDialog(await golferName(e['uid'] as int)!);
+          if (ans!) {
+            FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id)
+              .update({'response': 'OK'});
+            addMember(_gID, e['uid'] as int);
+          } else
+            FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id)
+              .update({'response': 'No'});
+        });
+        Navigator.push(context, newActivityPage(true, _gID, uID));
+      });
+    }
     DateTime today = DateTime.now();
     Timestamp deadline = Timestamp.fromDate(DateTime(today.year, today.month, today.day));
     return Scaffold(
@@ -161,7 +196,12 @@ class _GroupActPage extends MaterialPageRoute<bool> {
             }
           );
         }
-      )
+      ),
+      floatingActionButton: ((groupDoc.data()! as Map)['managers'] as List).indexOf(uID) < 0 ? null :
+        FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () => doAddActivity()  
+        )
     );
   });
 }

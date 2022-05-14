@@ -120,11 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
               : _currentPageIndex == 2 ? myGroupBody()
               : _currentPageIndex == 3  ? activityBody()
               : _currentPageIndex == 4  ? golfCourseBody()
-              : _currentPageIndex == 5  ? myScoreBody()
-              : _currentPageIndex == 6  ? groupActivityBody(_gID)  
+              : _currentPageIndex == 5  ? myScoreBody()  
               : usageBody()),
       drawer: isRegistered ? golfDrawer() : null,
-      floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4 || _currentPageIndex == 6)
+      floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
           ? FloatingActionButton(
               onPressed: () => doBodyAdd(_currentPageIndex),
               child: const Icon(Icons.add),
@@ -437,7 +436,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () async {
                       _gID = (doc.data()! as Map)["gid"] as int;
                       if (myGroups.indexOf(_gID) >= 0) {
-                        //setState(() => _currentPageIndex = 6);
                         Navigator.push(context, groupActPage(doc, _golferID, _name, _sex == gendre.Male ? 1 : 0, _handicap));
                       } else {
                         bool? apply = await showApplyDialog(await isApplying(_gID, _golferID));
@@ -508,7 +506,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
-                          //setState(() => _currentPageIndex = 6);
                           Navigator.push(context, groupActPage(doc, _golferID, _name, _sex == gendre.Male ? 1 : 0, _handicap));
                         },
                         onLongPress: () {
