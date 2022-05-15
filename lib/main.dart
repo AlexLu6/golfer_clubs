@@ -61,6 +61,7 @@ enum gendre { Male, Female }
 final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea1225b46c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=713&q=80';
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
 final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
+final String drawerPhoto = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
 String? _golferAvatar;
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -148,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).pop();
                 },
                 child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer))),
-            decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage("https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"))),
+            decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerPhoto))),
             onDetailsPressed: () {
               setState(() => isUpdate = true);
               _currentPageIndex = 0;
