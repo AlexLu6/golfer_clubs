@@ -140,7 +140,7 @@ Future<String>? courseName(int cid) {
     value.docs.forEach((result) {
       var items = result.data();
       res = items['region'] + ' ' + items['name'];
-      _coursePhoto = items['region'];
+      _coursePhoto = items['photo'];
     });
     return res;
   });
