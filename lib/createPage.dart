@@ -731,6 +731,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
           }
 
           int alreadyIn = -1;
+          print(subGroups.length);
           for (int i = 0; i < subGroups.length; i++) {
             print(subGroups);
             for (int j = 0; j < (subGroups[i] as Map).length; j++) {
