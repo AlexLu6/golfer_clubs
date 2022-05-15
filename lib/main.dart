@@ -561,11 +561,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: snapshot.data!.docs.map((doc) {
                   if ((doc.data()! as Map)["teeOff"] == null) {
                     return LinearProgressIndicator();
+                  } else if (myActivities.indexOf(doc.id) < 0) {
+                    return LinearProgressIndicator();
                   } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                     myActivities.remove(doc.id);
                     storeMyActivities();
-                    return LinearProgressIndicator();
-                  } else if (myActivities.indexOf(doc.id) < 0) {
                     return LinearProgressIndicator();
                   } else {
                     allActivities.add(doc.id);
