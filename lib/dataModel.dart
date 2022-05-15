@@ -133,16 +133,20 @@ Future<Map>? courseBody(int cid) {
   });
 }
 
+String _coursePhoto = '';
 Future<String>? courseName(int cid) {
   var res;
   return FirebaseFirestore.instance.collection('GolfCourses').where('cid', isEqualTo: cid).get().then((value) {
     value.docs.forEach((result) {
       var items = result.data();
       res = items['region'] + ' ' + items['name'];
+      _coursePhoto = items['region'];
     });
     return res;
   });
 }
+
+String coursePhoto2()  {return _coursePhoto;}
 
 Future<String>? coursePhoto(int cid) {
   var res;

@@ -583,15 +583,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + 
                                           Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + "\t" + 
                                           Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
-                            leading: FutureBuilder(
-                                future: coursePhoto((doc.data()! as Map)['cid'] as int),
-                                builder: (context, snapshot3) {
-                                  if (!snapshot3.hasData)
-                                    return const CircularProgressIndicator();
-                                  else
-                                    return Image.network(snapshot3.data!.toString(), fit: BoxFit.fitHeight);
-                                }),
-                            /*Image.network(coursePhoto((doc.data()! as Map)["cid"] as int)!),*/
+                            leading: Image.network(coursePhoto2(), fit: BoxFit.fitHeight),
                             trailing: Icon(Icons.keyboard_arrow_right),
                             onTap: () async {
                               Navigator.push(context, showActivityPage(doc, _golferID, await groupName((doc.data()! as Map)['gid'] as int)!, await isManager((doc.data()! as Map)['gid'] as int, _golferID), _handicap)).then((value) async {
