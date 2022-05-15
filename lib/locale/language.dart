@@ -73,5 +73,5 @@ abstract class Language {
   String get scoreNote;
   String get usage;
   String get hlepImage;
-  String get managerOnly;
+  String get applicationSent;
 }

@@ -69,5 +69,5 @@ class LanguageEn extends Language {
   String get scoreNote => 'Note: Press Enter after all inputs!';
   String get usage => 'Help';
   String get hlepImage => 'golferUsage_en.jpg';
-  String get managerOnly => 'Only group manager can add new activity!';
+  String get applicationSent => 'Your application has been sent!';
 }
