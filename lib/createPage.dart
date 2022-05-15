@@ -731,17 +731,19 @@ class SubGroupPage extends MaterialPageRoute<bool> {
           }
 
           int alreadyIn = -1;
-          print(subGroups.length);
+          print(subGroups);
           for (int i = 0; i < subGroups.length; i++) {
-            print(subGroups);
             for (int j = 0; j < (subGroups[i] as Map).length; j++) {
               print(subGroups[i]);
               subIntGroups[i].add((subGroups[i] as Map)[j.toString()]);
               if (subIntGroups[i][j] == uId) alreadyIn = i;
             }
           }
-          if (subIntGroups[subIntGroups.length - 1].length > 0 && subIntGroups[subIntGroups.length - 1].length < max && alreadyIn < 0) subIntGroups.add([]);
-
+          print(subGroups);
+          if (subIntGroups[subIntGroups.length - 1].length > 0 && 
+              subIntGroups[subIntGroups.length - 1].length < max && 
+              alreadyIn < 0) subIntGroups.add([]);
+          print(subGroups);
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).subGroup), elevation: 1.0),
               body: ListView.builder(
