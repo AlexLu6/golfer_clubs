@@ -57,7 +57,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-enum gendre { Male, Female }
+
 final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea1225b46c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=713&q=80';
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
 final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
@@ -431,7 +431,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () async {
                       _gID = (doc.data()! as Map)["gid"] as int;
                       if (myGroups.indexOf(_gID) >= 0) {
-                        Navigator.push(context, groupActPage(doc, _golferID, _name, _sex == gendre.Male ? 1 : 0, _handicap));
+                        Navigator.push(context, groupActPage(doc, _golferID, _name, _sex, _handicap));
                       } else {
                         bool? apply = await showApplyDialog(await isApplying(_gID, _golferID));
                         if (apply!) {
@@ -511,7 +511,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
-                          Navigator.push(context, groupActPage(doc, _golferID, _name, _sex == gendre.Male ? 1 : 0, _handicap));
+                          Navigator.push(context, groupActPage(doc, _golferID, _name, _sex, _handicap));
                         },
                         onLongPress: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
