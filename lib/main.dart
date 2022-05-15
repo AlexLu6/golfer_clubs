@@ -439,14 +439,18 @@ class _MyHomePageState extends State<MyHomePage> {
                             "gid": _gID,
                             "response": "waiting"
                           }).whenComplete(() =>
-                            AlertDialog(
-                              title: Text(Language.of(context).hint),
-                              content: Text(Language.of(context).applicationSent),
-                              actions: <Widget>[
-                                TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
-                              ],
-                            )
-                          );
+                            showDialog<bool>(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(Language.of(context).hint),
+                                  content: Text(Language.of(context).applicationSent),
+                                  actions: <Widget>[
+                                    TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
+                                  ],
+                                );
+                              }
+                          ));
                         }
                       }
                     },
