@@ -736,11 +736,12 @@ class SubGroupPage extends MaterialPageRoute<bool> {
             for (int j = 0; j < (subGroups[i] as Map).length; j++) {
               print(subGroups[i]);
               subIntGroups[i].add((subGroups[i] as Map)[j.toString()]);
+              print(subIntGroups);
               if (subIntGroups[i][j] == uId) alreadyIn = i;
               print('$i $j');
             }
           }
-          print(subGroups);
+          print(subIntGroups);
           if (subIntGroups[subIntGroups.length - 1].length > 0 && 
               subIntGroups[subIntGroups.length - 1].length < max && 
               alreadyIn < 0) subIntGroups.add([]);
