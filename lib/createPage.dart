@@ -737,7 +737,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
           if (subIntGroups[subIntGroups.length - 1].length > 0 && 
               subIntGroups.length < max && alreadyIn < 0) 
               subIntGroups.add([]);
-          print(subIntGroups);
+
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).subGroup), elevation: 1.0),
               body: ListView.builder(
@@ -932,7 +932,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           child: Text(Language.of(context).subGroup),
                           onPressed: () {
                             Navigator.push(context, SubGroupPage(activity, uId)).then((value) {
-                              if (value ?? false) Navigator.of(context).pop(0);
+                              if (value ?? false) setState(() {}); //Navigator.of(context).pop(0);
                             });
                           }),
                   const SizedBox(height: 16.0),
