@@ -583,7 +583,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + 
                                           Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + "\t" + 
                                           Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
-                            leading: Image.network(coursePhoto2(), fit: BoxFit.fitHeight),
+                            leading: Image.network(coursePhoto2()),
                             trailing: Icon(Icons.keyboard_arrow_right),
                             onTap: () async {
                               Navigator.push(context, showActivityPage(doc, _golferID, await groupName((doc.data()! as Map)['gid'] as int)!, await isManager((doc.data()! as Map)['gid'] as int, _golferID), _handicap)).then((value) async {
