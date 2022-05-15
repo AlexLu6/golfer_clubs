@@ -60,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 enum gendre { Male, Female }
 final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea1225b46c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=713&q=80';
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
+final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
 String? _golferAvatar;
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -423,7 +424,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           else
                             return Text(Language.of(context).region + (doc.data()! as Map)["region"] + "\n" + Language.of(context).manager + snapshot2.data!.toString() + "\n" + Language.of(context).members + ((doc.data() as Map)["members"] as List<dynamic>).length.toString());
                         }),
-                    leading: Image.network("https://www.csu-emba.com/img/port/22/10.jpg"),
+                    leading: Image.network(groupPhoto),
                     /*Icon(Icons.group), */
                     trailing: myGroups.indexOf(_gID) >= 0 ? Icon(Icons.keyboard_arrow_right) : Icon(Icons.no_accounts),
                     onTap: () async {
@@ -475,8 +476,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget? myGroupBody() {
-    return myGroups.isEmpty
-        ? ListView()
+    return myGroups.isEmpty ? ListView()
         : StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('GolferClubs').where('gid', whereIn: myGroups).snapshots(),
             builder: (context, snapshot) {
@@ -562,7 +562,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if ((doc.data()! as Map)["teeOff"] == null) {
                     return LinearProgressIndicator();
                   } else if (myActivities.indexOf(doc.id) < 0) {
-                    return LinearProgressIndicator();
+                    return SizedBox(height: 0.1,);
                   } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                     myActivities.remove(doc.id);
                     storeMyActivities();
