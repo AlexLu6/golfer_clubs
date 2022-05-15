@@ -791,7 +791,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           List buildRows() {
             var oneRow = {};
             int idx = 0;
-
+            for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
             for (var e in activity.data()!['golfers']) {
               if (idx % 4 == 0) {
                 oneRow = Map();
@@ -933,7 +933,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                               if (value ?? false) Navigator.of(context).pop(0);
                             });
                           }),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 4.0),
                   !scoreReady
                       ? const SizedBox(height: 10.0)
                       : Flexible(
