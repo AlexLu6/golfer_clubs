@@ -1110,7 +1110,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
               appBar: AppBar(title: Text(Language.of(context).enterScore), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                 return Container(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   const SizedBox(height: 16.0),
                   Text('Name: ' + golfer, style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 16.0),
@@ -1141,11 +1141,11 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                           })),
                   Text(Language.of(context).scoreNote, style: TextStyle(fontSize: 18)),
                   const SizedBox(height: 6.0),
-                  (sum1 + sum2) == 0 ? const SizedBox(height: 6.0) : Text(Language.of(context).total + ': ' + (sum1 + sum2).toString(), style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 16.0),
+                  (sum1 + sum2) == 0 ? const SizedBox(height: 6.0) : Text(Language.of(context).total + ': ' + (sum1 + sum2).toString(), style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 6.0),
                   Center(
                       child: ElevatedButton(
-                          child: Text(Language.of(context).store, style: TextStyle(fontSize: 24)),
+                          child: Text(Language.of(context).store, style: TextStyle(fontSize: 20)),
                           onPressed: () {
                             bool complete = scores.length > 0;
                             scores.forEach((element) {
