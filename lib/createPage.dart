@@ -711,7 +711,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
       : super(builder: (BuildContext context) {
           var subGroups = activity.data()!['subgroups'] as List;
           int max = ((activity.data()!['golfers'] as List).length + 3) >> 2;
-          List<List<int>> subIntGroups = [[]];
+          List<List<int>> subIntGroups = [];
 
           void storeAndLeave() {
             var newGroups = [];
@@ -733,14 +733,14 @@ class SubGroupPage extends MaterialPageRoute<bool> {
           int alreadyIn = -1;
           print(subGroups);
           for (int i = 0; i < subGroups.length; i++) {
+            subIntGroups.add([]);
             for (int j = 0; j < (subGroups[i] as Map).length; j++) {
               print(subGroups[i]);
               subIntGroups[i].add((subGroups[i] as Map)[j.toString()]);
               print(subIntGroups);
               if (subIntGroups[i][j] == uId) alreadyIn = i;
-              print('$i $j');
+
             }
-            subIntGroups.add([]);
           }
           print(subIntGroups);
           if (subIntGroups[subIntGroups.length - 1].length > 0 && 
