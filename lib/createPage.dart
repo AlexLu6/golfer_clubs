@@ -65,12 +65,12 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
         });
 }
 
-_GroupActPage groupActPage(var groupDoc, int uID, String uName, int uSex, double uHandicap) {
+_GroupActPage groupActPage(var groupDoc, int uID, String uName, gendre uSex, double uHandicap) {
   return _GroupActPage(groupDoc, uID, uName, uSex, uHandicap);
 }
 
 class _GroupActPage extends MaterialPageRoute<bool> {
-  _GroupActPage(var groupDoc, int uID, String _name, int _sex, double _handicap)
+  _GroupActPage(var groupDoc, int uID, String _name, gendre _sex, double _handicap)
       : super(builder: (BuildContext context) {
 
     Future<bool?> grantApplyDialog(String name) {
@@ -158,7 +158,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                                       if ((value?? 0) == 1) {
                                         glist.add({
                                           'uid': uID,
-                                          'name': _name + ((_sex == 0) ? Language.of(context).femaleNote : ''),
+                                          'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),
                                           'scores': []
                                         });
                                         myActivities.add(doc.id);

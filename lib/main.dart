@@ -55,10 +55,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-enum gendre { Male, Female }
 final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea1225b46c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=713&q=80';
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
 final String drawerCourse = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
+final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
+
 String? _golferAvatar;
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -107,7 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).activities, //"My Activities",
       Language.of(context).golfCourses, //"Golf courses",
       Language.of(context).myScores, //"My Scores",
-      Language.of(context).groupActivity, //"Group Activities"
       Language.of(context).usage //"Program Usage"
     ];
     return Scaffold(
@@ -226,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return const CircularProgressIndicator();
           else
             return  InteractiveViewer(
-              panEnabled: false,
+              //panEnabled: false,
                 maxScale: 3,
                 minScale: 0.8,
                 child: Image.network(snapshot.data!.toString())
@@ -312,6 +312,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       _expired = items['expired'].toDate().toString();
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
+                      storeMyGroup();
+                      storeMyActivities();
+                      storeMyScores();
                     });
                   }).whenComplete(() {
                     if (_golferID == 0) {
@@ -416,13 +419,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           else
                             return Text(Language.of(context).region + (doc.data()! as Map)["region"] + "\n" + Language.of(context).manager + snapshot2.data!.toString() + "\n" + Language.of(context).members + ((doc.data() as Map)["members"] as List<dynamic>).length.toString());
                         }),
-                    leading: Image.network("https://www.csu-emba.com/img/port/22/10.jpg"),
+                    leading: Image.network(groupPhoto),
                     /*Icon(Icons.group), */
                     trailing: myGroups.indexOf(_gID) >= 0 ? Icon(Icons.keyboard_arrow_right) : Icon(Icons.no_accounts),
                     onTap: () async {
                       _gID = (doc.data()! as Map)["gid"] as int;
                       if (myGroups.indexOf(_gID) >= 0) {
-                        Navigator.push(context, groupActPage(doc, _golferID, _name, _sex == gendre.Male ? 1 : 0, _handicap));
+                        Navigator.push(context, groupActPage(doc, _golferID, _name, _sex, _handicap));
                       } else {
                         bool? apply = await showApplyDialog(await isApplying(_gID, _golferID));
                         if (apply!) {
@@ -503,7 +506,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
-                          Navigator.push(context, groupActPage(doc, _golferID, _name, _sex == gendre.Male ? 1 : 0, _handicap));
+                          Navigator.push(context, groupActPage(doc, _golferID, _name, _sex, _handicap));
                         },
                         onLongPress: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
@@ -546,7 +549,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return myActivities.isEmpty
         ? ListView()
         : StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('ClubActivities').where(FieldPath.documentId, whereIn: myActivities).snapshots(),
+            stream: FirebaseFirestore.instance.collection('ClubActivities').orderBy('teeOff').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator();
@@ -555,6 +558,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: snapshot.data!.docs.map((doc) {
                   if ((doc.data()! as Map)["teeOff"] == null) {
                     return LinearProgressIndicator();
+                  } else if (myActivities.indexOf(doc.id) < 0) {
+                    return SizedBox(height: 0.1,);
                   } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                     myActivities.remove(doc.id);
                     storeMyActivities();
