@@ -438,15 +438,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             "uid": _golferID,
                             "gid": _gID,
                             "response": "waiting"
-                          }).whenComplete(() {
+                          }).whenComplete(() =>
                             AlertDialog(
                               title: Text(Language.of(context).hint),
-                              content: Text('Your application has been sent!'),
+                              content: Text(Language.of(context).applicationSent),
                               actions: <Widget>[
                                 TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
                               ],
-                            );
-                          });
+                            )
+                          );
                         }
                       }
                     },
