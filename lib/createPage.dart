@@ -717,14 +717,10 @@ class SubGroupPage extends MaterialPageRoute<bool> {
             var newGroups = [];
             for (int i = 0; i < subIntGroups.length; i++) {
               Map subMap = Map();
-              print(subIntGroups);
               for (int j = 0; j < subIntGroups[i].length; j++) 
                 subMap[j.toString()] = subIntGroups[i][j];
               newGroups.add(subMap);
-              print(newGroups);
-              //subMap.clear();
             }
-            print(newGroups);
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
               'subgroups': newGroups
             }).whenComplete(() => Navigator.of(context).pop(true));
@@ -736,11 +732,10 @@ class SubGroupPage extends MaterialPageRoute<bool> {
             for (int j = 0; j < (subGroups[i] as Map).length; j++) {
               subIntGroups[i].add((subGroups[i] as Map)[j.toString()]);
               if (subIntGroups[i][j] == uId) alreadyIn = i;
-
             }
           }
           if (subIntGroups[subIntGroups.length - 1].length > 0 && 
-              subIntGroups[subIntGroups.length - 1].length < max && 
+              subIntGroups.length < max && 
               alreadyIn < 0) subIntGroups.add([]);
           print(subIntGroups);
           return Scaffold(
