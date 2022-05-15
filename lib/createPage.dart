@@ -711,9 +711,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
       : super(builder: (BuildContext context) {
           var subGroups = activity.data()!['subgroups'] as List;
           int max = ((activity.data()!['golfers'] as List).length + 3) >> 2;
-          List<List<int>> subIntGroups = [
-            []
-          ];
+          List<List<int>> subIntGroups = [[]];
 
           void storeAndLeave() {
             var newGroups = [];
@@ -723,10 +721,10 @@ class SubGroupPage extends MaterialPageRoute<bool> {
               newGroups.add(subMap);
               subMap.clear();
             }
+            print(newGroups);
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
               'subgroups': newGroups
-            });
-            Navigator.of(context).pop(true);
+            }).whenComplete(() => Navigator.of(context).pop(true));
           }
 
           int alreadyIn = -1;
