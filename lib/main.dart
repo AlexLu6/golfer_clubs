@@ -301,47 +301,48 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() => isUpdate = false);
                 }
               } else {
+                _golferID = 0;
                 if (_name != '' && _phone != '') {
                   FirebaseFirestore.instance.collection('Golfers').where('name', isEqualTo: _name).where('phone', isEqualTo: _phone).get().then((value) {
                     value.docs.forEach((result) {
                       var items = result.data();
                       _golferDoc = result.id;
                       _golferID = items['uid'];
-                      _locale = items['loale'];
+                      _locale = items['locale'];
                       _expired = items['expired'].toDate().toString();
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
                     });
                   }).whenComplete(() {
-                    _golferID = uuidTime();
-                    DateTime today = _expired == '' ? DateTime.now() : DateTime
-                        .parse(_expired);
-                    //DateTime today = DateTime.now();
-                    int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
-                    Timestamp expire = Timestamp.fromDate(DateTime(
-                        _expired == '' ? today.year + 1 : today.year,
-                        today.month, today.day - leap));
-                    FirebaseFirestore.instance.collection('Golfers').add({
-                      "name": _name,
-                      "phone": _phone,
-                      "sex": _sex == gendre.Male ? 1 : 2,
-                      "uid": _golferID,
-                      "expired": expire,
-                      "locale": myLocale.toString()
-                    }).whenComplete(() {
-                      if (_expired == '') {
-                        _expired = expire.toDate().toString();
-                        prefs!.setString('expired', _expired);
-                      }
-                      _currentPageIndex = 1;
-                      setState(() => isRegistered = true);
-                    });
+                    if (_golferID == 0) {
+                      _golferID = uuidTime();
+                      DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
+                      //DateTime today = DateTime.now();
+                      int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
+                      Timestamp expire = Timestamp.fromDate(DateTime(
+                          _expired == '' ? today.year + 1 : today.year,
+                          today.month, today.day - leap));
+                      FirebaseFirestore.instance.collection('Golfers').add({
+                        "name": _name,
+                        "phone": _phone,
+                        "sex": _sex == gendre.Male ? 1 : 2,
+                        "uid": _golferID,
+                        "expired": expire,
+                        "locale": myLocale.toString()
+                      }).whenComplete(() {
+                        if (_expired == '') {
+                          _expired = expire.toDate().toString();
+                          prefs!.setString('expired', _expired);
+                        }
+                      });
+                    }
+                    _currentPageIndex = 1;
+                    setState(() => isRegistered = true);
                     prefs!.setInt('golferID', _golferID);
                   });
-                  }
                 }
               }
-            ),
+            }),
       ),
     );
     return ListView(
@@ -430,7 +431,18 @@ class _MyHomePageState extends State<MyHomePage> {
                             "uid": _golferID,
                             "gid": _gID,
                             "response": "waiting"
-                          });
+                          }).whenComplete(() => showDialog<bool>(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(Language.of(context).hint),
+                                  content: Text(Language.of(context).applicationSent),
+                                  actions: <Widget>[
+                                    TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
+                                  ],
+                                );
+                              }
+                          ));
                         }
                       }
                     },

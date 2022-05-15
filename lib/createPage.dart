@@ -728,33 +728,32 @@ class SubGroupPage extends MaterialPageRoute<bool> {
       : super(builder: (BuildContext context) {
           var subGroups = activity.data()!['subgroups'] as List;
           int max = ((activity.data()!['golfers'] as List).length + 3) >> 2;
-          List<List<int>> subIntGroups = [
-            []
-          ];
+          List<List<int>> subIntGroups = [];
 
           void storeAndLeave() {
             var newGroups = [];
             for (int i = 0; i < subIntGroups.length; i++) {
-              Map subMap = {};
-              for (int j = 0; j < subIntGroups[i].length; j++) subMap[j.toString()] = subIntGroups[i][j];
+              Map subMap = Map();
+              for (int j = 0; j < subIntGroups[i].length; j++)
+                subMap[j.toString()] = subIntGroups[i][j];
               newGroups.add(subMap);
-              subMap.clear();
             }
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
               'subgroups': newGroups
-            });
-            Navigator.of(context).pop(true);
+            }).whenComplete(() => Navigator.of(context).pop(true));
           }
 
           int alreadyIn = -1;
           for (int i = 0; i < subGroups.length; i++) {
+            subIntGroups.add([]);
             for (int j = 0; j < (subGroups[i] as Map).length; j++) {
               subIntGroups[i].add((subGroups[i] as Map)[j.toString()]);
               if (subIntGroups[i][j] == uId) alreadyIn = i;
             }
           }
-          if (subIntGroups[subIntGroups.length - 1].length > 0 && subIntGroups[subIntGroups.length - 1].length < max && alreadyIn < 0) subIntGroups.add([]);
-
+          if (subIntGroups[subIntGroups.length - 1].length > 0 &&
+              subIntGroups.length < max && alreadyIn < 0)
+            subIntGroups.add([]);
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).subGroup), elevation: 1.0),
               body: ListView.builder(
