@@ -550,21 +550,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget activityBody() {
     Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
     var allActivities = [];
-    return myActivities.isEmpty
-        ? ListView()
+    return myActivities.isEmpty ? ListView()
         : StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('ClubActivities').where(FieldPath.documentId, whereIn: myActivities).snapshots(),
+            stream: FirebaseFirestore.instance.collection('ClubActivities').orderBy('teeOff').snapshots(), //.where(FieldPath.documentId, whereIn: myActivities)
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return CircularProgressIndicator();
               } else {
                 return ListView(
-                    children: snapshot.data!.docs.map((doc) {
+                  children: snapshot.data!.docs.map((doc) {
                   if ((doc.data()! as Map)["teeOff"] == null) {
                     return LinearProgressIndicator();
                   } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                     myActivities.remove(doc.id);
                     storeMyActivities();
+                    return LinearProgressIndicator();
+                  } else if (myActivities.indexOf(doc.id) < 0) {
                     return LinearProgressIndicator();
                   } else {
                     allActivities.add(doc.id);
@@ -612,7 +613,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 }).toList());
               }
-            });
+            }
+          );
   }
 
   Widget? golfCourseBody() {
