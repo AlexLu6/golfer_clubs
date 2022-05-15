@@ -719,7 +719,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
               Map subMap = Map();
               print(subIntGroups);
               for (int j = 0; j < subIntGroups[i].length; j++) 
-                subMap[j.toString()] = subIntGroups[i][j];
+                subMap[i.toString()] = subIntGroups[i][j];
               newGroups.add(subMap);
               print(newGroups);
               //subMap.clear();
