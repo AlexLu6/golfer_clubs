@@ -716,13 +716,13 @@ class SubGroupPage extends MaterialPageRoute<bool> {
           void storeAndLeave() {
             var newGroups = [];
             for (int i = 0; i < subIntGroups.length; i++) {
-              Map subMap = {};
+              Map subMap = Map();
               print(subIntGroups);
               for (int j = 0; j < subIntGroups[i].length; j++) 
                 subMap[j.toString()] = subIntGroups[i][j];
               newGroups.add(subMap);
               print(newGroups);
-              subMap.clear();
+              //subMap.clear();
             }
             print(newGroups);
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
