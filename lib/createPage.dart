@@ -143,7 +143,15 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                             }
                           ),
                         subtitle: Text(Language.of(context).teeOff + (doc.data()! as Map)['teeOff']!.toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List<dynamic>).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
-                        leading: Image.network(coursePhoto2()),
+                        leading: FutureBuilder(
+                          future: coursePhoto((doc.data()! as Map)['cid'] as int),
+                            builder: (context, snapshot3) {
+                              if (!snapshot3.hasData)
+                                return const CircularProgressIndicator();
+                              else
+                                return Image.network(snapshot3.data!.toString());
+                            }
+                          ),
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () async {
                           Navigator.push(context, showActivityPage(doc, uID, _gName, isManager, _handicap)).then((value) {
