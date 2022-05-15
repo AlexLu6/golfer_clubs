@@ -438,8 +438,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             "uid": _golferID,
                             "gid": _gID,
                             "response": "waiting"
-                          }).whenComplete(() =>
-                            showDialog<bool>(
+                          }).whenComplete(() => showDialog<bool>(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
