@@ -589,7 +589,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   if (!snapshot3.hasData)
                                     return const LinearProgressIndicator();
                                   else
-                                    return Flexible(child:Image.network(snapshot3.data!.toString(), fit: BoxFit.fitHeight));
+                                    return Image.network(snapshot3.data!.toString());
                                 }),
                             trailing: Icon(Icons.keyboard_arrow_right),
                             onTap: () async {
