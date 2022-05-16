@@ -964,7 +964,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
                             {'title': '${Emoji.byName('bird')!.char}', 'index': 5, 'key': 'BD', 'editable': false},
-                            {'title': '${Emoji.byName('OK hand')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
+                            {'title': '${Emoji.byName('duck')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
                             {'title': '${Emoji.byName('index pointing up')!.char}', 'index': 7, 'key': 'BG', 'editable': false},
                             {'title': '${Emoji.byName('victory hand')!.char}', 'index': 8, 'key': 'DB', 'editable': false},
                             {'title': '${Emoji.byName('eagle')!.char}', 'index': 9, 'key': 'EG', 'editable': false},      
