@@ -1131,8 +1131,8 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                   const SizedBox(height: 10.0),
                   Row(
                     children: <Widget>[
-                      Text(course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
-                      Text(Language.of(context).name + golfer, style: TextStyle(fontSize: 20))
+                      Text(course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 14)),
+                      Text(Language.of(context).name + golfer, style: TextStyle(fontSize: 14))
                     ],
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     ),
