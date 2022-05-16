@@ -598,7 +598,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     'golfers': glist
                                   });
                                   setState(() {});
-                                } else if (value == 0) {
+                                } else if (value == 1) {
                                   glist.add({
                                     'uid': _golferID,
                                     'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),
