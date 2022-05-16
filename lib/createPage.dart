@@ -900,8 +900,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               glist[uIdx]['net'] = myScores[0]['total'] - handicap;
               FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
                 'golfers': glist
-              }).whenComplete(() => scoreDone = true);
-            });
+              }).whenComplete(() => Navigator.of(context).pop(0));
+            });           
           }
 
           return Scaffold(
@@ -979,23 +979,20 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
                                                   : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
                           onPressed: () async {
-                            bool stay = false;
                             if (teeOffPass && alreadyIn) {
                               if ((course["zones"]).length > 2) {
                                 List zones = await selectZones(context, course);
                                 if (zones.isNotEmpty)
                                   Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
                                     if (value ?? false) updateScore();
-                                    else stay = true;
                                   });
                               } else {
                                 Navigator.push(context, newScorePage(course, uName)).then((value) {
                                   if (value ?? false) updateScore();
-                                  else stay = true;
                                 });
                               }
-                            }
-                            if (!stay) Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
+                            } else
+                              Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
                           }),
                   const SizedBox(height: 16.0),
                   Text(Language.of(context).actRemarks + activity.data()!['remarks']),
