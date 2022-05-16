@@ -946,7 +946,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           trHeight: 16,
                           tdAlignment: TextAlign.center,
                           thAlignment: TextAlign.center,
-                          columnRatio: 0.12,
+                          columnRatio: 0.11,
                           columns: [
                             {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
