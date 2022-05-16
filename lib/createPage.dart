@@ -1128,9 +1128,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                 return Container(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   const SizedBox(height: 10.0),
-                  Text('Name: ' + golfer, style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 10.0),
-                  Text('Course: ' + course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
+                  Text(course['region'] + ' ' + course['name'] + '\t\t' + golfer, style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 10.0),
                   Flexible(
                       child: Editable2(

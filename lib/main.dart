@@ -564,6 +564,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     storeMyActivities();
                     return LinearProgressIndicator();
                   } else {
+                    allActivities.add(doc.id);
                     return Card(
                         child: ListTile(
                             title: FutureBuilder(
