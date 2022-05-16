@@ -812,15 +812,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 oneRow['c4'] = e['name'];
                 rows.add(oneRow);
               }
-              if (e['uid'] as int == uId) {
-                alreadyIn = true;
-                uName = e['name'];
-                uIdx = idx;
-                if (myActivities.indexOf(activity.id) < 0) {
-                  myActivities.add(activity.id);
-                  storeMyActivities();
-                }
-              }
               idx++;
               if (idx == (activity.data()!['max'] as int)) {
                 if (idx % 4 != 0)
@@ -859,7 +850,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   'total': e['total'],
                   'name': e['name'],
                   'net': net.substring(0, min(net.length, 5)),
-//                  'EG' : eg,
+                  'EG' : eg,
                   'BD' : bd,
                   'PAR' : par,
                   'BG' : bg,
@@ -888,13 +879,27 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               }).whenComplete(() => Navigator.of(context).pop(0));
             });           
           }
-          for (var e in activity.data()!['golfers'])
-            if ((e['scores'] as List).length > 0) {
-              if (e['uid'] as int == uId) 
-                scoreDone = true;
-              scoreReady = true;
+
+          // prepare parameters
+          int idx = 0;
+          for (var e in activity.data()!['golfers']) {
+            if (e['uid'] as int == uId) {
+              uIdx = idx;
+              alreadyIn = true;
+              uName = e['name'];
+              if (myActivities.indexOf(activity.id) < 0) {
+                myActivities.add(activity.id);
+                storeMyActivities();
+              }
             }
-          print('scoreReady: $scoreReady scoreDone: $scoreDone alreadyIn: $alreadyIn');
+            if ((e['scores'] as List).length > 0) {
+              scoreReady = true;
+              if (e['uid'] as int == uId) 
+                scoreDone = true;              
+            }
+            idx++;
+          }
+
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
