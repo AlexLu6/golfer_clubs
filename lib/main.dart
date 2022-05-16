@@ -146,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _currentPageIndex = 0;
                   Navigator.of(context).pop();
                 },
-                child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer))),
+                child: CircleAvatar(backgroundImage: NetworkImage(_sex == gendre.Male ? maleGolfer : femaleGolfer))),
             decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerPhoto))),
             onDetailsPressed: () {
               setState(() => isUpdate = true);
