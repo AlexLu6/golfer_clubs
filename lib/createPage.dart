@@ -884,7 +884,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               glist[uIdx]['net'] = myScores[0]['total'] - handicap;
               FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
                 'golfers': glist
-              });
+              }).whenComplete(() => scoreDone = true);
             });
           }
 
@@ -963,11 +963,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                                 List zones = await selectZones(context, course);
                                 if (zones.isNotEmpty)
                                   Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
-                                    if (value ?? false) updateScore();
+                                    if (value ?? false) {updateScore(); setState(() {});}
                                   });
                               } else {
                                 Navigator.push(context, newScorePage(course, uName)).then((value) {
-                                  if (value ?? false) updateScore();
+                                  if (value ?? false) {updateScore(); setState(() {});}
                                 });
                               }
                             } else {
