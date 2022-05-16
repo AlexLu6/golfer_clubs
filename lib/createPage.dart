@@ -1135,7 +1135,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                       Text(Language.of(context).name + golfer, style: TextStyle(fontSize: 18))
                     ],
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    ),
+                  ),
                   const SizedBox(height: 10.0),
                   Flexible(
                       child: Editable2(
