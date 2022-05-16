@@ -5,7 +5,6 @@ import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
-import 'package:emojis/emojis.dart';
 import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'editable2.dart';
@@ -315,11 +314,9 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                               }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
-                        }),
-                  ]),
-                  ((groupDoc.data()! as Map)['managers'] as List).length == 1
-                      ? const SizedBox(width: 5)
-                      : ElevatedButton(
+                        }),                 
+                    ((groupDoc.data()! as Map)['managers'] as List).length == 1 ? const SizedBox(width: 5)
+                    : ElevatedButton(
                           child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
                           onPressed: () {
                             var mlist = (groupDoc.data()! as Map)['managers'] as List;
@@ -327,7 +324,8 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                               'managers': mlist
                             }).whenComplete(() => Navigator.of(context).pop(true));
-                          }),
+                    }),
+                  ]),
                 ]);
               })
           );
