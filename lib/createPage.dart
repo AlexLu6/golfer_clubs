@@ -881,10 +881,10 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           }
 
           // prepare parameters
-          int idx = 0;
+          int eidx = 0;
           for (var e in activity.data()!['golfers']) {
             if (e['uid'] as int == uId) {
-              uIdx = idx;
+              uIdx = eidx;
               alreadyIn = true;
               uName = e['name'];
               if (myActivities.indexOf(activity.id) < 0) {
@@ -897,9 +897,9 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               if (e['uid'] as int == uId) 
                 scoreDone = true;              
             }
-            idx++;
+            eidx++;
           }
-
+          print('alreadyIn: $alreadyIn scoreReady: $scoreReady scoreDoc: $scoreDone uIdx: $uIdx');
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
