@@ -1125,8 +1125,8 @@ class _NewScorePage extends MaterialPageRoute<bool> {
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).enterScore), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Container(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                return ListView(
+                  children: <Widget>[
                   const SizedBox(height: 10.0),
                   Text('Name: ' + golfer, style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 10.0),
@@ -1181,7 +1181,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                             }
                           })),
                   const SizedBox(height: 6.0)
-                ]));
+                ]);
               }));
         });
 }
