@@ -277,7 +277,6 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             }).whenComplete(() => Navigator.of(context).pop(true));
                           }
                         }),
-                    const SizedBox(width: 5),
                     ElevatedButton(
                         child: Text(Language.of(context).addManager, style: TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -298,7 +297,6 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             }
                           });
                         }),
-                    const SizedBox(width: 5),
                     ElevatedButton(
                         child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -319,7 +317,6 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                           });
                         }),
                   ]),
-                  const SizedBox(height: 5),
                   ((groupDoc.data()! as Map)['managers'] as List).length == 1
                       ? const SizedBox(width: 5)
                       : ElevatedButton(
