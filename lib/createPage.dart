@@ -842,12 +842,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           List buildScoreRows() {
             var scoreRows = [];
             int idx = 1, i=0;
-
+            List pars = myScores[0]['pars'];
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
-                int eg = 0, bd =0, par = 0, bg = 0, db = 0;
-                List pars = myScores[0]['pars'];
-                List scores = myScores[0]['scores'];
+                int eg = 0, bd =0, par = 0, bg = 0, db = 0;                
+                List scores = e['scores'] as List;
                 for (var i=0; i< pars.length; i++) {
                   if (scores[i] == pars[i]) par++;
                   else if (scores[i] == pars[i] + 1) bg++;
