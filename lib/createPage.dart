@@ -265,8 +265,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                     decoration: InputDecoration(labelText: Language.of(context).groupRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 12.0),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    const SizedBox(width: 5),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
                     ElevatedButton(
                         child: Text(Language.of(context).modify, style: TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -275,8 +274,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                               "Name": _groupName,
                               "region": _region,
                               "Remarks": _remarks,
-                            });
-                            Navigator.of(context).pop(true);
+                            }).whenComplete(() => Navigator.of(context).pop(true));
                           }
                         }),
                     const SizedBox(width: 5),
@@ -293,13 +291,10 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                           ).then((value) {
                             if (_selectedGolfer != null) {
                               var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                              if (mlist.indexOf(_selectedGolfer.toID()) < 0) {
-                                mlist.add(_selectedGolfer.toID());
-                                FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
-                                  'managers': mlist
-                                });
-                              }
-                              Navigator.of(context).pop(true);
+                              mlist.add(_selectedGolfer.toID());
+                              FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                                'managers': mlist
+                              }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
                         }),
@@ -316,14 +311,10 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
-                              var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                              if (mlist.indexOf(_selectedGolfer.toID()) < 0) {
-                                blist.remove(_selectedGolfer.toID());
-                                FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
-                                  'members': blist
-                                });
-                              }
-                              Navigator.of(context).pop(true);
+                              blist.remove(_selectedGolfer.toID());
+                              FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                                'members': blist
+                              }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
                         }),
@@ -338,8 +329,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             mlist.remove(uID);
                             FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                               'managers': mlist
-                            });
-                            Navigator.of(context).pop(true);
+                            }).whenComplete(() => Navigator.of(context).pop(true));
                           }),
                 ]);
               })
