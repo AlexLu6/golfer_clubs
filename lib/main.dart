@@ -595,8 +595,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                   myActivities.remove(doc.id);
                                   storeMyActivities();
                                   glist.removeWhere((item) => item['uid'] == _golferID);
+                                  var subGroups = doc.get('subgroups');
+                                  for (int i = 0; i < subGroups.length; i++) {
+                                    for (int j = 0; j < (subGroups[i] as Map).length; j++) {
+                                      if ((subGroups[i] as Map)[j.toString()] == _golferID) {
+                                        for (; j<(subGroups[i] as Map).length - 1; j++)
+                                          (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[(j+1).toString()];
+                                        (subGroups[i] as Map).remove(j.toString());
+                                      }                                   
+                                    }
+                                  }
                                   FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
-                                    'golfers': glist
+                                    'golfers': glist,
+                                    'subgroups': subGroups
                                   });
                                   setState(() {});
                                 } else if (value == 1) {
