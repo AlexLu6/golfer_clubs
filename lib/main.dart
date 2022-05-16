@@ -237,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ListView registerBody() {
     final logo = Hero(
       tag: 'golfer',
-      child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer), radius: 140),
+      child: CircleAvatar(backgroundImage: NetworkImage(_sex == gendre.Male ? maleGolfer : femaleGolfer), radius: 140),
     );
 
     Locale myLocale = Localizations.localeOf(context);
