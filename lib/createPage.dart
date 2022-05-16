@@ -882,6 +882,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           void updateScore() {
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).get().then((value) {
               var glist = value.get('golfers');
+              glist[uIdx]['pars'] = myScores[0]['pars'];
               glist[uIdx]['scores'] = myScores[0]['scores'];
               glist[uIdx]['total'] = myScores[0]['total'];
               glist[uIdx]['net'] = myScores[0]['total'] - handicap;
@@ -950,7 +951,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           columns: [
                             {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
-                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.18},
+                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
 //                            {'title': 'E', 'index': 5, 'key': 'EG', 'editable': false, 'widthFactor': 0.1},
                             {'title': 'B', 'index': 6, 'key': 'BD', 'editable': false, 'widthFactor': 0.1},
