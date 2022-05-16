@@ -841,11 +841,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
 
           List buildScoreRows() {
             var scoreRows = [];
-            int idx = 1, i=0;
-            List pars = myScores[0]['pars'];
+            int idx = 1, i=0;            
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
-                int eg = 0, bd =0, par = 0, bg = 0, db = 0;                
+                int eg = 0, bd =0, par = 0, bg = 0, db = 0;
+                List pars = e['pars'] as List;              
                 List scores = e['scores'] as List;
                 for (var ii=0; ii < pars.length; ii++) {
                   if (scores[ii] == pars[ii]) par++;
@@ -950,7 +950,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           columnRatio: 0.1,
                           columns: [
                             {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
-                            {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
+                            {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false, 'widthFactor': 0.13},
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
 //                            {'title': 'E', 'index': 5, 'key': 'EG', 'editable': false},
