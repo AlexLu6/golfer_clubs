@@ -1,4 +1,5 @@
 //import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
@@ -1128,7 +1129,10 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                 return Container(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   const SizedBox(height: 10.0),
-                  Text(course['region'] + ' ' + course['name'] + '\t\t' + golfer, style: TextStyle(fontSize: 20)),
+                  Row(children: <Widget>[
+                    Text(course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
+                    Text(Language.of(context).name + golfer, style: TextStyle(fontSize: 20))
+                  ]),
                   const SizedBox(height: 10.0),
                   Flexible(
                       child: Editable2(

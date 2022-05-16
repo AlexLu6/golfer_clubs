@@ -589,7 +589,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 }),
                             trailing: Icon(Icons.keyboard_arrow_right),
                             onTap: () async {
-                              print(myActivities);
+                            
                               Navigator.push(context, showActivityPage(doc, _golferID, await groupName((doc.data()! as Map)['gid'] as int)!, await isManager((doc.data()! as Map)['gid'] as int, _golferID), _handicap)).then((value) async {
                                 var glist = doc.get('golfers');
                                 if (value == -1) {
@@ -622,6 +622,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
                                     'golfers': glist
                                   });                                
+                                } else if (myActivities.length != allActivities.length) {
+                                    myActivities = allActivities;
+                                    storeMyActivities();
                                 }
                               });
                             }));
