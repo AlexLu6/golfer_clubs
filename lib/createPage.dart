@@ -846,8 +846,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
                 int eg = 0, bd =0, par = 0, bg = 0, db = 0;
-                List<int> pars = myScores[0]['pars'];
-                List<int> scores = myScores[0]['scores'];
+                List<int> pars = myScores[0]['pars'] as List<int>;
+                List<int> scores = myScores[0]['scores'] as List<int>;
                 for (var i=0; i< pars.length; i++) {
                   if (scores[i] == pars[i]) par++;
                   else if (scores[i] == pars[i] + 1) bg++;
