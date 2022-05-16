@@ -894,6 +894,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 scoreDone = true;
               scoreReady = true;
             }
+          print('scoreReady: $scoreReady scoreDone: $scoreDone alreadyIn: $alreadyIn');
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
