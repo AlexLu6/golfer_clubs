@@ -847,12 +847,12 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               if ((e['scores'] as List).length > 0) {
                 int eg = 0, bd =0, par = 0, bg = 0, db = 0;                
                 List scores = e['scores'] as List;
-                for (var i=0; i< pars.length; i++) {
-                  if (scores[i] == pars[i]) par++;
-                  else if (scores[i] == pars[i] + 1) bg++;
-                  else if (scores[i] == pars[i] + 2) db++;
-                  else if (scores[i] == pars[i] - 1) bd++;
-                  else if (scores[i] == pars[i] - 2) eg++;
+                for (var ii=0; ii < pars.length; ii++) {
+                  if (scores[ii] == pars[ii]) par++;
+                  else if (scores[ii] == pars[ii] + 1) bg++;
+                  else if (scores[ii] == pars[ii] + 2) db++;
+                  else if (scores[ii] == pars[ii] - 1) bd++;
+                  else if (scores[ii] == pars[ii] - 2) eg++;
                 }
                 if (uIdx == i) scoreDone = true;
                 String net = e['net'].toString();
@@ -872,21 +872,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               i++;
             }
             scoreRows.sort((a, b) => a['total'] - b['total']);
-            // bubble sort rank
-/*            for (int i = 0; i < scoreRows.length; i++)
-              for (int j = i + 1; j < scoreRows.length; j++) {
-                if ((scoreRows[i]['total'] > scoreRows[j]['total']) || (scoreRows[i]['total'] == scoreRows[j]['total'] && scoreRows[i]['net'] > scoreRows[j]['net'])) {
-                  var tt = scoreRows[i]['total'];
-                  var nn = scoreRows[i]['name'];
-                  var ee = scoreRows[i]['net'];
-                  scoreRows[i]['total'] = scoreRows[j]['total'];
-                  scoreRows[i]['name'] = scoreRows[j]['name'];
-                  scoreRows[i]['net'] = scoreRows[j]['net'];
-                  scoreRows[j]['total'] = tt;
-                  scoreRows[j]['name'] = nn;
-                  scoreRows[j]['net'] = ee;
-                }
-              }*/
+            for (idx = 0; idx < scoreRows.length; idx++)
+              scoreRows[idx]['rank'] = idx + 1;
             return scoreRows;
           }
 
