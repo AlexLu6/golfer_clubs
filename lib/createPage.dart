@@ -947,17 +947,17 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           trHeight: 16,
                           tdAlignment: TextAlign.center,
                           thAlignment: TextAlign.center,
-                          columnRatio: 0.11,
+                          columnRatio: 0.1,
                           columns: [
                             {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
-//                            {'title': 'E', 'index': 5, 'key': 'EG', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'B', 'index': 6, 'key': 'BD', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'P', 'index': 7, 'key': 'PAR', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'G', 'index': 8, 'key': 'BG', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'D', 'index': 9, 'key': 'DB', 'editable': false, 'widthFactor': 0.1}
+//                            {'title': 'E', 'index': 5, 'key': 'EG', 'editable': false},
+                            {'title': 'B', 'index': 6, 'key': 'BD', 'editable': false},
+                            {'title': 'P', 'index': 7, 'key': 'PAR', 'editable': false},
+                            {'title': 'G', 'index': 8, 'key': 'BG', 'editable': false},
+                            {'title': 'D', 'index': 9, 'key': 'DB', 'editable': false}
                           ],
                           rows: buildScoreRows(),
                         )),
