@@ -60,8 +60,6 @@ final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-772
 final String drawerCourse = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
 final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
 
-String? _golferAvatar;
-
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _golferID = 0, _gID = 1;
@@ -147,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _currentPageIndex = 0;
                   Navigator.of(context).pop();
                 },
-                child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer))),
+                child: CircleAvatar(backgroundImage: NetworkImage(_sex == gendre.Male ? maleGolfer : femaleGolfer))),
             decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerCourse))),
             onDetailsPressed: () {
               setState(() => isUpdate = true);
@@ -236,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ListView registerBody() {
     final logo = Hero(
       tag: 'golfer',
-      child: CircleAvatar(backgroundImage: NetworkImage(_golferAvatar ?? maleGolfer), radius: 140),
+      child: CircleAvatar(backgroundImage: NetworkImage(_sex == gendre.Male ? maleGolfer : femaleGolfer), radius: 140),
     );
 
     Locale myLocale = Localizations.localeOf(context);
@@ -263,7 +261,6 @@ class _MyHomePageState extends State<MyHomePage> {
               groupValue: _sex,
               onChanged: (gendre? value) => setState(() {
                     _sex = value!;
-                    _golferAvatar = maleGolfer;
                   }))),
       Flexible(
           child: RadioListTile<gendre>(
@@ -272,7 +269,6 @@ class _MyHomePageState extends State<MyHomePage> {
               groupValue: _sex,
               onChanged: (gendre? value) => setState(() {
                     _sex = value!;
-                    _golferAvatar = femaleGolfer;
                   }))),
     ], mainAxisAlignment: MainAxisAlignment.center);
     final loginButton = Padding(
@@ -501,7 +497,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               else
                                 return Text(Language.of(context).region + (doc.data()! as Map)["region"] + "\n" + Language.of(context).manager + snapshot2.data!.toString() + "\n" + Language.of(context).members + ((doc.data() as Map)["members"] as List<dynamic>).length.toString());
                             }),
-                        leading: Image.network("https://www.csu-emba.com/img/port/22/10.jpg"),
+                        leading: Image.network(groupPhoto),
                         /*Icon(Icons.group), */
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () {
@@ -593,13 +589,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                   myActivities.remove(doc.id);
                                   storeMyActivities();
                                   glist.removeWhere((item) => item['uid'] == _golferID);
+                                  var subGroups = doc.get('subgroups');
+                                  for (int i = 0; i < subGroups.length; i++) {
+                                    for (int j = 0; j < (subGroups[i] as Map).length; j++) {
+                                      if ((subGroups[i] as Map)[j.toString()] == _golferID) {
+                                        for (; j<(subGroups[i] as Map).length - 1; j++)
+                                          (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[(j+1).toString()];
+                                        (subGroups[i] as Map).remove(j.toString());
+                                      }
+                                    }
+                                  }
+                                  FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
+                                    'golfers': glist,
+                                    'subgroups': subGroups
+                                  });
+                                  setState(() {});
+                                } else if (value == 1) {
+                                  glist.add({
+                                    'uid': _golferID,
+                                    'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),
+                                    'scores': []
+                                  });
+                                  myActivities.add(doc.id);
+                                  storeMyActivities();
                                   FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
                                     'golfers': glist
                                   });
-                                  setState(() {});
-                                } else if ((value == 0) && (myActivities.length != allActivities.length)) {
-                                  myActivities = allActivities;
-                                  storeMyActivities();
                                 }
                               });
                             }));

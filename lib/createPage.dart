@@ -4,9 +4,12 @@ import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
+import 'package:emojis/emojis.dart';
+import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'editable2.dart';
 import 'locale/language.dart';
+import 'dart:math';
 
 _NewGroupPage newGroupPage(int golferID, String locale) {
   return _NewGroupPage(golferID, locale);
@@ -261,8 +264,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                     decoration: InputDecoration(labelText: Language.of(context).groupRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 12.0),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                    const SizedBox(width: 5),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
                     ElevatedButton(
                         child: Text(Language.of(context).modify, style: TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -271,11 +273,9 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                               "Name": _groupName,
                               "region": _region,
                               "Remarks": _remarks,
-                            });
-                            Navigator.of(context).pop(true);
+                            }).whenComplete(() => Navigator.of(context).pop(true));
                           }
                         }),
-                    const SizedBox(width: 5),
                     ElevatedButton(
                         child: Text(Language.of(context).addManager, style: TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -289,17 +289,13 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                           ).then((value) {
                             if (_selectedGolfer != null) {
                               var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                              if (mlist.indexOf(_selectedGolfer.toID()) < 0) {
-                                mlist.add(_selectedGolfer.toID());
-                                FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
-                                  'managers': mlist
-                                });
-                              }
-                              Navigator.of(context).pop(true);
+                              mlist.add(_selectedGolfer.toID());
+                              FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                                'managers': mlist
+                              }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
                         }),
-                    const SizedBox(width: 5),
                     ElevatedButton(
                         child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 18)),
                         onPressed: () {
@@ -313,20 +309,17 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                           ).then((value) {
                             if (_selectedGolfer != null) {
                               var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                              if (mlist.indexOf(_selectedGolfer.toID()) < 0) {
-                                blist.remove(_selectedGolfer.toID());
-                                FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                              blist.remove(_selectedGolfer.toID());
+                              FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                                   'members': blist
-                                });
-                              }
-                              Navigator.of(context).pop(true);
+                              }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
                         }),
-          //        ]),
-                  const SizedBox(width: 5),
+                  ]),
+                  SizedBox(height: 10),
                   ((groupDoc.data()! as Map)['managers'] as List).length == 1
-                      ? const SizedBox(width: 5)
+                      ? const SizedBox(width: 1)
                       : ElevatedButton(
                           child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
                           onPressed: () {
@@ -334,10 +327,8 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             mlist.remove(uID);
                             FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                               'managers': mlist
-                            });
-                            Navigator.of(context).pop(true);
+                            }).whenComplete(() => Navigator.of(context).pop(true));
                           }),
-                  ]),
                 ]);
               }));
         });
@@ -801,217 +792,228 @@ ShowActivityPage showActivityPage(var activity, int uId, String title, bool edit
 class ShowActivityPage extends MaterialPageRoute<int> {
   ShowActivityPage(var activity, int uId, String title, bool editable, double handicap)
       : super(builder: (BuildContext context) {
-          bool alreadyIn = false, scoreReady = false, scoreDone = false;
-          String uName = '';
-          int uIdx = 0;
-          var rows = [];
+    bool alreadyIn = false, scoreReady = false, scoreDone = false;
+    String uName = '';
+    int uIdx = 0;
+    var rows = [];
 
-          List buildRows() {
-            var oneRow = {};
-            int idx = 0;
+    List buildRows() {
+      var oneRow = {};
+      int idx = 0;
+//            for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+      for (var e in activity.data()!['golfers']) {
+        if (idx % 4 == 0) {
+          oneRow = Map();
+          if (idx >= (activity.data()!['max'] as int))
+            oneRow['row'] = Language.of(context).waiting;
+          else
+            oneRow['row'] = (idx >> 2) + 1;
+          oneRow['c1'] = e['name'];
+          oneRow['c2'] = '';
+          oneRow['c3'] = '';
+          oneRow['c4'] = '';
+        } else if (idx % 4 == 1)
+          oneRow['c2'] = e['name'];
+        else if (idx % 4 == 2)
+          oneRow['c3'] = e['name'];
+        else if (idx % 4 == 3) {
+          oneRow['c4'] = e['name'];
+          rows.add(oneRow);
+        }
+        idx++;
+        if (idx == (activity.data()!['max'] as int)) {
+          if (idx % 4 != 0)
+            rows.add(oneRow);
+          while (idx % 4 != 0) idx++;
+        }
+      }
+      if ((idx % 4) != 0)
+        rows.add(oneRow);
+      else if (idx == 0) {
+        oneRow['c1'] = oneRow['c2'] = oneRow['c3'] = oneRow['c4'] = '';
+        rows.add(oneRow);
+      }
+      return rows;
+    }
 
-            for (var e in activity.data()!['golfers']) {
-              if (idx % 4 == 0) {
-                oneRow = Map();
-                if (idx >= (activity.data()!['max'] as int))
-                  oneRow['row'] = Language.of(context).waiting;
-                else
-                  oneRow['row'] = (idx >> 2) + 1;
-                oneRow['c1'] = e['name'];
-                oneRow['c2'] = '';
-                oneRow['c3'] = '';
-                oneRow['c4'] = '';
-              } else if (idx % 4 == 1)
-                oneRow['c2'] = e['name'];
-              else if (idx % 4 == 2)
-                oneRow['c3'] = e['name'];
-              else if (idx % 4 == 3) {
-                oneRow['c4'] = e['name'];
-                rows.add(oneRow);
-              }
-              if (e['uid'] as int == uId) {
-                alreadyIn = true;
-                uName = e['name'];
-                uIdx = idx;
-                if (myActivities.indexOf(activity.id) < 0) {
-                  myActivities.add(activity.id);
-                  storeMyActivities();
-                }
-              }
-              if ((e['scores'] as List).length > 0)
-                scoreReady = true;
-              idx++;
-              if (idx == (activity.data()!['max'] as int)) {
-                if (idx % 4 != 0)
-                  rows.add(oneRow);
-                while (idx % 4 != 0) idx++;
-              }
-            }
-            if ((idx % 4) != 0)
-              rows.add(oneRow);
-            else if (idx == 0) {
-              oneRow['c1'] = oneRow['c2'] = oneRow['c3'] = oneRow['c4'] = '';
-              rows.add(oneRow);
-            }
-
-            return rows;
+    List buildScoreRows() {
+      var scoreRows = [];
+      int idx = 1;
+      List pars = myScores.isEmpty ? [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]:myScores[0]['pars'];
+      for (var e in activity.data()!['golfers']) {
+        if ((e['scores'] as List).length > 0) {
+          int eg = 0, bd =0, par = 0, bg = 0, db = 0;
+//                List pars = e['pars'] as List;
+          List scores = e['scores'] as List;
+          for (var ii=0; ii < pars.length; ii++) {
+            if (scores[ii] == pars[ii]) par++;
+            else if (scores[ii] == pars[ii] + 1) bg++;
+            else if (scores[ii] == pars[ii] + 2) db++;
+            else if (scores[ii] == pars[ii] - 1) bd++;
+            else if (scores[ii] == pars[ii] - 2) eg++;
           }
+          String net = e['net'].toString();
+          scoreRows.add({
+            'rank': idx,
+            'total': e['total'],
+            'name': e['name'],
+            'net': net.substring(0, min(net.length, 5)),
+            'EG' : eg,
+            'BD' : bd,
+            'PAR' : par,
+            'BG' : bg,
+            'DB' : db
+          });
+          idx++;
+        }
+      }
+      scoreRows.sort((a, b) => a['total'] - b['total']);
+      for (idx = 0; idx < scoreRows.length; idx++)
+        scoreRows[idx]['rank'] = idx + 1;
+      return scoreRows;
+    }
 
-          List buildScoreRows() {
-            var scoreRows = [];
-            int idx = 1, i=0;
+    bool teeOffPass = activity.data()!['teeOff'].compareTo(Timestamp.now()) < 0;
+    Map course = {};
+    void updateScore() {
+      FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).get().then((value) {
+        var glist = value.get('golfers');
+        glist[uIdx]['pars'] = myScores[0]['pars'];
+        glist[uIdx]['scores'] = myScores[0]['scores'];
+        glist[uIdx]['total'] = myScores[0]['total'];
+        glist[uIdx]['net'] = myScores[0]['total'] - handicap;
+        FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
+          'golfers': glist
+        }).whenComplete(() => Navigator.of(context).pop(0));
+      });
+    }
 
-            for (var e in activity.data()!['golfers']) {
+    // prepare parameters
+    int eidx = 0;
+    for (var e in activity.data()!['golfers']) {
+      if (e['uid'] as int == uId) {
+        uIdx = eidx;
+        alreadyIn = true;
+        uName = e['name'];
+        if (myActivities.indexOf(activity.id) < 0) {
+          myActivities.add(activity.id);
+          storeMyActivities();
+        }
+      }
+      if ((e['scores'] as List).length > 0) {
+        scoreReady = true;
+        if (e['uid'] as int == uId)
+          scoreDone = true;
+      }
+      eidx++;
+    }
 
-              if ((e['scores'] as List).length > 0) {
-                if (uIdx == i) scoreDone = true;
-                scoreRows.add({
-                  'rank': idx,
-                  'total': e['total'],
-                  'name': e['name'],
-                  'net': e['net']
-                });
-                idx++;
-              }
-              i++;
-            }
-
-            scoreRows.sort((a, b) => a['total'] - b['total']);
-            // bubble sort rank
-/*            for (int i = 0; i < scoreRows.length; i++)
-              for (int j = i + 1; j < scoreRows.length; j++) {
-                if ((scoreRows[i]['total'] > scoreRows[j]['total']) || (scoreRows[i]['total'] == scoreRows[j]['total'] && scoreRows[i]['net'] > scoreRows[j]['net'])) {
-                  var tt = scoreRows[i]['total'];
-                  var nn = scoreRows[i]['name'];
-                  var ee = scoreRows[i]['net'];
-                  scoreRows[i]['total'] = scoreRows[j]['total'];
-                  scoreRows[i]['name'] = scoreRows[j]['name'];
-                  scoreRows[i]['net'] = scoreRows[j]['net'];
-                  scoreRows[j]['total'] = tt;
-                  scoreRows[j]['name'] = nn;
-                  scoreRows[j]['net'] = ee;
-                }
-              }*/
-            return scoreRows;
-          }
-
-          bool teeOffPass = activity.data()!['teeOff'].compareTo(Timestamp.now()) < 0;
-          Map course = {};
-          void updateScore() {
-            FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).get().then((value) {
-              var glist = value.get('golfers');
-              glist[uIdx]['scores'] = myScores[0]['scores'];
-              glist[uIdx]['total'] = myScores[0]['total'];
-              glist[uIdx]['net'] = myScores[0]['total'] - handicap;
-              FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
-                'golfers': glist
-              });
-            });
-          }
-
-          return Scaffold(
-              appBar: AppBar(title: Text(title), elevation: 1.0),
-              body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Container(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  const SizedBox(height: 16.0),
-                  Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + '\t' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 16.0),
-                  FutureBuilder(
-                      future: courseBody(activity.data()!['cid'] as int),
-                      builder: (context, snapshot2) {
-                        if (!snapshot2.hasData)
-                          return const LinearProgressIndicator();
-                        else {
-                          course = snapshot2.data! as Map;
-                          return Text(course['name'] + "\t" + Language.of(context).max + activity.data()!['max'].toString(), style: TextStyle(fontSize: 20));
-                        }
-                      }),
-                  const SizedBox(height: 16.0),
-                  Flexible(
-                      child: Editable(
-                    borderColor: Colors.black,
-                    tdStyle: TextStyle(fontSize: 16),
-                    trHeight: 16,
-                    tdAlignment: TextAlign.center,
-                    thAlignment: TextAlign.center,
-                    columnRatio: 0.2,
-                    columns: [
-                      {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
-                      {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
-                      {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
-                      {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
-                      {"title": "D", 'index': 5, 'key': 'c4', 'editable': false}
-                    ],
-                    rows: buildRows(),
-                  )),
-                  ((activity.data()!['golfers'] as List).length < 5) || !alreadyIn || scoreReady
-                      ? const SizedBox(height: 10.0)
-                      : ElevatedButton(
-                          child: Text(Language.of(context).subGroup),
-                          onPressed: () {
-                            Navigator.push(context, SubGroupPage(activity, uId)).then((value) {
-                              if (value ?? false) Navigator.of(context).pop(0);
+    return Scaffold(
+        appBar: AppBar(title: Text(title), elevation: 1.0),
+        body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          return Container(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                const SizedBox(height: 16.0),
+                Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + '\t' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 16.0),
+                FutureBuilder(
+                    future: courseBody(activity.data()!['cid'] as int),
+                    builder: (context, snapshot2) {
+                      if (!snapshot2.hasData)
+                        return const LinearProgressIndicator();
+                      else {
+                        course = snapshot2.data! as Map;
+                        return Text(course['name'] + "\t" + Language.of(context).max + activity.data()!['max'].toString(), style: TextStyle(fontSize: 20));
+                      }
+                    }),
+                const SizedBox(height: 10.0),
+                scoreReady ? const SizedBox(height: 1.0) :
+                Flexible(
+                    child: Editable(
+                      borderColor: Colors.black,
+                      tdStyle: TextStyle(fontSize: 16),
+                      trHeight: 16,
+                      tdAlignment: TextAlign.center,
+                      thAlignment: TextAlign.center,
+                      columnRatio: 0.2,
+                      columns: [
+                        {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
+                        {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
+                        {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
+                        {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
+                        {"title": "D", 'index': 5, 'key': 'c4', 'editable': false}
+                      ],
+                      rows: buildRows(),
+                    )),
+                ((activity.data()!['golfers'] as List).length < 5) || !alreadyIn || scoreReady
+                    ? const SizedBox(height: 4.0)
+                    : ElevatedButton(
+                    child: Text(Language.of(context).subGroup),
+                    onPressed: () {
+                      Navigator.push(context, SubGroupPage(activity, uId)).then((value) {
+                        if (value ?? false) Navigator.of(context).pop(0);
+                      });
+                    }),
+                const SizedBox(height: 4.0),
+                !scoreReady ? const SizedBox(height: 4.0)
+                    : Flexible(
+                    child: Editable(
+                      borderColor: Colors.black,
+                      tdStyle: TextStyle(fontSize: 16),
+                      trHeight: 16,
+                      tdAlignment: TextAlign.center,
+                      thAlignment: TextAlign.center,
+                      columnRatio: 0.1,
+                      columns: [
+                        {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
+                        {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false, 'widthFactor': 0.13},
+                        {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
+                        {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
+                        {'title': '${Emoji.byName('bird')!.char}', 'index': 5, 'key': 'BD', 'editable': false},
+                        {'title': '${Emoji.byName('person golfing')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
+                        {'title': '${Emoji.byName('index pointing up')!.char}', 'index': 7, 'key': 'BG', 'editable': false},
+                        {'title': '${Emoji.byName('victory hand')!.char}', 'index': 8, 'key': 'DB', 'editable': false},
+                        {'title': '${Emoji.byName('eagle')!.char}', 'index': 9, 'key': 'EG', 'editable': false},
+                      ],
+                      rows: buildScoreRows(),
+                    )),
+                (teeOffPass && !alreadyIn) || scoreDone ? const SizedBox(height: 4)
+                    : ElevatedButton(
+                    child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
+                        : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
+                    onPressed: () async {
+                      if (teeOffPass && alreadyIn) {
+                        if ((course["zones"]).length > 2) {
+                          List zones = await selectZones(context, course);
+                          if (zones.isNotEmpty)
+                            Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
+                              if (value ?? false) updateScore();
                             });
-                          }),
-                  const SizedBox(height: 16.0),
-                  !scoreReady ? const SizedBox(height: 10.0)
-                      : Flexible(
-                          child: Editable(
-                          borderColor: Colors.black,
-                          tdStyle: TextStyle(fontSize: 16),
-                          trHeight: 16,
-                          tdAlignment: TextAlign.center,
-                          thAlignment: TextAlign.center,
-                          columnRatio: 0.14,
-                          columns: [
-                            {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
-                            {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
-                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.25},
-                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false}
-                          ],
-                          rows: buildScoreRows(),
-                        )),
-                      (teeOffPass && !alreadyIn) || scoreDone ?
-                      const SizedBox(height: 10.0)
-                      : ElevatedButton(
-                          child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
-                                                  : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
-                          onPressed: () async {
-                            if (teeOffPass && alreadyIn) {
-                              if ((course["zones"]).length > 2) {
-                                List zones = await selectZones(context, course);
-                                if (zones.isNotEmpty)
-                                  Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
-                                    if (value ?? false) updateScore();
-                                  });
-                              } else {
-                                Navigator.push(context, newScorePage(course, uName)).then((value) {
-                                  if (value ?? false) updateScore();
-                                });
-                              }
-                            } else {
-                              Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
-                            }
-                          }),
-                  const SizedBox(height: 16.0),
-                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
-                  const SizedBox(height: 16.0)
-                ]));
-              }),
-              floatingActionButton: editable
-                  ? FloatingActionButton(
-                      onPressed: () {
-                        // modify activity info
-                        Navigator.push(context, _EditActivityPage(activity, course['name'])).then((value) {
-                          if (value ?? false) Navigator.of(context).pop(0);
-                        });
-                      },
-                      child: const Icon(Icons.edit),
-                    )
-                  : null,
-              floatingActionButtonLocation: FloatingActionButtonLocation.endTop);
-        });
+                        } else {
+                          Navigator.push(context, newScorePage(course, uName)).then((value) {
+                            if (value ?? false) updateScore();
+                          });
+                        }
+                      } else
+                        Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
+                    }),
+                const SizedBox(height: 4.0),
+                Text(Language.of(context).actRemarks + activity.data()!['remarks']),
+              ]));
+        }),
+        floatingActionButton: editable
+            ? FloatingActionButton(
+          onPressed: () {
+            // modify activity info
+            Navigator.push(context, _EditActivityPage(activity, course['name'])).then((value) {
+              if (value ?? false) Navigator.of(context).pop(0);
+            });
+          },
+          child: const Icon(Icons.edit),
+        )
+            : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop);
+  });
 }
 
 Future<List> selectZones(BuildContext context, Map course, {int zone0 = 0, int zone1 = 1}) {
@@ -1131,11 +1133,15 @@ class _NewScorePage extends MaterialPageRoute<bool> {
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                 return Container(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  const SizedBox(height: 16.0),
-                  Text('Name: ' + golfer, style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 16.0),
-                  Text('Course: ' + course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Text(course['region'] + ' ' + course['name'], style: TextStyle(fontSize: 18)),
+                      Text(Language.of(context).name + golfer, style: TextStyle(fontSize: 18))
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                  const SizedBox(height: 10),
                   Flexible(
                       child: Editable2(
                           key: _editableKey,
@@ -1161,11 +1167,11 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                           })),
                       Text(Language.of(context).scoreNote, style: TextStyle(fontSize: 18)),
                   const SizedBox(height: 6.0),
-                  (sum1 + sum2) == 0 ? const SizedBox(height: 6.0) : Text(Language.of(context).total + ': ' + (sum1 + sum2).toString(), style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 16.0),
+                  (sum1 + sum2) == 0 ? const SizedBox(height: 6.0) : Text(Language.of(context).total + ': ' + (sum1 + sum2).toString(), style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 6.0),
                   Center(
                       child: ElevatedButton(
-                          child: Text(Language.of(context).store, style: TextStyle(fontSize: 24)),
+                          child: Text(Language.of(context).store, style: TextStyle(fontSize: 20)),
                           onPressed: () {
                             bool complete = scores.length > 0;
                             scores.forEach((element) {
