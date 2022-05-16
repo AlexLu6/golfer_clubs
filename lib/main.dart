@@ -564,7 +564,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     storeMyActivities();
                     return LinearProgressIndicator();
                   } else {
-                    allActivities.add(doc.id);
                     return Card(
                         child: ListTile(
                             title: FutureBuilder(
@@ -599,9 +598,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                     'golfers': glist
                                   });
                                   setState(() {});
-                                } else if ((value == 0) && (myActivities.length != allActivities.length)) {
-                                  myActivities = allActivities;
+                                } else if (value == 0) {
+                                  glist.add({
+                                    'uid': _golferID,
+                                    'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),
+                                    'scores': []
+                                  });
+                                  myActivities.add(doc.id);
                                   storeMyActivities();
+                                  FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
+                                    'golfers': glist
+                                  });                                
                                 }
                               });
                             }));
