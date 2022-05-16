@@ -849,7 +849,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   'rank': idx,
                   'total': e['total'],
                   'name': e['name'],
-                  'net': e['net']
+                  'net': e['net'].toString().substring(0, 5)
                 });
                 idx++;
               }
