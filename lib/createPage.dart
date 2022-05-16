@@ -7,6 +7,7 @@ import 'package:charcode/charcode.dart';
 import 'dataModel.dart';
 import 'editable2.dart';
 import 'locale/language.dart';
+import 'dart:math';
 
 _NewGroupPage newGroupPage(int golferID, String locale) {
   return _NewGroupPage(golferID, locale);
@@ -845,11 +846,12 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
                 if (uIdx == i) scoreDone = true;
+                String net = e['net'].toString();
                 scoreRows.add({
                   'rank': idx,
                   'total': e['total'],
                   'name': e['name'],
-                  'net': e['net'].toString().substring(0, 5)
+                  'net': net.substring(0, min(net.length, 5))
                 });
                 idx++;
               }
