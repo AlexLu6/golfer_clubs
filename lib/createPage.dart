@@ -951,7 +951,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             });
                           }),
                   const SizedBox(height: 4.0),
-                  !scoreReady ? const SizedBox(height: 10.0)
+                  !scoreReady || myScores.isEmpty ? const SizedBox(height: 10.0)
                       : Flexible(
                           child: Editable(
                           borderColor: Colors.black,
