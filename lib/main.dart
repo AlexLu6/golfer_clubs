@@ -60,7 +60,6 @@ final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea122
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
 final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
 final String drawerPhoto = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
-String? _golferAvatar;
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
@@ -265,7 +264,6 @@ class _MyHomePageState extends State<MyHomePage> {
               groupValue: _sex,
               onChanged: (gendre? value) => setState(() {
                     _sex = value!;
-                    _golferAvatar = maleGolfer;
                   }))),
       Flexible(
           child: RadioListTile<gendre>(
@@ -274,7 +272,6 @@ class _MyHomePageState extends State<MyHomePage> {
               groupValue: _sex,
               onChanged: (gendre? value) => setState(() {
                     _sex = value!;
-                    _golferAvatar = femaleGolfer;
                   }))),
     ], mainAxisAlignment: MainAxisAlignment.center);
     final loginButton = Padding(
