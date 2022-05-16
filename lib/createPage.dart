@@ -942,7 +942,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   const SizedBox(height: 4.0),
                   !scoreReady || myScores.isEmpty ? const SizedBox(height: 4.0)
                       : Flexible(
-                          child: Editable(
+                          child: Editable2(
                           borderColor: Colors.black,
                           tdStyle: TextStyle(fontSize: 16),
                           trHeight: 16,
