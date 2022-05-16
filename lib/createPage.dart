@@ -967,10 +967,10 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.25},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.16},
                             {'title': 'E', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'B', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'P', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'G', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
-                            {'title': 'D', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1}
+                            {'title': 'B', 'index': 6, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'P', 'index': 7, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'G', 'index': 8, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'D', 'index': 9, 'key': 'net', 'editable': false, 'widthFactor': 0.1}
                           ],
                           rows: buildScoreRows(),
                         )),
