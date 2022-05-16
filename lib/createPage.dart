@@ -845,13 +845,28 @@ class ShowActivityPage extends MaterialPageRoute<int> {
 
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
+                int eg = 0, bd =0, par = 0, bg = 0, db = 0;
+                List<int> pars = myScores[0]['pars'];
+                List<int> scores = myScores[0]['scores'];
+                for (var i=0; i< pars.length; i++) {
+                  if (scores[i] == pars[i]) par++;
+                  else if (scores[i] == pars[i] + 1) bg++;
+                  else if (scores[i] == pars[i] + 2) db++;
+                  else if (scores[i] == pars[i] - 1) bd++;
+                  else if (scores[i] == pars[i] - 2) eg++;
+                }
                 if (uIdx == i) scoreDone = true;
                 String net = e['net'].toString();
                 scoreRows.add({
                   'rank': idx,
                   'total': e['total'],
                   'name': e['name'],
-                  'net': net.substring(0, min(net.length, 5))
+                  'net': net.substring(0, min(net.length, 5)),
+                  'E' : eg,
+                  'B' : bd,
+                  'P' : par,
+                  'G' : bg,
+                  'D' : db
                 });
                 idx++;
               }
@@ -950,7 +965,12 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.25},
-                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false}
+                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.16},
+                            {'title': 'E', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'B', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'P', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'G', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1},
+                            {'title': 'D', 'index': 5, 'key': 'net', 'editable': false, 'widthFactor': 0.1}
                           ],
                           rows: buildScoreRows(),
                         )),
