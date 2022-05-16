@@ -901,7 +901,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             }
             eidx++;
           }
-          print('alreadyIn: $alreadyIn scoreReady: $scoreReady scoreDoc: $scoreDone uIdx: $uIdx');
+
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
@@ -963,8 +963,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false, 'widthFactor': 0.13},
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
-                            {'title': '${Emoji.byName('bird')!.char}', 'index': 5, 'key': 'BD', 'editable': false},
-                            {'title': '${Emoji.byName('eagle')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
+                            {'title': '${Emoji.byName('duck')!.char}', 'index': 5, 'key': 'BD', 'editable': false},
+                            {'title': '${Emoji.byName('bird')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
                             {'title': 'G', 'index': 7, 'key': 'BG', 'editable': false},
                             {'title': 'D', 'index': 8, 'key': 'DB', 'editable': false},
                             {'title': '${Emoji.byName('eagle')!.char}', 'index': 9, 'key': 'EG', 'editable': false},      
