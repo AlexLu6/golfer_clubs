@@ -821,8 +821,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   storeMyActivities();
                 }
               }
-              if ((e['scores'] as List).length > 0)
-                scoreReady = true;
               idx++;
               if (idx == (activity.data()!['max'] as int)) {
                 if (idx % 4 != 0)
@@ -841,7 +839,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
 
           List buildScoreRows() {
             var scoreRows = [];
-            int idx = 1, i=0;    
+            int idx = 1;    
             List pars = myScores[0]['pars'];        
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
@@ -855,7 +853,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   else if (scores[ii] == pars[ii] - 1) bd++;
                   else if (scores[ii] == pars[ii] - 2) eg++;
                 }
-                if (uIdx == i) scoreDone = true;
                 String net = e['net'].toString();
                 scoreRows.add({
                   'rank': idx,
@@ -870,7 +867,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 });
                 idx++;
               }
-              i++;
             }
             scoreRows.sort((a, b) => a['total'] - b['total']);
             for (idx = 0; idx < scoreRows.length; idx++)
@@ -892,7 +888,12 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               }).whenComplete(() => Navigator.of(context).pop(0));
             });           
           }
-
+          for (var e in activity.data()!['golfers'])
+            if ((e['scores'] as List).length > 0) {
+              if (e['uid'] as int == uId) 
+                scoreDone = true;
+              scoreReady = true;
+            }
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
@@ -912,7 +913,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                         }
                       }),
                   const SizedBox(height: 10.0),
-//                  scoreReady ? const SizedBox(height: 1.0) :
+                  scoreReady ? const SizedBox(height: 1.0) :
                   Flexible(
                       child: Editable(
                     borderColor: Colors.black,
@@ -962,8 +963,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           ],
                           rows: buildScoreRows(),
                         )),
-                  (teeOffPass && !alreadyIn) || scoreDone
-                      ? const SizedBox(height: 10.0)
+                  (teeOffPass && !alreadyIn) || scoreDone ? const SizedBox(height: 4)
                       : ElevatedButton(
                           child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
                                                   : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
