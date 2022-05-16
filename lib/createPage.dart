@@ -831,7 +831,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           List buildScoreRows() {
             var scoreRows = [];
             int idx = 1;    
-            List pars = myScores[0]['pars'];        
+            List pars = myScores.isEmpty ? [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]:myScores[0]['pars'];        
             for (var e in activity.data()!['golfers']) {
               if ((e['scores'] as List).length > 0) {
                 int eg = 0, bd =0, par = 0, bg = 0, db = 0;
@@ -947,7 +947,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             });
                           }),
                   const SizedBox(height: 4.0),
-                  !scoreReady || myScores.isEmpty ? const SizedBox(height: 4.0)
+                  !scoreReady ? const SizedBox(height: 4.0)
                       : Flexible(
                           child: Editable(
                           borderColor: Colors.black,
