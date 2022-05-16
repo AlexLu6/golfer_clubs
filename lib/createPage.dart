@@ -314,7 +314,9 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                               }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
-                        }),                 
+                        }),
+                    ]),
+                    SizedBox(height: 10),          
                     ((groupDoc.data()! as Map)['managers'] as List).length == 1 ? const SizedBox(width: 5)
                     : ElevatedButton(
                           child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
@@ -324,8 +326,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                               'managers': mlist
                             }).whenComplete(() => Navigator.of(context).pop(true));
-                    }),
-                  ]),
+                    }),                  
                 ]);
               })
           );
