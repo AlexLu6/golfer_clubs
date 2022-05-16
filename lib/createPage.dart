@@ -910,7 +910,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           return Text(course['name'] + "\t" + Language.of(context).max + activity.data()!['max'].toString(), style: TextStyle(fontSize: 20));
                         }
                       }),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 10.0),
 //                  scoreReady ? const SizedBox(height: 1.0) :
                   Flexible(
                       child: Editable(
@@ -930,7 +930,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                     rows: buildRows(),
                   )),
                   ((activity.data()!['golfers'] as List).length < 5) || !alreadyIn || scoreReady
-                      ? const SizedBox(height: 10.0)
+                      ? const SizedBox(height: 4.0)
                       : ElevatedButton(
                           child: Text(Language.of(context).subGroup),
                           onPressed: () {
@@ -939,7 +939,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             });
                           }),
                   const SizedBox(height: 4.0),
-                  !scoreReady || myScores.isEmpty ? const SizedBox(height: 10.0)
+                  !scoreReady || myScores.isEmpty ? const SizedBox(height: 4.0)
                       : Flexible(
                           child: Editable(
                           borderColor: Colors.black,
@@ -982,9 +982,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             } else
                               Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
                           }),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 4.0),
                   Text(Language.of(context).actRemarks + activity.data()!['remarks']),
-                  const SizedBox(height: 16.0)
                 ]));
               }),
               floatingActionButton: editable
