@@ -964,7 +964,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           columns: [
                             {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false},
-                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.25},
+                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.16},
                             {'title': 'E', 'index': 5, 'key': 'EG', 'editable': false, 'widthFactor': 0.1},
                             {'title': 'B', 'index': 6, 'key': 'BD', 'editable': false, 'widthFactor': 0.1},
