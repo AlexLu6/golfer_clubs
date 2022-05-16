@@ -4,6 +4,8 @@ import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
+import 'package:emojis/emojis.dart';
+import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'editable2.dart';
 import 'locale/language.dart';
@@ -961,11 +963,11 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                             {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false, 'widthFactor': 0.13},
                             {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
                             {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
-//                            {'title': 'E', 'index': 5, 'key': 'EG', 'editable': false},
-                            {'title': 'B', 'index': 6, 'key': 'BD', 'editable': false},
-                            {'title': 'P', 'index': 7, 'key': 'PAR', 'editable': false},
-                            {'title': 'G', 'index': 8, 'key': 'BG', 'editable': false},
-                            {'title': 'D', 'index': 9, 'key': 'DB', 'editable': false}
+                            {'title': 'B', 'index': 5, 'key': 'BD', 'editable': false},
+                            {'title': 'P', 'index': 6, 'key': 'PAR', 'editable': false},
+                            {'title': 'G', 'index': 7, 'key': 'BG', 'editable': false},
+                            {'title': 'D', 'index': 8, 'key': 'DB', 'editable': false},
+                            {'title': Emoji.byName('eagle'), 'index': 9, 'key': 'EG', 'editable': false},      
                           ],
                           rows: buildScoreRows(),
                         )),
