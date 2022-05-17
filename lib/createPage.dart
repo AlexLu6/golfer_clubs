@@ -336,7 +336,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).delete()
                           .whenComplete(() => Navigator.of(context).pop(true));
                       }
-                    ) : ((groupDoc.data()! as Map)['members'] as List).length > 1 ?           
+                    ) : ((groupDoc.data()! as Map)['managers'] as List).length > 1 ?           
                     ElevatedButton(
                       child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
                       onPressed: () {
