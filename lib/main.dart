@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
 import 'firebase_options.dart';
@@ -668,6 +669,24 @@ class _MyHomePageState extends State<MyHomePage> {
     int cnt = myScores.length > 10 ? 10 : myScores.length;
     _handicap = 0;
 
+    List<int> scoreRow(List pars, List scores){      
+      int eg = 0, bd =0, par = 0, bg = 0, db = 0;
+      for (var i=0; i < pars.length; i++) {
+        if (scores[i] == pars[i]) par++;
+        else if (scores[i] == pars[i] + 1) bg++;
+        else if (scores[i] == pars[i] + 2) db++;
+        else if (scores[i] == pars[i] - 1) bd++;
+        else if (scores[i] == pars[i] - 2) eg++;
+      }
+      return [eg, bd, par, bg, db];
+    }
+    List parRows = [
+      Emoji.byName('eagle')!.char, 
+      Emoji.byName('bird')!.char, 
+      Emoji.byName('person golfing')!.char, 
+      Emoji.byName('index pointing up')!.char,
+      Emoji.byName('victory hand')!.char
+    ];
     return ListView.builder(
       itemCount: myScores.length,
       padding: const EdgeInsets.all(16.0),
@@ -680,7 +699,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListTile(
           leading: CircleAvatar(child: Text(myScores[i]['total'].toString(), style: TextStyle(fontWeight: FontWeight.bold))), 
           title: Text(myScores[i]['date'] + ' ' + myScores[i]['course'], style: TextStyle(fontWeight: FontWeight.bold)), 
-          subtitle: Text(myScores[i]['pars'].toString() + '\n' + myScores[i]['scores'].toString(), style: TextStyle(fontWeight: FontWeight.w200))
+          subtitle: Text(parRows.toString() + '\n' + scoreRow(myScores[i]['pars'], myScores[i]['scores']).toString(), style: TextStyle(fontWeight: FontWeight.w200))
         );
       },
     );
