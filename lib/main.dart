@@ -509,22 +509,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         onLongPress: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
                           if (((doc.data()! as Map)["managers"] as List).indexOf(_golferID) >= 0) {
-                            // modify group info
                             Navigator.push(context, editGroupPage(doc, _golferID));
                           } else {
                             showDialog<bool>(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text((doc.data()! as Map)["Name"]),
-                                    content: Text(Language.of(context).quitGroup),
-                                    actions: <Widget>[
-                                      TextButton(child: Text("Yes"), onPressed: () => Navigator.of(context).pop(true)),
-                                      TextButton(child: Text("No"), onPressed: () => Navigator.of(context).pop(false))
-                                    ],
-                                  );
-                                }).then((value) {
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text((doc.data()! as Map)["Name"]),
+                                  content: Text(Language.of(context).quitGroup),
+                                  actions: <Widget>[
+                                    TextButton(child: Text("Yes"), onPressed: () => Navigator.of(context).pop(true)),
+                                    TextButton(child: Text("No"), onPressed: () => Navigator.of(context).pop(false))
+                                  ],
+                                );
+                              }
+                            ).then((value) {
                               if (value!) {
+                                // lack delete related activities and subroups
                                 removeMember(_gID, _golferID);
                                 myGroups.remove(_gID);
                                 storeMyGroup();
