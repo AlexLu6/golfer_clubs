@@ -178,6 +178,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                                 location: cName,
                                 startDate: (doc.data()! as Map)['teeOff']!.toDate(),
                                 endDate: (doc.data()! as Map)['teeOff']!.toDate().add(duration: Duration(hours: 5)),
+                                timeZone: 'CST'
                               );
                               Add2Calendar.addEvent2Cal(event);
                             } else if (value == -1) {
