@@ -6,6 +6,7 @@ import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
 import 'package:emojis/emoji.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'dataModel.dart';
 import 'editable2.dart';
 import 'locale/language.dart';
@@ -134,6 +135,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                   } else if (myActivities.indexOf(doc.id) >= 0) {
                     return SizedBox(height: 1);
                   } else {
+                    String cName = '';
                     return Card(
                       child: ListTile(
                         title: FutureBuilder(
@@ -142,13 +144,13 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                               if (!snapshot2.hasData)
                                 return const LinearProgressIndicator();
                               else
-                                return Text(snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
+                                return Text(cName = snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
                             }
                           ),
                         subtitle: Text(Language.of(context).teeOff + (doc.data()! as Map)['teeOff']!.toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List<dynamic>).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
                         leading: FutureBuilder(
                           future: coursePhoto((doc.data()! as Map)['cid'] as int),
-                            builder: (context, snapshot3) {
+                          builder: (context, snapshot3) {
                               if (!snapshot3.hasData)
                                 return const CircularProgressIndicator();
                               else
@@ -170,6 +172,14 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                               FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
                                 'golfers': glist
                               });
+                              // Add to calendar
+                              final event = Event(
+                                title: _gName,
+                                location: cName,
+                                startDate: (doc.data()! as Map)['teeOff']!.toDate(),
+                                endDate: (doc.data()! as Map)['teeOff']!.toDate().add(duration: Duration(hours: 5)),
+                              );
+                              Add2Calendar.addEvent2Cal(event);
                             } else if (value == -1) {
                               glist.removeWhere((item) => item['uid'] == uID);
                               myActivities.remove(doc.id);

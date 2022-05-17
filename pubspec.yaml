@@ -25,6 +25,7 @@ dependencies:
   firebase_storage: ^10.2.16
   firebase_core: ^1.17.0
   emojis: ^0.9.9
+  add_2_calendar: ^2.1.3
 
 dev_dependencies:
   flutter_test:
