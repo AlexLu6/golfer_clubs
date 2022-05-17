@@ -932,7 +932,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   Flexible(
                       child: Editable(
                     borderColor: Colors.black,
-                    tdStyle: TextStyle(fontSize: 16),
+                    tdStyle: TextStyle(fontSize: 14),
                     trHeight: 16,
                     tdAlignment: TextAlign.center,
                     thAlignment: TextAlign.center,
