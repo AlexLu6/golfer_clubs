@@ -73,7 +73,7 @@ void addMember(int gid, int uid) {
 
 void removeMemberAllActivities(int gid, int uid) {
   FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: gid).get().then((value) {
-     value.docs.forEach((doc) {
+    value.docs.forEach((doc) {
       var glist = doc.get('golfers');
       glist.removeWhere((item) => item['uid'] == uid);
       var subGroups = doc.get('subgroups');
