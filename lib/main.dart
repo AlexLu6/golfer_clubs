@@ -61,20 +61,21 @@ final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea122
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
 final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
 final String drawerPhoto = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
+final double initHandicap = 14.2;
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _golferID = 0, _gID = 1;
   String _name = '', _phone = '', _expired = '', _locale ='';
   gendre _sex = gendre.Male;
-  double _handicap = 14.2;
+  double _handicap = initHandicap;
   bool isRegistered = false, isUpdate = false, isExpired = false;
   var _golferDoc;
 
   @override
   void initState() {
     _golferID = prefs!.getInt('golferID') ?? 0;
-    _handicap = prefs!.getDouble('handicap') ?? 14.2;
+    _handicap = prefs!.getDouble('handicap') ?? initHandicap;
     _expired = prefs!.getString('expired')?? '';
     loadMyGroup();
     loadMyActivities();
@@ -198,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _name = '';
                   _phone = '';
                   _golferID = 0;
+                  _handicap= initHandicap;
                   myGroups.clear();
                   myActivities.clear();
                   myScores.clear();
