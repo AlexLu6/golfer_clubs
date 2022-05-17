@@ -699,7 +699,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListTile(
           leading: CircleAvatar(child: Text(myScores[i]['total'].toString(), style: TextStyle(fontWeight: FontWeight.bold))), 
           title: Text(myScores[i]['date'] + ' ' + myScores[i]['course'], style: TextStyle(fontWeight: FontWeight.bold)), 
-          subtitle: Text(parRows.toString() + '\n' + scoreRow(myScores[i]['pars'], myScores[i]['scores']).toString(), style: TextStyle(fontWeight: FontWeight.w200))
+          subtitle: Text(parRows.toString() + '\n' + scoreRow(myScores[i]['pars'], myScores[i]['scores']).toString()/*, style: TextStyle(fontWeight: FontWeight.w200)*/)
         );
       },
     );
