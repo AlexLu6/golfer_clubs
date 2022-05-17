@@ -308,6 +308,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
+                              removeMemberAllActivities((groupDoc.data()! as Map)['gid'], _selectedGolfer.toID());
                               blist.remove(_selectedGolfer.toID());
                               FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                                 'members': blist
