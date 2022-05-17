@@ -203,8 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   myGroups.clear();
                   myActivities.clear();
                   myScores.clear();
+                  _currentPageIndex = 0;
                 });
-                _currentPageIndex = 0;
                 Navigator.of(context).pop();
               }),
           ListTile(
