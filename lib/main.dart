@@ -525,7 +525,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               }
                             ).then((value) {
                               if (value!) {
-                                // lack delete related activities and subroups
+                                removeMemberAllActivities(_gID, _golferID);
                                 removeMember(_gID, _golferID);
                                 myGroups.remove(_gID);
                                 storeMyGroup();
