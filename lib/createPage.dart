@@ -4,7 +4,6 @@ import 'package:editable/editable.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charcode/charcode.dart';
-import 'package:emojis/emojis.dart';
 import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'editable2.dart';
@@ -308,7 +307,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
                             if (_selectedGolfer != null) {
-                              var mlist = (groupDoc.data()! as Map)['managers'] as List;
+                              removeMemberAllActivities((groupDoc.data()! as Map)['gid'], _selectedGolfer.toID());
                               blist.remove(_selectedGolfer.toID());
                               FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
                                   'members': blist
@@ -318,17 +317,24 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         }),
                   ]),
                   SizedBox(height: 10),
-                  ((groupDoc.data()! as Map)['managers'] as List).length == 1
-                      ? const SizedBox(width: 1)
-                      : ElevatedButton(
-                          child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
-                          onPressed: () {
-                            var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                            mlist.remove(uID);
-                            FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
-                              'managers': mlist
-                            }).whenComplete(() => Navigator.of(context).pop(true));
-                          }),
+                  (((groupDoc.data()! as Map)['managers'] as List).length == 1) && (((groupDoc.data()! as Map)['members'] as List).length == 1) ?
+                  ElevatedButton(
+                      child: Text(Language.of(context).deleteGroup, style: TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).delete()
+                            .whenComplete(() => Navigator.of(context).pop(true));
+                      }
+                  ) : ((groupDoc.data()! as Map)['managers'] as List).length > 1 ?
+                  ElevatedButton(
+                      child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        var mlist = (groupDoc.data()! as Map)['managers'] as List;
+                        mlist.remove(uID);
+                        FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                          'managers': mlist
+                        }).whenComplete(() => Navigator.of(context).pop(true));
+                      }
+                  ) : SizedBox(height: 2),
                 ]);
               }));
         });
@@ -800,7 +806,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
     List buildRows() {
       var oneRow = {};
       int idx = 0;
-//            for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
       for (var e in activity.data()!['golfers']) {
         if (idx % 4 == 0) {
           oneRow = Map();
@@ -830,6 +836,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
       if ((idx % 4) != 0)
         rows.add(oneRow);
       else if (idx == 0) {
+        oneRow['row'] = '1';
         oneRow['c1'] = oneRow['c2'] = oneRow['c3'] = oneRow['c4'] = '';
         rows.add(oneRow);
       }
@@ -839,11 +846,10 @@ class ShowActivityPage extends MaterialPageRoute<int> {
     List buildScoreRows() {
       var scoreRows = [];
       int idx = 1;
-      List pars = myScores.isEmpty ? [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]:myScores[0]['pars'];
       for (var e in activity.data()!['golfers']) {
         if ((e['scores'] as List).length > 0) {
           int eg = 0, bd =0, par = 0, bg = 0, db = 0;
-//                List pars = e['pars'] as List;
+          List pars = e['pars'] as List;
           List scores = e['scores'] as List;
           for (var ii=0; ii < pars.length; ii++) {
             if (scores[ii] == pars[ii]) par++;
@@ -931,7 +937,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 Flexible(
                     child: Editable(
                       borderColor: Colors.black,
-                      tdStyle: TextStyle(fontSize: 16),
+                      tdStyle: TextStyle(fontSize: 14),
                       trHeight: 16,
                       tdAlignment: TextAlign.center,
                       thAlignment: TextAlign.center,
@@ -1079,10 +1085,10 @@ class _NewScorePage extends MaterialPageRoute<bool> {
           var columns = [
             {'title': 'Out', 'index': 0, 'key': 'zone1', 'editable': false},
             {'title': "Par", 'index': 1, 'key': 'par1', 'editable': false},
-            {'title': " ", 'index': 2, 'key': 'score1'},
+            {'title': " ", 'index': 2, 'key': 'score1', 'widthFactor': 0.17},
             {'title': 'In', 'index': 3, 'key': 'zone2', 'editable': false},
             {'title': "Par", 'index': 4, 'key': 'par2', 'editable': false},
-            {'title': " ", 'index': 5, 'key': 'score2'}
+            {'title': " ", 'index': 5, 'key': 'score2', 'widthFactor': 0.17}
           ];
           var rows = [
             {'zone1': '1', 'par1': '4', 'score1': '', 'zone2': '10', 'par2': '4', 'score2': ''},
@@ -1150,7 +1156,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                           trHeight: 16,
                           tdAlignment: TextAlign.center,
                           thAlignment: TextAlign.center,
-                          columnRatio: 0.16,
+                          columnRatio: 0.15,
                           columns: buildColumns(),
                           rows: buildRows(),
                           onSubmitted: (value) {

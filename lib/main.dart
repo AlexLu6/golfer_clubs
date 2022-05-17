@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
 import 'firebase_options.dart';
@@ -59,20 +60,21 @@ final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea122
 final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
 final String drawerCourse = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
 final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
+final double initHandicap = 14.2;
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _golferID = 0, _gID = 1;
   String _name = '', _phone = '', _expired = '', _locale ='';
   gendre _sex = gendre.Male;
-  double _handicap = 14.2;
+  double _handicap = initHandicap;
   bool isRegistered = false, isUpdate = false, isExpired = false;
   var _golferDoc;
 
   @override
   void initState() {
     _golferID = prefs!.getInt('golferID') ?? 0;
-    _handicap = prefs!.getDouble('handicap') ?? 14.2;
+    _handicap = prefs!.getDouble('handicap') ?? initHandicap;
     _expired = prefs!.getString('expired') ?? '';
     loadMyGroup();
     loadMyActivities();
@@ -197,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _name = '';
                   _phone = '';
                   _golferID = 0;
+                  _handicap= initHandicap;
                   myGroups.clear();
                   myActivities.clear();
                   myScores.clear();
@@ -307,6 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       _locale = items['locale'];
                       _expired = items['expired'].toDate().toString();
                       _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
+                      prefs!.setString('expired', _expired);
                       print(_name + '(' + _phone + ') already registered! ($_golferID)');
                       storeMyGroup();
                       storeMyActivities();
@@ -315,19 +319,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   }).whenComplete(() {
                     if (_golferID == 0) {
                       _golferID = uuidTime();
-                      DateTime today = _expired == '' ? DateTime.now() : DateTime.parse(_expired);
-                      //DateTime today = DateTime.now();
-                      int leap = (today.month == 2 && today.day == 29) ? 1 : 0;
-                      Timestamp expire = Timestamp.fromDate(DateTime(
-                          _expired == '' ? today.year + 1 : today.year,
-                          today.month, today.day - leap));
+                      DateTime expireDate = _expired == '' ? DateTime.now().add(Duration(days: 90)) : DateTime.parse(_expired);
+                      Timestamp expire = Timestamp.fromDate(expireDate);
+                      _locale = myLocale.toString();
                       FirebaseFirestore.instance.collection('Golfers').add({
                         "name": _name,
                         "phone": _phone,
                         "sex": _sex == gendre.Male ? 1 : 2,
                         "uid": _golferID,
                         "expired": expire,
-                        "locale": myLocale.toString()
+                        "locale": _locale
                       }).whenComplete(() {
                         if (_expired == '') {
                           _expired = expire.toDate().toString();
@@ -507,28 +508,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         onLongPress: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
                           if (((doc.data()! as Map)["managers"] as List).indexOf(_golferID) >= 0) {
-                            // modify group info
                             Navigator.push(context, editGroupPage(doc, _golferID));
                           } else {
                             showDialog<bool>(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text((doc.data()! as Map)["Name"]),
-                                    content: Text(Language.of(context).quitGroup),
-                                    actions: <Widget>[
-                                      TextButton(child: Text("Yes"), onPressed: () => Navigator.of(context).pop(true)),
-                                      TextButton(child: Text("No"), onPressed: () => Navigator.of(context).pop(false))
-                                    ],
-                                  );
-                                }).then((value) {
-                              if (value!) {
-                                removeMember(_gID, _golferID);
-                                myGroups.remove(_gID);
-                                storeMyGroup();
-                                setState(() {});
-                              }
-                            });
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text((doc.data()! as Map)["Name"]),
+                                  content: Text(Language.of(context).quitGroup),
+                                  actions: <Widget>[
+                                    TextButton(child: Text("Yes"), onPressed: () => Navigator.of(context).pop(true)),
+                                    TextButton(child: Text("No"), onPressed: () => Navigator.of(context).pop(false))
+                                  ],
+                                );
+                              }).then((value) {
+                                if (value!) {
+                                  removeMemberAllActivities(_gID, _golferID);
+                                  removeMember(_gID, _golferID);
+                                  myGroups.remove(_gID);
+                                  storeMyGroup();
+                                  setState(() {});
+                                }
+                              });
                           }
                         },
                       ));
@@ -659,7 +660,26 @@ class _MyHomePageState extends State<MyHomePage> {
   ListView myScoreBody() {
     int cnt = myScores.length > 10 ? 10 : myScores.length;
     _handicap = 0;
-
+    List<int> scoreRow(List pars, List scores){
+      int eg = 0, bd =0, par = 0, bg = 0, db = 0, mm = 0;
+      for (var i=0; i < pars.length; i++) {
+        if (scores[i] == pars[i]) par++;
+        else if (scores[i] == pars[i] + 1) bg++;
+        else if (scores[i] == pars[i] + 2) db++;
+        else if (scores[i] == pars[i] - 1) bd++;
+        else if (scores[i] == pars[i] - 2) eg++;
+        else mm++;
+      }
+      return [eg, bd, par, bg, db, mm];
+    }
+    List parRows = [
+      Emoji.byName('eagle')!.char,
+      Emoji.byName('bird')!.char,
+      Emoji.byName('person golfing')!.char,
+      Emoji.byName('index pointing up')!.char,
+      Emoji.byName('victory hand')!.char,
+      Emoji.byName('face exhaling')!.char
+    ];
     return ListView.builder(
       itemCount: myScores.length,
       padding: const EdgeInsets.all(16.0),
@@ -672,7 +692,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListTile(
             leading: CircleAvatar(child: Text(myScores[i]['total'].toString())),
             title: Text(myScores[i]['date'] + ' ' + myScores[i]['course'], style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(myScores[i]['pars'].toString() + '\n' + myScores[i]['scores'].toString())
+            subtitle: Text(parRows.toString() + ': ' + scoreRow(myScores[i]['pars'], myScores[i]['scores']).toString())
         );
       },
     );
