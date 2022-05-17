@@ -333,7 +333,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         "expired": expire,
                         "locale": _locale
                       }).whenComplete(() { 
-//                        print('Add new user $_name using $_locale');
                         if (_expired == '') {
                           _expired = expire.toDate().toString();
                           prefs!.setString('expired', _expired);

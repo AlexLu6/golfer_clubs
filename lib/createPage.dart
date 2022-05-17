@@ -336,7 +336,7 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).delete()
                           .whenComplete(() => Navigator.of(context).pop(true));
                       }
-                    ) : ((groupDoc.data()! as Map)['managers'] as List).length > 1 ?           
+                    ) : ((groupDoc.data()! as Map)['members'] as List).length > 1 ?           
                     ElevatedButton(
                       child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
                       onPressed: () {
@@ -1080,10 +1080,10 @@ class _NewScorePage extends MaterialPageRoute<bool> {
           var columns = [
             {'title': 'Out', 'index': 0, 'key': 'zone1', 'editable': false},
             {'title': "Par", 'index': 1, 'key': 'par1', 'editable': false},
-            {'title': " ", 'index': 2, 'key': 'score1'},
+            {'title': " ", 'index': 2, 'key': 'score1', 'widthFactor': 0.17},
             {'title': 'In', 'index': 3, 'key': 'zone2', 'editable': false},
             {'title': "Par", 'index': 4, 'key': 'par2', 'editable': false},
-            {'title': " ", 'index': 5, 'key': 'score2'}
+            {'title': " ", 'index': 5, 'key': 'score2', 'widthFactor': 0.17}
           ];
           var rows = [
             {'zone1': '1', 'par1': '4', 'score1': '', 'zone2': '10', 'par2': '4', 'score2': ''},
@@ -1151,7 +1151,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                           trHeight: 16,
                           tdAlignment: TextAlign.center,
                           thAlignment: TextAlign.center,
-                          columnRatio: 0.16,
+                          columnRatio: 0.15,
                           columns: buildColumns(),
                           rows: buildRows(),
                           onSubmitted: (value) {
