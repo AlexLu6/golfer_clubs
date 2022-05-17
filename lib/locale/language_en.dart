@@ -70,4 +70,5 @@ class LanguageEn extends Language {
   String get usage => 'Help';
   String get hlepImage => 'golferUsage_en.jpg';
   String get applicationSent => 'Your application has been sent!';
+  String get deleteGroup => 'Delete Group';
 }

@@ -317,16 +317,24 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         }),
                     ]),
                     SizedBox(height: 10),          
-                    ((groupDoc.data()! as Map)['managers'] as List).length == 1 ? const SizedBox(width: 5)
-                    : ElevatedButton(
-                          child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
-                          onPressed: () {
-                            var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                            mlist.remove(uID);
-                            FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
-                              'managers': mlist
-                            }).whenComplete(() => Navigator.of(context).pop(true));
-                    }),                  
+                    (((groupDoc.data()! as Map)['managers'] as List).length == 1) && (((groupDoc.data()! as Map)['members'] as List).length == 1) ? 
+                    ElevatedButton(
+                      child: Text(Language.of(context).deleteGroup, style: TextStyle(fontSize: 18)),
+                      onPressed: () {                        
+                        FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).delete()
+                          .whenComplete(() => Navigator.of(context).pop(true));
+                      }
+                    ) : ((groupDoc.data()! as Map)['members'] as List).length > 1 ?           
+                    ElevatedButton(
+                      child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        var mlist = (groupDoc.data()! as Map)['managers'] as List;
+                        mlist.remove(uID);
+                        FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                          'managers': mlist
+                        }).whenComplete(() => Navigator.of(context).pop(true));
+                      }
+                    ) : SizedBox(height: 2),                  
                 ]);
               })
           );
@@ -811,6 +819,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             if ((idx % 4) != 0)
               rows.add(oneRow);
             else if (idx == 0) {
+              oneRow['row'] = '1';
               oneRow['c1'] = oneRow['c2'] = oneRow['c3'] = oneRow['c4'] = '';
               rows.add(oneRow);
             }

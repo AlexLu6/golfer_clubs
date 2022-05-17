@@ -74,4 +74,5 @@ abstract class Language {
   String get usage;
   String get hlepImage;
   String get applicationSent;
+  String get deleteGroup;
 }

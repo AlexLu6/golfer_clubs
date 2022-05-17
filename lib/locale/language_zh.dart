@@ -70,4 +70,5 @@ class LanguageZh extends Language {
   String get usage => '使用說明';
   String get hlepImage => 'golferUsage_zh.jpg';
   String get applicationSent => '申請已送出！';
+  String get deleteGroup => '刪除群組';
 }
