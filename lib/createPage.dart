@@ -131,7 +131,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                     FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).delete(); //anyone can delete outdated activity
                     return LinearProgressIndicator();
                   } else if (myActivities.indexOf(doc.id) >= 0) {
-                    return SizedBox(height: 1);
+                    return SizedBox.shrink();
                   } else {
                     String cName = '';
                     return Card(
@@ -327,25 +327,31 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                         }),
                     ]),
                     SizedBox(height: 10),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[       
-                      (((groupDoc.data()! as Map)['managers'] as List).length == 1) && (((groupDoc.data()! as Map)['members'] as List).length == 1) ? 
-                      ElevatedButton(
-                        child: Text(Language.of(context).deleteGroup, style: TextStyle(fontSize: 18)),
-                        onPressed: () {                        
-                          FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).delete()
-                            .whenComplete(() => Navigator.of(context).pop(true));
-                        }
-                      ) : ((groupDoc.data()! as Map)['managers'] as List).length > 1 ?           
-                      ElevatedButton(
-                        child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
-                        onPressed: () {
-                          var mlist = (groupDoc.data()! as Map)['managers'] as List;
-                          mlist.remove(uID);
-                          FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
-                            'managers': mlist
-                          }).whenComplete(() => Navigator.of(context).pop(true));
-                        }
-                      ) : SizedBox(height: 2), 
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+                      Visibility(
+                        visible: (((groupDoc.data()! as Map)['managers'] as List).length == 1) && 
+                                 (((groupDoc.data()! as Map)['members'] as List).length == 1),
+                        child: ElevatedButton(
+                          child: Text(Language.of(context).deleteGroup, style: TextStyle(fontSize: 18)),
+                          onPressed: () {                        
+                            FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).delete()
+                              .whenComplete(() => Navigator.of(context).pop(true));
+                          }
+                        )
+                      ),
+                      Visibility(
+                        visible: ((groupDoc.data()! as Map)['managers'] as List).length > 1,           
+                        child: ElevatedButton(
+                          child: Text(Language.of(context).quitManager, style: TextStyle(fontSize: 18)),
+                          onPressed: () {
+                            var mlist = (groupDoc.data()! as Map)['managers'] as List;
+                            mlist.remove(uID);
+                            FirebaseFirestore.instance.collection('GolferClubs').doc(groupDoc.id).update({
+                              'managers': mlist
+                            }).whenComplete(() => Navigator.of(context).pop(true));
+                          }
+                        )
+                      ), 
                     ])                 
                 ]);
               })
