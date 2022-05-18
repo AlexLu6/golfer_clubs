@@ -957,7 +957,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       child: Text(Language.of(context).subGroup),
                       onPressed: () {
                         Navigator.push(context, SubGroupPage(activity, uId)).then((value) {
-                          if (value ?? false) Navigator.of(context).pop(0);
+//                          if (value ?? false) Navigator.of(context).pop(0);
                         });
                       }
                     )
