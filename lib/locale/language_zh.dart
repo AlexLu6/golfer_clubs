@@ -68,7 +68,7 @@ class LanguageZh extends Language {
   String get reply => '回復';
   String get scoreNote => '注意：輸入成績後要按Enter!';
   String get usage => '使用說明';
-  String get hlepImage => 'golferUsage_zh.jpg';
+  String get helpImage => 'golferUsage_zh.jpg';
   String get applicationSent => '申請已送出！';
   String get deleteGroup => '刪除群組';
 }

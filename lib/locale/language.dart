@@ -72,7 +72,7 @@ abstract class Language {
   String get reply;
   String get scoreNote;
   String get usage;
-  String get hlepImage;
+  String get helpImage;
   String get applicationSent;
   String get deleteGroup;
 }

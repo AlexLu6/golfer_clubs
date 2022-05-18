@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget usageBody() {
     return FutureBuilder(
-      future: FirebaseStorage.instance.ref().child(Language.of(context).hlepImage).getDownloadURL(),
+      future: FirebaseStorage.instance.ref().child(Language.of(context).helpImage).getDownloadURL(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return const CircularProgressIndicator();
