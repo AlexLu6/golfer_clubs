@@ -667,7 +667,7 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                 Flexible(
                     child: Editable(
                   borderColor: Colors.black,
-                  tdStyle: TextStyle(fontSize: 16),
+                  tdStyle: TextStyle(fontSize: 14),
                   trHeight: 16,
                   tdAlignment: TextAlign.center,
                   thAlignment: TextAlign.center,
@@ -931,82 +931,102 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                         }
                       }),
                   const SizedBox(height: 10.0),
-                  scoreReady ? const SizedBox(height: 1.0) :
-                  Flexible(
+                  Visibility(
+                    visible: !scoreReady,
+                    child: Flexible(
                       child: Editable(
-                    borderColor: Colors.black,
-                    tdStyle: TextStyle(fontSize: 14),
-                    trHeight: 16,
-                    tdAlignment: TextAlign.center,
-                    thAlignment: TextAlign.center,
-                    columnRatio: 0.2,
-                    columns: [
-                      {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
-                      {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
-                      {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
-                      {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
-                      {"title": "D", 'index': 5, 'key': 'c4', 'editable': false}
-                    ],
-                    rows: buildRows(),
-                  )),
-                  ((activity.data()!['golfers'] as List).length < 5) || !alreadyIn || scoreReady
-                      ? const SizedBox(height: 4.0)
-                      : ElevatedButton(
-                          child: Text(Language.of(context).subGroup),
-                          onPressed: () {
-                            Navigator.push(context, SubGroupPage(activity, uId)).then((value) {
-                              if (value ?? false) Navigator.of(context).pop(0);
-                            });
-                          }),
+                      borderColor: Colors.black,
+                      tdStyle: TextStyle(fontSize: 14),
+                      trHeight: 16,
+                      tdAlignment: TextAlign.center,
+                      thAlignment: TextAlign.center,
+                      columnRatio: 0.2,
+                      columns: [
+                        {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
+                        {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
+                        {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
+                        {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
+                        {"title": "D", 'index': 5, 'key': 'c4', 'editable': false}
+                      ],
+                      rows: buildRows(),
+                    ))
+                  ),
+                  Visibility(
+                    visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !scoreReady,
+                    child: ElevatedButton(
+                      child: Text(Language.of(context).subGroup),
+                      onPressed: () {
+                        Navigator.push(context, SubGroupPage(activity, uId)).then((value) {
+                          if (value ?? false) Navigator.of(context).pop(0);
+                        });
+                      }
+                    )
+                  ),
                   const SizedBox(height: 4.0),
-                  !scoreReady ? const SizedBox(height: 4.0)
-                      : Flexible(
-                          child: Editable(
-                          borderColor: Colors.black,
-                          tdStyle: TextStyle(fontSize: 16),
-                          trHeight: 16,
-                          tdAlignment: TextAlign.center,
-                          thAlignment: TextAlign.center,
-                          columnRatio: 0.1,
-                          columns: [
-                            {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
-                            {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false, 'widthFactor': 0.13},
-                            {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
-                            {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
-                            {'title': '${Emoji.byName('parrot')!.char}', 'index': 5, 'key': 'BD', 'editable': false},
-                            {'title': '${Emoji.byName('person golfing')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
-                            {'title': '${Emoji.byName('index pointing up')!.char}', 'index': 7, 'key': 'BG', 'editable': false},
-                            {'title': '${Emoji.byName('victory hand')!.char}', 'index': 8, 'key': 'DB', 'editable': false},
-                            {'title': '${Emoji.byName('eagle')!.char}', 'index': 9, 'key': 'EG', 'editable': false},      
-                          ],
-                          rows: buildScoreRows(),
-                        )),
-                  (teeOffPass && !alreadyIn) || scoreDone ? const SizedBox(height: 4)
-                      : ElevatedButton(
-                          child: Text(teeOffPass && alreadyIn ? Language.of(context).enterScore
-                                                  : alreadyIn ? Language.of(context).cancel : Language.of(context).apply),
-                          onPressed: () async {
-                            if (teeOffPass && alreadyIn) {
-                              if ((course["zones"]).length > 2) {
-                                List zones = await selectZones(context, course);
-                                if (zones.isNotEmpty)
-                                  Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
-                                    if (value ?? false) updateScore();
-                                  });
-                              } else {
-                                Navigator.push(context, newScorePage(course, uName)).then((value) {
-                                  if (value ?? false) updateScore();
-                                });
-                              }
-                            } else
-                              Navigator.of(context).pop(teeOffPass ? 0 : alreadyIn ? -1 : 1);
-                          }),
+                  Visibility(
+                    visible: scoreReady,
+                    child : Flexible(
+                      child: Editable(
+                      borderColor: Colors.black,
+                      tdStyle: TextStyle(fontSize: 14),
+                      trHeight: 16,
+                      tdAlignment: TextAlign.center,
+                      thAlignment: TextAlign.center,
+                      columnRatio: 0.1,
+                      columns: [
+                        {'title': Language.of(context).rank, 'index': 1, 'key': 'rank', 'editable': false},
+                        {'title': Language.of(context).total, 'index': 2, 'key': 'total', 'editable': false, 'widthFactor': 0.13},
+                        {'title': Language.of(context).name, 'index': 3, 'key': 'name', 'editable': false, 'widthFactor': 0.2},
+                        {'title': Language.of(context).net, 'index': 4, 'key': 'net', 'editable': false, 'widthFactor': 0.15},
+                        {'title': '${Emoji.byName('parrot')!.char}', 'index': 5, 'key': 'BD', 'editable': false},
+                        {'title': '${Emoji.byName('person golfing')!.char}', 'index': 6, 'key': 'PAR', 'editable': false},
+                        {'title': '${Emoji.byName('index pointing up')!.char}', 'index': 7, 'key': 'BG', 'editable': false},
+                        {'title': '${Emoji.byName('victory hand')!.char}', 'index': 8, 'key': 'DB', 'editable': false},
+                        {'title': '${Emoji.byName('eagle')!.char}', 'index': 9, 'key': 'EG', 'editable': false},      
+                      ],
+                      rows: buildScoreRows(),
+                    ))
+                  ),
+                  Visibility(
+                    visible: teeOffPass && alreadyIn && !scoreDone,
+                    child : ElevatedButton(
+                      child: Text(Language.of(context).enterScore),
+                      onPressed: () async {
+                          if ((course["zones"]).length > 2) {
+                            List zones = await selectZones(context, course);
+                            if (zones.isNotEmpty)
+                              Navigator.push(context, newScorePage(course, uName, zone0: zones[0], zone1: zones[1])).then((value) {
+                                if (value ?? false) updateScore();
+                              });
+                          } else {
+                            Navigator.push(context, newScorePage(course, uName)).then((value) {
+                              if (value ?? false) updateScore();
+                            });
+                          }
+                      }
+                    )
+                  ),
+                  Visibility(
+                    visible: !teeOffPass && alreadyIn,
+                    child: ElevatedButton(
+                      child: Text(Language.of(context).cancel),
+                      onPressed: () => Navigator.of(context).pop(-1)
+                    )
+                  ),
+                  Visibility(
+                    visible: !teeOffPass && !alreadyIn,
+                    child: ElevatedButton(
+                      child: Text(Language.of(context).apply),
+                      onPressed: () => Navigator.of(context).pop(1)
+                    )
+                  ),
                   const SizedBox(height: 4.0),
                   Text(Language.of(context).actRemarks + activity.data()!['remarks']),
                 ]));
               }),
-              floatingActionButton: editable
-                  ? FloatingActionButton(
+              floatingActionButton: Visibility(
+                  visible: editable,
+                  child: FloatingActionButton(
                       onPressed: () {
                         // modify activity info
                         Navigator.push(context, _EditActivityPage(activity, course['name'])).then((value) {
@@ -1014,8 +1034,8 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                         });
                       },
                       child: const Icon(Icons.edit),
-                    )
-                  : null,
+                  )
+              ),
               floatingActionButtonLocation: FloatingActionButtonLocation.endTop);
         });
 }
@@ -1150,7 +1170,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                       child: Editable2(
                           key: _editableKey,
                           borderColor: Colors.black,
-                          tdStyle: TextStyle(fontSize: 16),
+                          tdStyle: TextStyle(fontSize: 14),
                           trHeight: 16,
                           tdAlignment: TextAlign.center,
                           thAlignment: TextAlign.center,

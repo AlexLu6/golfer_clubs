@@ -263,7 +263,7 @@ class Editable2State extends State<Editable2> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child:
-                Column(crossAxisAlignment: widget.createButtonAlign, children: [
+              Column(crossAxisAlignment: widget.createButtonAlign, children: [
               //Table Header
               createButton(),
               Container(
@@ -277,7 +277,7 @@ class Editable2State extends State<Editable2> {
                     crossAxisAlignment: widget.thVertAlignment,
                     mainAxisSize: MainAxisSize.min,
                     children: _tableHeaders()),
-                ),
+              ),
               Expanded(child: SingleChildScrollView(child: Column(children: _tableRows())))
             ]),
           ),
