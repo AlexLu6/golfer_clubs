@@ -389,6 +389,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
             });
 
           return Scaffold(
+              resizeToAvoidBottomInset: false,
               appBar: AppBar(title: Text(Language.of(context).createNewActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                 return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
