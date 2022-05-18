@@ -390,7 +390,9 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
               resizeToAvoidBottomInset: false,
               appBar: AppBar(title: Text(Language.of(context).createNewActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                return Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                return SingleChildScrollView(reverse: true, child:
+                Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
                   const SizedBox(height: 12.0),
                   Flexible(
                       child: Row(children: <Widget>[
@@ -481,7 +483,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                   ),
                   const SizedBox(height: 12),
                   Flexible(
-                      child: Row(children: <Widget>[
+                    child: Row(children: <Widget>[
                     const SizedBox(width: 5),
                     Checkbox(value: _includeMe, onChanged: (bool? value) => setState(() => _includeMe = value!)),
                     const SizedBox(width: 5),
@@ -511,7 +513,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                           });
                         }
                       })
-                ]);
+                ]));
               }));
         });
 }
