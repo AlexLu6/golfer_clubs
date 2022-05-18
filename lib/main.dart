@@ -1,4 +1,4 @@
-//import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,6 +12,7 @@ import 'createPage.dart';
 import 'firebase_options.dart';
 import 'locale/language.dart';
 import 'locale/app_localizations_delegate.dart';
+import 'activity.dart';
 
 void main() async {
 
@@ -56,40 +57,34 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-final String maleGolfer = 'https://images.unsplash.com/photo-1494249120761-ea1225b46c05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=713&q=80';
-final String femaleGolfer = 'https://images.unsplash.com/photo-1622819219010-7721328f050b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=415&q=80';
-final String drawerCourse = 'https://images.unsplash.com/photo-1622482594949-a2ea0c800edd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80';
-final String groupPhoto = 'https://www.csu-emba.com/img/port/22/10.jpg';
-final double initHandicap = 14.2;
+
+
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
-  int _golferID = 0, _gID = 1;
-  String _name = '', _phone = '', _expired = '', _locale ='';
-  gendre _sex = gendre.Male;
-  double _handicap = initHandicap;
+  int _gID = 1;
   bool isRegistered = false, isUpdate = false, isExpired = false;
   var _golferDoc;
 
   @override
   void initState() {
-    _golferID = prefs!.getInt('golferID') ?? 0;
-    _handicap = prefs!.getDouble('handicap') ?? initHandicap;
-    _expired = prefs!.getString('expired') ?? '';
+    golferID = prefs!.getInt('golferID') ?? 0;
+    userHandicap = prefs!.getDouble('handicap') ?? initHandicap;
+    expiredDate = prefs!.getString('expired')?? '';
     loadMyGroup();
     loadMyActivities();
     loadMyScores();
-    FirebaseFirestore.instance.collection('Golfers').where('uid', isEqualTo: _golferID).get().then((value) {
+    FirebaseFirestore.instance.collection('Golfers').where('uid', isEqualTo: golferID).get().then((value) {
       value.docs.forEach((result) {
         _golferDoc = result.id;
         var items = result.data();
-        _name = items['name'];
-        _phone = items['phone'];
-        _locale = items['locale'];
-        _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
-        if (_expired == '') {
-          _expired = items['expired'].toDate().toString();
-          prefs!.setString('expired', _expired);
+        userName = items['name'];
+        userPhone = items['phone'];
+        theLocale = items['locale'];
+        userSex = items['sex'] == 1 ? gendre.Male : gendre.Female;
+        if (expiredDate == '') {
+          expiredDate = items['expired'].toDate().toString();
+          prefs!.setString('expired', expiredDate);
         }
         isExpired = items['expired'].compareTo(Timestamp.now()) < 0;
         setState(() => isRegistered = true);
@@ -108,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).activities, //"My Activities",
       Language.of(context).golfCourses, //"Golf courses",
       Language.of(context).myScores, //"My Scores",
-      Language.of(context).usage //"Program Usage"
+      Language.of(context).usage  // "Program Usage"
     ];
     return Scaffold(
       appBar: AppBar(
@@ -121,14 +116,13 @@ class _MyHomePageState extends State<MyHomePage> {
               : _currentPageIndex == 3  ? activityBody()
               : _currentPageIndex == 4  ? golfCourseBody()
               : _currentPageIndex == 5  ? myScoreBody()
-              : usageBody()
-      ),
+              : usageBody()),
       drawer: isRegistered ? golfDrawer() : null,
-      floatingActionButton: (_currentPageIndex == 1)
+      floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
           ? FloatingActionButton(
-              onPressed: () => doBodyAdd(_currentPageIndex),
-              child: const Icon(Icons.add),
-            )
+        onPressed: () => doBodyAdd(_currentPageIndex),
+        child: const Icon(Icons.add),
+      )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
@@ -139,16 +133,16 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(_name),
-            accountEmail: Text(_phone),
+            accountName: Text(userName),
+            accountEmail: Text(userPhone),
             currentAccountPicture: GestureDetector(
                 onTap: () {
                   setState(() => isUpdate = true);
                   _currentPageIndex = 0;
                   Navigator.of(context).pop();
                 },
-                child: CircleAvatar(backgroundImage: NetworkImage(_sex == gendre.Male ? maleGolfer : femaleGolfer))),
-            decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerCourse))),
+                child: CircleAvatar(backgroundImage: NetworkImage(userSex == gendre.Male ? maleGolfer : femaleGolfer))),
+            decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerPhoto))),
             onDetailsPressed: () {
               setState(() => isUpdate = true);
               _currentPageIndex = 0;
@@ -196,15 +190,15 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 setState(() {
                   isRegistered = isUpdate = false;
-                  _name = '';
-                  _phone = '';
-                  _golferID = 0;
-                  _handicap= initHandicap;
+                  userName = '';
+                  userPhone = '';
+                  golferID = 0;
+                  userHandicap= initHandicap;
                   myGroups.clear();
                   myActivities.clear();
                   myScores.clear();
+                  _currentPageIndex = 0;
                 });
-                _currentPageIndex = 0;
                 Navigator.of(context).pop();
               }),
           ListTile(
@@ -226,33 +220,36 @@ class _MyHomePageState extends State<MyHomePage> {
           if (!snapshot.hasData)
             return const CircularProgressIndicator();
           else
-            return  InteractiveViewer(
+            return InteractiveViewer(
               //panEnabled: false,
-                maxScale: 3,
                 minScale: 0.8,
+                maxScale: 2.5,
                 child: Image.network(snapshot.data!.toString())
             );
-        });
+        }
+    );
   }
+
   ListView registerBody() {
     final logo = Hero(
       tag: 'golfer',
-      child: CircleAvatar(backgroundImage: NetworkImage(_sex == gendre.Male ? maleGolfer : femaleGolfer), radius: 140),
+      child: CircleAvatar(backgroundImage: NetworkImage(userSex == gendre.Male ? maleGolfer : femaleGolfer), radius: 140),
     );
 
     Locale myLocale = Localizations.localeOf(context);
-
     final golferName = TextFormField(
-      initialValue: _name,
+      initialValue: userName,
+//      key: Key(_name),
       showCursor: true,
-      onChanged: (String value) => setState(() => _name = value),
+      onChanged: (String value) => setState(() => userName = value),
       //keyboardType: TextInputType.name,
       decoration: InputDecoration(labelText: Language.of(context).name, hintText: Language.of(context).realName, icon: Icon(Icons.person), border: UnderlineInputBorder()),
     );
 
     final golferPhone = TextFormField(
-      initialValue: _phone,
-      onChanged: (String value) => setState(() => _phone = value),
+      initialValue: userPhone,
+//      key: Key(_phone),
+      onChanged: (String value) => setState(() => userPhone = value),
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(labelText: Language.of(context).mobile, icon: Icon(Icons.phone), border: UnderlineInputBorder()),
     );
@@ -261,18 +258,18 @@ class _MyHomePageState extends State<MyHomePage> {
           child: RadioListTile<gendre>(
               title: Text(Language.of(context).male),
               value: gendre.Male,
-              groupValue: _sex,
+              groupValue: userSex,
               onChanged: (gendre? value) => setState(() {
-                    _sex = value!;
-                  }))),
+                userSex = value!;
+              }))),
       Flexible(
           child: RadioListTile<gendre>(
               title: Text(Language.of(context).female),
               value: gendre.Female,
-              groupValue: _sex,
+              groupValue: userSex,
               onChanged: (gendre? value) => setState(() {
-                    _sex = value!;
-                  }))),
+                userSex = value!;
+              }))),
     ], mainAxisAlignment: MainAxisAlignment.center);
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -290,55 +287,55 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             onPressed: () {
               if (isUpdate) {
-                if (_name != '' && _phone != '') {
+                if (userName != '' && userPhone != '') {
                   FirebaseFirestore.instance.collection('Golfers').doc(_golferDoc).update({
-                    "name": _name,
-                    "phone": _phone,
-                    "sex": _sex == gendre.Male ? 1 : 2,
+                    "name": userName,
+                    "phone": userPhone,
+                    "sex": userSex == gendre.Male ? 1 : 2,
                   });
                   _currentPageIndex = 1;
                   setState(() => isUpdate = false);
                 }
               } else {
-                _golferID = 0;
-                if (_name != '' && _phone != '') {
-                  FirebaseFirestore.instance.collection('Golfers').where('name', isEqualTo: _name).where('phone', isEqualTo: _phone).get().then((value) {
+                if (userName != '' && userPhone != '') {
+                  golferID = 0;
+                  FirebaseFirestore.instance.collection('Golfers').where('name', isEqualTo: userName).where('phone', isEqualTo: userPhone).get().then((value) {
                     value.docs.forEach((result) {
                       var items = result.data();
                       _golferDoc = result.id;
-                      _golferID = items['uid'];
-                      _locale = items['locale'];
-                      _expired = items['expired'].toDate().toString();
-                      _sex = items['sex'] == 1 ? gendre.Male : gendre.Female;
-                      prefs!.setString('expired', _expired);
-                      print(_name + '(' + _phone + ') already registered! ($_golferID)');
+                      golferID = items['uid'];
+                      theLocale = items['locale'];
+                      expiredDate = items['expired'].toDate().toString();
+                      userSex = items['sex'] == 1 ? gendre.Male : gendre.Female;
+                      prefs!.setString('expired', expiredDate);
+                      print(userName + '(' + userPhone + ') already registered! ($golferID)');
                       storeMyGroup();
                       storeMyActivities();
                       storeMyScores();
                     });
                   }).whenComplete(() {
-                    if (_golferID == 0) {
-                      _golferID = uuidTime();
-                      DateTime expireDate = _expired == '' ? DateTime.now().add(Duration(days: 90)) : DateTime.parse(_expired);
+                    if (golferID == 0) {
+                      golferID = uuidTime();
+                      DateTime expireDate = expiredDate == '' ? DateTime.now().add(Duration(days: 90)) : DateTime.parse(expiredDate);
                       Timestamp expire = Timestamp.fromDate(expireDate);
-                      _locale = myLocale.toString();
+                      theLocale = myLocale.toString();
                       FirebaseFirestore.instance.collection('Golfers').add({
-                        "name": _name,
-                        "phone": _phone,
-                        "sex": _sex == gendre.Male ? 1 : 2,
-                        "uid": _golferID,
+                        "name": userName,
+                        "phone": userPhone,
+                        "sex": userSex == gendre.Male ? 1 : 2,
+                        "uid": golferID,
                         "expired": expire,
-                        "locale": _locale
+                        "locale": theLocale
                       }).whenComplete(() {
-                        if (_expired == '') {
-                          _expired = expire.toDate().toString();
-                          prefs!.setString('expired', _expired);
+                        if (expiredDate == '') {
+                          expiredDate = expire.toDate().toString();
+                          prefs!.setString('expired', expiredDate);
                         }
                       });
                     }
                     _currentPageIndex = 1;
                     setState(() => isRegistered = true);
-                    prefs!.setInt('golferID', _golferID);
+                    prefs!.setInt('golferID', golferID);
                   });
                 }
               }
@@ -353,12 +350,12 @@ class _MyHomePageState extends State<MyHomePage> {
         logo,
         SizedBox(height: 24.0),
         golferName,
-        SizedBox(),
+        SizedBox(height: 8.0),
         golferPhone,
         SizedBox(height: 8.0),
         golferSex,
         SizedBox(height: 8.0),
-        Text(isRegistered ? Language.of(context).handicap + ": " + _handicap.toString().substring(0, min(_handicap.toString().length, 5)) : '', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(isRegistered ? Language.of(context).handicap + ": " + userHandicap.toString().substring(0, min(userHandicap.toString().length, 5)) : '', style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 10.0),
         loginButton
       ],
@@ -372,8 +369,8 @@ class _MyHomePageState extends State<MyHomePage> {
           return AlertDialog(
             title: Text(Language.of(context).hint),
             content: Text(applying == 1 ? Language.of(context).applyWaiting
-                    : applying == 0 ? Language.of(context).applyFirst
-                    : Language.of(context).applyRejected),
+                : applying == 0 ? Language.of(context).applyFirst
+                : Language.of(context).applyRejected),
             actions: <Widget>[
               TextButton(child: Text(applying == 0 ? "Apply" : "OK"), onPressed: () => Navigator.of(context).pop(applying == 0)),
               TextButton(child: Text("Cancel"), onPressed: () => Navigator.of(context).pop(false))
@@ -381,7 +378,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         });
   }
-  
+
   Widget? groupBody() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('GolferClubs').where('gid', whereNotIn: myGroups.length > 0 ? myGroups : [123]).snapshots(),
@@ -395,71 +392,71 @@ class _MyHomePageState extends State<MyHomePage> {
                   return const LinearProgressIndicator();
                 } else {
                   _gID = (doc.data()! as Map)["gid"] as int;
-                  if (((doc.data()! as Map)["members"] as List).indexOf(_golferID) >= 0) {
+                  if (((doc.data()! as Map)["members"] as List).indexOf(golferID) >= 0) {
                     if (myGroups.indexOf(_gID) < 0) {
                       myGroups.add(_gID);
                       storeMyGroup();
-                      FirebaseFirestore.instance.collection('ApplyQueue').where('uid', isEqualTo: _golferID).where('gid', isEqualTo: _gID).get().then((value) {
+                      FirebaseFirestore.instance.collection('ApplyQueue').where('uid', isEqualTo: golferID).where('gid', isEqualTo: _gID).get().then((value) {
                         value.docs.forEach((result) => FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id).delete());
                       });
-                    } else if ((doc.data()! as Map)['locale'] != _locale)
-                      return SizedBox(height: 1);
-                  }
+                    }
+                  } else if ((doc.data()! as Map)['locale'] != theLocale)
+                    return SizedBox(height: 1);
                   return Card(
                       child: ListTile(
-                    title: Text((doc.data()! as Map)["Name"], style: TextStyle(fontSize: 20)),
-                    subtitle: FutureBuilder(
-                        future: golferNames((doc.data()! as Map)["managers"] as List),
-                        builder: (context, snapshot2) {
-                          if (!snapshot2.hasData)
-                            return const LinearProgressIndicator();
-                          else
-                            return Text(Language.of(context).region + (doc.data()! as Map)["region"] + "\n" + Language.of(context).manager + snapshot2.data!.toString() + "\n" + Language.of(context).members + ((doc.data() as Map)["members"] as List<dynamic>).length.toString());
-                        }),
-                    leading: Image.network(groupPhoto),
-                    /*Icon(Icons.group), */
-                    trailing: myGroups.indexOf(_gID) >= 0 ? Icon(Icons.keyboard_arrow_right) : Icon(Icons.no_accounts),
-                    onTap: () async {
-                      _gID = (doc.data()! as Map)["gid"] as int;
-                      if (myGroups.indexOf(_gID) >= 0) {
-                        Navigator.push(context, groupActPage(doc, _golferID, _name, _sex, _handicap));
-                      } else {
-                        bool? apply = await showApplyDialog(await isApplying(_gID, _golferID));
-                        if (apply!) {
-                          // fill the apply waiting queue
-                          FirebaseFirestore.instance.collection('ApplyQueue').add({
-                            "uid": _golferID,
-                            "gid": _gID,
-                            "response": "waiting"
-                          }).whenComplete(() => showDialog<bool>(
+                        title: Text((doc.data()! as Map)["Name"], style: TextStyle(fontSize: 20)),
+                        subtitle: FutureBuilder(
+                            future: golferNames((doc.data()! as Map)["managers"] as List),
+                            builder: (context, snapshot2) {
+                              if (!snapshot2.hasData)
+                                return const LinearProgressIndicator();
+                              else
+                                return Text(Language.of(context).region + (doc.data()! as Map)["region"] + "\n" + Language.of(context).manager + snapshot2.data!.toString() + "\n" + Language.of(context).members + ((doc.data() as Map)["members"] as List<dynamic>).length.toString());
+                            }),
+                        leading: Image.network(groupPhoto),
+                        /*Icon(Icons.group), */
+                        trailing: myGroups.indexOf(_gID) >= 0 ? Icon(Icons.keyboard_arrow_right) : Icon(Icons.no_accounts),
+                        onTap: () async {
+                          _gID = (doc.data()! as Map)["gid"] as int;
+                          if (myGroups.indexOf(_gID) >= 0) {
+                            Navigator.push(context, groupActPage(doc, golferID, userName, userSex, userHandicap));
+                          } else {
+                            bool? apply = await showApplyDialog(await isApplying(_gID, golferID));
+                            if (apply!) {
+                              // fill the apply waiting queue
+                              FirebaseFirestore.instance.collection('ApplyQueue').add({
+                                "uid": golferID,
+                                "gid": _gID,
+                                "response": "waiting"
+                              }).whenComplete(() => showDialog<bool>(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(Language.of(context).hint),
+                                      content: Text(Language.of(context).applicationSent),
+                                      actions: <Widget>[
+                                        TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
+                                      ],
+                                    );
+                                  }
+                              ));
+                            }
+                          }
+                        },
+                        onLongPress: () async {
+                          showDialog<bool>(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text(Language.of(context).hint),
-                                  content: Text(Language.of(context).applicationSent),
+                                  title: Text(Language.of(context).groupRemarks),
+                                  content: Text((doc.data()! as Map)["Remarks"]),
                                   actions: <Widget>[
                                     TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
                                   ],
                                 );
-                              }
-                          ));
-                        }
-                      }
-                    },
-                    onLongPress: () async {
-                      showDialog<bool>(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(Language.of(context).groupRemarks),
-                              content: Text((doc.data()! as Map)["Remarks"]),
-                              actions: <Widget>[
-                                TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
-                              ],
-                            );
-                          });
-                    },
-                  ));
+                              });
+                        },
+                      ));
                 }
               }).toList(),
             );
@@ -468,27 +465,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget? myGroupBody() {
-    return myGroups.isEmpty
-        ? ListView()
+    return myGroups.isEmpty ? ListView()
         : StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('GolferClubs').where('gid', whereIn: myGroups).snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              } else {
-                return ListView(
-                  children: snapshot.data!.docs.map((doc) {
-                    if ((doc.data()! as Map)["Name"] == null) {
-                      return const LinearProgressIndicator();
-                    } else {
-                      _gID = (doc.data()! as Map)["gid"] as int;
-                      if (((doc.data()! as Map)["members"] as List).indexOf(_golferID) < 0) {
-                        myGroups.remove(_gID);
-                        storeMyGroup();
-                        return const LinearProgressIndicator();
-                      }
-                      return Card(
-                          child: ListTile(
+        stream: FirebaseFirestore.instance.collection('GolferClubs').where('gid', whereIn: myGroups).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          } else {
+            return ListView(
+              children: snapshot.data!.docs.map((doc) {
+                if ((doc.data()! as Map)["Name"] == null) {
+                  return const LinearProgressIndicator();
+                } else {
+                  _gID = (doc.data()! as Map)["gid"] as int;
+                  if (((doc.data()! as Map)["members"] as List).indexOf(golferID) < 0) {
+                    myGroups.remove(_gID);
+                    storeMyGroup();
+                    return const LinearProgressIndicator();
+                  }
+                  return Card(
+                      child: ListTile(
                         title: Text((doc.data()! as Map)["Name"], style: TextStyle(fontSize: 20)),
                         subtitle: FutureBuilder(
                             future: golferNames((doc.data()! as Map)["managers"] as List),
@@ -503,126 +499,42 @@ class _MyHomePageState extends State<MyHomePage> {
                         trailing: Icon(Icons.keyboard_arrow_right),
                         onTap: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
-                          Navigator.push(context, groupActPage(doc, _golferID, _name, _sex, _handicap));
+                          Navigator.push(context, groupActPage(doc, golferID, userName, userSex, userHandicap));
                         },
                         onLongPress: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
-                          if (((doc.data()! as Map)["managers"] as List).indexOf(_golferID) >= 0) {
-                            Navigator.push(context, editGroupPage(doc, _golferID));
+                          if (((doc.data()! as Map)["managers"] as List).indexOf(golferID) >= 0) {
+                            Navigator.push(context, editGroupPage(doc, golferID));
                           } else {
                             showDialog<bool>(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text((doc.data()! as Map)["Name"]),
-                                  content: Text(Language.of(context).quitGroup),
-                                  actions: <Widget>[
-                                    TextButton(child: Text("Yes"), onPressed: () => Navigator.of(context).pop(true)),
-                                    TextButton(child: Text("No"), onPressed: () => Navigator.of(context).pop(false))
-                                  ],
-                                );
-                              }).then((value) {
-                                if (value!) {
-                                  removeMemberAllActivities(_gID, _golferID);
-                                  removeMember(_gID, _golferID);
-                                  myGroups.remove(_gID);
-                                  storeMyGroup();
-                                  setState(() {});
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text((doc.data()! as Map)["Name"]),
+                                    content: Text(Language.of(context).quitGroup),
+                                    actions: <Widget>[
+                                      TextButton(child: Text("Yes"), onPressed: () => Navigator.of(context).pop(true)),
+                                      TextButton(child: Text("No"), onPressed: () => Navigator.of(context).pop(false))
+                                    ],
+                                  );
                                 }
-                              });
+                            ).then((value) {
+                              if (value!) {
+                                removeMemberAllActivities(_gID, golferID);
+                                removeMember(_gID, golferID);
+                                myGroups.remove(_gID);
+                                storeMyGroup();
+                                setState(() {});
+                              }
+                            });
                           }
                         },
                       ));
-                    }
-                  }).toList(),
-                );
-              }
-            });
-  }
-
-  Widget activityBody() {
-    Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
-    var allActivities = [];
-    return myActivities.isEmpty
-        ? ListView()
-        : StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('ClubActivities').orderBy('teeOff').snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              } else {
-                return ListView(
-                    children: snapshot.data!.docs.map((doc) {
-                  if ((doc.data()! as Map)["teeOff"] == null) {
-                    return LinearProgressIndicator();
-                  } else if (myActivities.indexOf(doc.id) < 0) {
-                    return SizedBox(height: 0.1,);
-                  } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
-                    myActivities.remove(doc.id);
-                    storeMyActivities();
-                    return LinearProgressIndicator();
-                  } else {
-                    allActivities.add(doc.id);
-                    return Card(
-                        child: ListTile(
-                            title: FutureBuilder(
-                                future: courseName((doc.data()! as Map)['cid'] as int),
-                                builder: (context, snapshot2) {
-                                  if (!snapshot2.hasData)
-                                    return const LinearProgressIndicator();
-                                  else
-                                    return Text(snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
-                                }),
-                            subtitle: Text(Language.of(context).teeOff + ((doc.data()! as Map)['teeOff']).toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
-                            leading: FutureBuilder(
-                                future: coursePhoto((doc.data()! as Map)['cid'] as int),
-                                builder: (context, snapshot3) {
-                                  if (!snapshot3.hasData)
-                                    return const CircularProgressIndicator();
-                                  else
-                                    return Image.network(snapshot3.data!.toString(), fit: BoxFit.fitHeight);
-                                }),
-                            trailing: Icon(Icons.keyboard_arrow_right),
-                            onTap: () async {
-                              Navigator.push(context, showActivityPage(doc, _golferID, await groupName((doc.data()! as Map)['gid'] as int)!, await isManager((doc.data()! as Map)['gid'] as int, _golferID), _handicap)).then((value) async {
-                                var glist = doc.get('golfers');
-                                if (value == -1) {
-                                  myActivities.remove(doc.id);
-                                  storeMyActivities();
-                                  glist.removeWhere((item) => item['uid'] == _golferID);
-                                  var subGroups = doc.get('subgroups');
-                                  for (int i = 0; i < subGroups.length; i++) {
-                                    for (int j = 0; j < (subGroups[i] as Map).length; j++) {
-                                      if ((subGroups[i] as Map)[j.toString()] == _golferID) {
-                                        for (; j<(subGroups[i] as Map).length - 1; j++)
-                                          (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[(j+1).toString()];
-                                        (subGroups[i] as Map).remove(j.toString());
-                                      }
-                                    }
-                                  }
-                                  FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
-                                    'golfers': glist,
-                                    'subgroups': subGroups
-                                  });
-                                  setState(() {});
-                                } else if (value == 1) {
-                                  glist.add({
-                                    'uid': _golferID,
-                                    'name': _name + ((_sex == gendre.Female) ? Language.of(context).femaleNote : ''),
-                                    'scores': []
-                                  });
-                                  myActivities.add(doc.id);
-                                  storeMyActivities();
-                                  FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
-                                    'golfers': glist
-                                  });
-                                }
-                              });
-                            }));
-                  }
-                }).toList());
-              }
-            });
+                }
+              }).toList(),
+            );
+          }
+        });
   }
 
   Widget? golfCourseBody() {
@@ -634,32 +546,33 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             return ListView(
                 children: snapshot.data!.docs.map((doc) {
-              if ((doc.data()! as Map)["photo"] == null) {
-                return LinearProgressIndicator();
-              } else {
-                return Card(
-                    child: ListTile(
-                  leading: Image.network((doc.data()! as Map)["photo"]),
-                  title: Text((doc.data()! as Map)["region"] + ' ' + (doc.data()! as Map)["name"], style: TextStyle(fontSize: 18)),
-                  subtitle: Text((((doc.data()! as Map)["zones"]).length * 9).toString() + ' Holes'),
-                  trailing: Icon(Icons.keyboard_arrow_right),
-                  onTap: () async {
-                    if (((doc.data()! as Map)["zones"]).length > 2) {
-                      List zones = await selectZones(context, doc.data()! as Map);
-                      if (zones.isNotEmpty) Navigator.push(context, newScorePage(doc.data()! as Map, _name, zone0: zones[0], zone1: zones[1]));
-                    } else
-                      Navigator.push(context, newScorePage(doc.data()! as Map, _name));
-                  },
-                ));
-              }
-            }).toList());
+                  if ((doc.data()! as Map)["photo"] == null) {
+                    return LinearProgressIndicator();
+                  } else {
+                    return Card(
+                        child: ListTile(
+                          leading: Image.network((doc.data()! as Map)["photo"]),
+                          title: Text((doc.data()! as Map)["region"] + ' ' + (doc.data()! as Map)["name"], style: TextStyle(fontSize: 18)),
+                          subtitle: Text((((doc.data()! as Map)["zones"]).length * 9).toString() + ' Holes'),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          onTap: () async {
+                            if (((doc.data()! as Map)["zones"]).length > 2) {
+                              List zones = await selectZones(context, doc.data()! as Map);
+                              if (zones.isNotEmpty) Navigator.push(context, newScorePage(doc.data()! as Map, userName, zone0: zones[0], zone1: zones[1]));
+                            } else
+                              Navigator.push(context, newScorePage(doc.data()! as Map, userName));
+                          },
+                        ));
+                  }
+                }).toList());
           }
         });
   }
 
   ListView myScoreBody() {
     int cnt = myScores.length > 10 ? 10 : myScores.length;
-    _handicap = 0;
+    userHandicap = 0;
+
     List<int> scoreRow(List pars, List scores){
       int eg = 0, bd =0, par = 0, bg = 0, db = 0, mm = 0;
       for (var i=0; i < pars.length; i++) {
@@ -674,7 +587,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     List parRows = [
       Emoji.byName('eagle')!.char,
-      Emoji.byName('bird')!.char,
+      Emoji.byName('parrot')!.char,
       Emoji.byName('person golfing')!.char,
       Emoji.byName('index pointing up')!.char,
       Emoji.byName('victory hand')!.char,
@@ -684,13 +597,13 @@ class _MyHomePageState extends State<MyHomePage> {
       itemCount: myScores.length,
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (BuildContext context, int i) {
-        if (i < cnt) _handicap += myScores[i]['handicap'];
+        if (i < cnt) userHandicap += myScores[i]['handicap'];
         if ((i + 1) == cnt) {
-          _handicap = (_handicap / cnt) * 0.9;
-          prefs!.setDouble('handicap', _handicap);
+          userHandicap = (userHandicap / cnt) * 0.9;
+          prefs!.setDouble('handicap', userHandicap);
         }
         return ListTile(
-            leading: CircleAvatar(child: Text(myScores[i]['total'].toString())),
+            leading: CircleAvatar(child: Text(myScores[i]['total'].toString(), style: TextStyle(fontWeight: FontWeight.bold))),
             title: Text(myScores[i]['date'] + ' ' + myScores[i]['course'], style: TextStyle(fontWeight: FontWeight.bold)),
             subtitle: Text(parRows.toString() + ': ' + scoreRow(myScores[i]['pars'], myScores[i]['scores']).toString())
         );
@@ -701,7 +614,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void doBodyAdd(int index) async {
     switch (index) {
       case 1:
-        Navigator.push(context, newGroupPage(_golferID, _locale)).then((ret) {
+        Navigator.push(context, newGroupPage(golferID, theLocale)).then((ret) {
           if (ret ?? false) setState(() => index = 1);
         });
         break;
