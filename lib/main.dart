@@ -685,7 +685,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     List parRows = [
       Emoji.byName('eagle')!.char, 
-      Emoji.byName('bird')!.char, 
+      Emoji.byName('parrot')!.char, 
       Emoji.byName('person golfing')!.char, 
       Emoji.byName('index pointing up')!.char,
       Emoji.byName('victory hand')!.char,
