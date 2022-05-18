@@ -732,6 +732,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
                 subMap[j.toString()] = subIntGroups[i][j];
               newGroups.add(subMap);
             }
+            subGroups = newGroups;
             FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
               'subgroups': newGroups
             }).whenComplete(() => Navigator.of(context).pop(true));
@@ -769,7 +770,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
                                 if (!snapshot.hasData)
                                   return const LinearProgressIndicator();
                                 else
-                                  return Text(Language.of(context).name + snapshot.data!.toString(), style: TextStyle(fontWeight: FontWeight.bold));
+                                  return Text(snapshot.data!.toString(), style: TextStyle(fontWeight: FontWeight.bold));
                               }),
                       trailing: (alreadyIn == i) ? Icon(Icons.remove, color: Colors.red,)
                               : (!isfull && alreadyIn < 0) ? Icon(Icons.add, color: Colors.blue,)
