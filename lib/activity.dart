@@ -516,10 +516,11 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
           List<NameID> golfers = [];
           var _selectedGolfer;
           var blist = [];
+
           ((actDoc.data()! as Map)['golfers'] as List).forEach((element) {
             blist.add(element['uid']);
           });
-          if (golfers.isEmpty) {
+          if (blist.length > 0)
             FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
@@ -527,7 +528,6 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                   golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
               });
             });
-          }
 
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).editActivity), elevation: 1.0),
@@ -611,7 +611,9 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                         });
                       }
                     ),
-                    ElevatedButton(
+                    Visibility(
+                      visible: blist.length > 0,
+                      child: ElevatedButton(
                         child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 18)),
                         onPressed: () {
                           showMaterialScrollPicker<NameID>(
@@ -630,7 +632,9 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                               }).whenComplete(() => Navigator.of(context).pop(true));
                             }
                           });
-                        })
+                        }
+                      )
+                    )
                   ])
                 ]);
               }));
