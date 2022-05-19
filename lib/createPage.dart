@@ -171,14 +171,14 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                                 'golfers': glist
                               });
                               // Add to calendar
-                              final event = Event(
+/*                              final event = Event(
                                 title: _gName,
                                 location: cName,
                                 startDate: (doc.data()! as Map)['teeOff']!.toDate(),
                                 endDate: (doc.data()! as Map)['teeOff']!.toDate().add(duration: Duration(hours: 5)),
                                 timeZone: 'CST'
                               );
-                              Add2Calendar.addEvent2Cal(event);
+                              Add2Calendar.addEvent2Cal(event);*/
                             } else if (value == -1) {
                               glist.removeWhere((item) => item['uid'] == uID);
                               myActivities.remove(doc.id);
