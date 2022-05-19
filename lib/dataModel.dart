@@ -15,6 +15,15 @@ String userName = '', userPhone = '', expiredDate = '', theLocale ='';
 gendre userSex = gendre.Male;
 double userHandicap = initHandicap;
 
+class NameID {
+  const NameID(this.name, this.id);
+  final String name;
+  final int id;
+  @override
+  String toString() => name;
+  int toID() => id;
+}
+
 int uuidTime() {
   return DateTime.now().millisecondsSinceEpoch - 1647000000000;
 }

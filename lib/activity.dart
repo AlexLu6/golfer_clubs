@@ -353,15 +353,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
         });
 }
 
-class NameID {
-  const NameID(this.name, this.id);
-  final String name;
-  final int id;
-  @override
-  String toString() => name;
-  int toID() => id;
-}
-
 List<NameID> coursesItems = [];
 
 _NewActivityPage newActivityPage(bool isMan, int gid, int uid) {
@@ -522,6 +513,18 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
           String _remarks = (actDoc.data()! as Map)['remarks'];
           int _fee = (actDoc.data()! as Map)['fee'], _max = (actDoc.data()! as Map)['max'];
           DateTime _selectedDate = (actDoc.data()! as Map)['teeOff'].toDate();
+          List<NameID> golfers = [];
+          var _selectedGolfer;
+          var blist = (actDoc.data()! as Map)['golfers'] as List;
+          if (golfers.isEmpty) {
+            FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
+              value.docs.forEach((result) {
+                var items = result.data();
+                if (((actDoc.data()! as Map)['golfers'] as List).indexOf(items['uid'] as int) < 0)
+                  golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
+              });
+            });
+          }
 
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).editActivity), elevation: 1.0),
@@ -591,7 +594,8 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                     decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
                   ),
                   const SizedBox(height: 12),
-                  ElevatedButton(
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+                    ElevatedButton(
                       child: Text(Language.of(context).modify, style: TextStyle(fontSize: 24)),
                       onPressed: () async {
                         FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
@@ -602,7 +606,29 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                         }).then((value) {
                           Navigator.of(context).pop(true);
                         });
-                      })
+                      }
+                    ),
+                    ElevatedButton(
+                        child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 18)),
+                        onPressed: () {
+                          showMaterialScrollPicker<NameID>(
+                            context: context,
+                            title: Language.of(context).selectKickMember,
+                            items: golfers,
+                            showDivider: false,
+                            selectedItem: golfers[0],
+                            onChanged: (value) => setState(() => _selectedGolfer = value),
+                          ).then((value) {
+                            if (_selectedGolfer != null) {
+                              // remove subgroup
+                              blist.remove(_selectedGolfer.toID());
+                              FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
+                                'golfers': blist
+                              }).whenComplete(() => Navigator.of(context).pop(true));
+                            }
+                          });
+                        })
+                  ])
                 ]);
               }));
         });
