@@ -626,6 +626,7 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                           ).then((value) {
                             if (_selectedGolfer != null) 
                               removeGolferActivity(actDoc, _selectedGolfer.toID());
+                            Navigator.of(context).pop(true);
                           });
                         }
                       )
