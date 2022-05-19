@@ -599,7 +599,7 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                   const SizedBox(height: 12),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
                     ElevatedButton(
-                      child: Text(Language.of(context).modify, style: TextStyle(fontSize: 24)),
+                      child: Text(Language.of(context).modify, style: TextStyle(fontSize: 18)),
                       onPressed: () async {
                         FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
                           "teeOff": Timestamp.fromDate(_selectedDate),
