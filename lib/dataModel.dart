@@ -90,25 +90,30 @@ void addMember(int gid, int uid) {
   });
 }
 
+void removeGolferActivity(var actDoc, int uid) {
+  var glist = actDoc.get('golfers');
+  
+  var subGroups = actDoc.get('subgroups');
+  for (int i = 0; i < subGroups.length; i++) {
+    for (int j = 0; j < (subGroups[i] as Map).length; j++) {
+      if ((subGroups[i] as Map)[j.toString()] == uid) {
+        for (; j<(subGroups[i] as Map).length - 1; j++)
+          (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[(j+1).toString()];
+        (subGroups[i] as Map).remove(j.toString());
+      }                                   
+    }
+  }
+  glist.removeWhere((item) => item['uid'] == uid);
+  FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
+    'golfers': glist,
+    'subgroups': subGroups
+  });
+}
+
 void removeMemberAllActivities(int gid, int uid) {
   FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: gid).get().then((value) {
     value.docs.forEach((doc) {
-      var glist = doc.get('golfers');
-      glist.removeWhere((item) => item['uid'] == uid);
-      var subGroups = doc.get('subgroups');
-      for (int i = 0; i < subGroups.length; i++) {
-        for (int j = 0; j < (subGroups[i] as Map).length; j++) {
-          if ((subGroups[i] as Map)[j.toString()] == uid) {
-            for (; j<(subGroups[i] as Map).length - 1; j++)
-              (subGroups[i] as Map)[j.toString()] = (subGroups[i] as Map)[(j+1).toString()];
-            (subGroups[i] as Map).remove(j.toString());
-          }                                   
-        }
-      }
-      FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).update({
-        'golfers': glist,
-        'subgroups': subGroups
-      });
+      removeGolferActivity(doc, uid);
     });
   });
 }

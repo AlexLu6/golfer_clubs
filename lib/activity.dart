@@ -624,13 +624,8 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                             selectedItem: golfers[0],
                             onChanged: (value) => setState(() => _selectedGolfer = value),
                           ).then((value) {
-                            if (_selectedGolfer != null) {
-                              // remove subgroup
-                              blist.remove(_selectedGolfer.toID());
-                              FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
-                                'golfers': blist
-                              }).whenComplete(() => Navigator.of(context).pop(true));
-                            }
+                            if (_selectedGolfer != null) 
+                              removeGolferActivity(actDoc, _selectedGolfer.toID());
                           });
                         }
                       )
