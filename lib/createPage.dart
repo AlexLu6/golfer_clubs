@@ -522,8 +522,8 @@ class SubGroupPage extends MaterialPageRoute<bool> {
                                 else
                                   return Text(snapshot.data!.toString(), style: TextStyle(fontWeight: FontWeight.bold));
                               }),
-                      trailing: (alreadyIn == i) ? Icon(Icons.remove, color: Colors.red,)
-                              : (!isfull && alreadyIn < 0) ? Icon(Icons.add, color: Colors.blue,)
+                      trailing: (alreadyIn == i) ? Icon(Icons.person_remove_round, color: Colors.red,)
+                              : (!isfull && alreadyIn < 0) ? Icon(Icons.add_box_outlined, color: Colors.blue,)
                               : Icon(Icons.stop, color: Colors.grey),
                       onTap: () {
                         if (alreadyIn == i) {
