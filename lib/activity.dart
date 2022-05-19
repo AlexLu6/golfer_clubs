@@ -515,7 +515,10 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
           DateTime _selectedDate = (actDoc.data()! as Map)['teeOff'].toDate();
           List<NameID> golfers = [];
           var _selectedGolfer;
-          var blist = (actDoc.data()! as Map)['golfers'] as List;
+          var blist = [];
+          ((actDoc.data()! as Map)['golfers'] as List).forEach((element) {
+            blist.add(element['uid']);
+          });
           if (golfers.isEmpty) {
             FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
               value.docs.forEach((result) {
