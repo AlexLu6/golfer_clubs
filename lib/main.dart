@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
               : _currentPageIndex == 5  ? myScoreBody()
               : usageBody()),
       drawer: isRegistered ? golfDrawer() : null,
-      floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
+      floatingActionButton: (_currentPageIndex == 1)
           ? FloatingActionButton(
         onPressed: () => doBodyAdd(_currentPageIndex),
         child: const Icon(Icons.add),
@@ -286,52 +286,52 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(color: Colors.white, fontSize: 20.0),
             ),
             onPressed: () {
-              if (isUpdate) {
-                if (userName != '' && userPhone != '') {
-                  FirebaseFirestore.instance.collection('Golfers').doc(_golferDoc).update({
-                    "name": userName,
-                    "phone": userPhone,
-                    "sex": userSex == gendre.Male ? 1 : 2,
+              int uID = 0;
+              if (userName != '' && userPhone != '') {
+                FirebaseFirestore.instance.collection('Golfers').where('name', isEqualTo: userName).where('phone', isEqualTo: userPhone)
+                  .get().then((value) {
+                  value.docs.forEach((result) {
+                    var items = result.data();
+                    _golferDoc = result.id;
+                    uID = items['uid'];
+                    theLocale = items['locale'];
+                    expiredDate = items['expired'].toDate().toString();
+                    userSex = items['sex'] == 1 ? gendre.Male : gendre.Female;
+                    prefs!.setString('expired', expiredDate);
+                    golferID = uID;
+                    print(userName + '(' + userPhone + ') already registered! ($golferID)');
+                    storeMyGroup();
+                    storeMyActivities();
+                    storeMyScores();
                   });
-                  _currentPageIndex = 1;
-                  setState(() => isUpdate = false);
-                }
-              } else {
-                if (userName != '' && userPhone != '') {
-                  golferID = 0;
-                  FirebaseFirestore.instance.collection('Golfers').where('name', isEqualTo: userName).where('phone', isEqualTo: userPhone).get().then((value) {
-                    value.docs.forEach((result) {
-                      var items = result.data();
-                      _golferDoc = result.id;
-                      golferID = items['uid'];
-                      theLocale = items['locale'];
-                      expiredDate = items['expired'].toDate().toString();
-                      userSex = items['sex'] == 1 ? gendre.Male : gendre.Female;
-                      prefs!.setString('expired', expiredDate);
-                      print(userName + '(' + userPhone + ') already registered! ($golferID)');
-                      storeMyGroup();
-                      storeMyActivities();
-                      storeMyScores();
-                    });
-                  }).whenComplete(() {
-                    if (golferID == 0) {
-                      golferID = uuidTime();
-                      DateTime expireDate = expiredDate == '' ? DateTime.now().add(Duration(days: 90)) : DateTime.parse(expiredDate);
-                      Timestamp expire = Timestamp.fromDate(expireDate);
-                      theLocale = myLocale.toString();
-                      FirebaseFirestore.instance.collection('Golfers').add({
-                        "name": userName,
-                        "phone": userPhone,
-                        "sex": userSex == gendre.Male ? 1 : 2,
-                        "uid": golferID,
-                        "expired": expire,
-                        "locale": theLocale
-                      }).whenComplete(() {
-                        if (expiredDate == '') {
-                          expiredDate = expire.toDate().toString();
-                          prefs!.setString('expired', expiredDate);
-                        }
-                      });
+                }).whenComplete(() {
+                    if (uID == 0) {
+                      if (isUpdate) {
+                        FirebaseFirestore.instance.collection('Golfers').doc(_golferDoc).update({
+                          "name": userName,
+                          "phone": userPhone,
+                          "sex": userSex == gendre.Male ? 1 : 2,
+                        });
+                        isUpdate = false;
+                      } else {
+                        golferID = uuidTime();
+                        DateTime expireDate = expiredDate == '' ? DateTime.now().add(Duration(days: 90)) : DateTime.parse(expiredDate);
+                        Timestamp expire = Timestamp.fromDate(expireDate);
+                        theLocale = myLocale.toString();
+                        FirebaseFirestore.instance.collection('Golfers').add({
+                          "name": userName,
+                          "phone": userPhone,
+                          "sex": userSex == gendre.Male ? 1 : 2,
+                          "uid": golferID,
+                          "expired": expire,
+                          "locale": theLocale
+                        }).whenComplete(() {
+                          if (expiredDate == '') {
+                            expiredDate = expire.toDate().toString();
+                            prefs!.setString('expired', expiredDate);
+                          }
+                        });
+                      }
                     }
                     _currentPageIndex = 1;
                     setState(() => isRegistered = true);
@@ -339,7 +339,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 }
               }
-            }),
+            ),
       ),
     );
     return ListView(

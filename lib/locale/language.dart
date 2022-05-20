@@ -75,4 +75,5 @@ abstract class Language {
   String get helpImage;
   String get applicationSent;
   String get deleteGroup;
+  String get includeMyself;
 }

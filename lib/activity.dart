@@ -353,15 +353,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
   });
 }
 
-class NameID {
-  const NameID(this.name, this.id);
-  final String name;
-  final int id;
-  @override
-  String toString() => name;
-  int toID() => id;
-}
-
 List<NameID> coursesItems = [];
 
 _NewActivityPage newActivityPage(bool isMan, int gid, int uid) {
@@ -394,6 +385,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                 const SizedBox(height: 12.0),
                 Flexible(
                     child: Row(children: <Widget>[
+                      const SizedBox(width: 5),
                       ElevatedButton(
                           child: Text(Language.of(context).golfCourses),
                           onPressed: () {
@@ -421,6 +413,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                 const SizedBox(height: 12),
                 Flexible(
                     child: Row(children: <Widget>[
+                      const SizedBox(width: 5),
                       ElevatedButton(
                           child: Text(Language.of(context).teeOff),
                           onPressed: () {
@@ -432,7 +425,11 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                               lastDate: DateTime.now().add(Duration(days: 180)),
                               //onChanged: (value) => setState(() => _selectedDate = value),
                             ).then((date) {
-                              if (date != null) showMaterialTimePicker(context: context, title: Language.of(context).pickTime, selectedTime: TimeOfDay.now()).then((time) => setState(() => print(_selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))));
+                              if (date != null) showMaterialTimePicker(
+                                  context: context,
+                                  title: Language.of(context).pickTime,
+                                  selectedTime: TimeOfDay.now()).then((time) =>
+                                    setState(() => _selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute)));
                             });
                           }),
                       const SizedBox(width: 5),
@@ -471,23 +468,23 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                       const SizedBox(width: 5)
                     ])),
                 const SizedBox(height: 12.0),
-                TextFormField(
-                  showCursor: true,
-                  initialValue: _remarks,
-                  onChanged: (String value) => setState(() => _remarks = value),
-                  //keyboardType: TextInputType.name,
-                  maxLines: 3,
-                  decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
-                ),
-                const SizedBox(height: 12),
+                  TextFormField(
+                    showCursor: true,
+                    initialValue: _remarks,
+                    onChanged: (String value) => setState(() => _remarks = value),
+                    //keyboardType: TextInputType.name,
+                    maxLines: 3,
+                    decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
+                  ),
+//                const SizedBox(height: 12),
                 Flexible(
                     child: Row(children: <Widget>[
                       const SizedBox(width: 5),
                       Checkbox(value: _includeMe, onChanged: (bool? value) => setState(() => _includeMe = value!)),
                       const SizedBox(width: 5),
-                      const Text('Include myself')
+                      Text(Language.of(context).includeMyself)
                     ])),
-                const SizedBox(height: 12.0),
+//                const SizedBox(height: 5.0),
                 ElevatedButton(
                     child: Text(Language.of(context).create, style: TextStyle(fontSize: 24)),
                     onPressed: () async {
@@ -522,6 +519,21 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
     String _remarks = (actDoc.data()! as Map)['remarks'];
     int _fee = (actDoc.data()! as Map)['fee'], _max = (actDoc.data()! as Map)['max'];
     DateTime _selectedDate = (actDoc.data()! as Map)['teeOff'].toDate();
+    List<NameID> golfers = [];
+    var _selectedGolfer;
+    var blist = [];
+
+    ((actDoc.data()! as Map)['golfers'] as List).forEach((element) {
+      blist.add(element['uid']);
+    });
+    if (blist.length > 0)
+      FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
+        value.docs.forEach((result) {
+          var items = result.data();
+          if (((actDoc.data()! as Map)['golfers'] as List).indexOf(items['uid'] as int) < 0)
+            golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
+        });
+      });
 
     return Scaffold(
         appBar: AppBar(title: Text(Language.of(context).editActivity), elevation: 1.0),
@@ -543,7 +555,12 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                           lastDate: DateTime.now().add(Duration(days: 180)),
                           //onChanged: (value) => setState(() => _selectedDate = value),
                         ).then((date) {
-                          if (date != null) showMaterialTimePicker(context: context, title: Language.of(context).pickTime, selectedTime: TimeOfDay.now()).then((time) => setState(() => print(_selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))));
+                          if (date != null) showMaterialTimePicker(
+                              context: context,
+                              title: Language.of(context).pickTime,
+                              selectedTime: TimeOfDay.now()).then((time) =>
+                                setState(() => _selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))
+                          );
                         });
                       }),
                   const SizedBox(width: 5),
@@ -591,18 +608,41 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
               decoration: InputDecoration(labelText: Language.of(context).actRemarks, icon: Icon(Icons.edit_note), border: OutlineInputBorder()),
             ),
             const SizedBox(height: 12),
-            ElevatedButton(
-                child: Text(Language.of(context).modify, style: TextStyle(fontSize: 24)),
-                onPressed: () async {
-                  FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
-                    "teeOff": Timestamp.fromDate(_selectedDate),
-                    "max": _max,
-                    "fee": _fee,
-                    "remarks": _remarks,
-                  }).then((value) {
-                    Navigator.of(context).pop(true);
-                  });
-                })
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+              ElevatedButton(
+                  child: Text(Language.of(context).modify, style: TextStyle(fontSize: 18)),
+                  onPressed: () async {
+                    FirebaseFirestore.instance.collection('ClubActivities').doc(actDoc.id).update({
+                      "teeOff": Timestamp.fromDate(_selectedDate),
+                      "max": _max,
+                      "fee": _fee,
+                      "remarks": _remarks,
+                    }).then((value) {
+                      Navigator.of(context).pop(true);
+                    });
+                  }
+              ),
+              Visibility(
+                  visible: blist.length > 0,
+                  child: ElevatedButton(
+                      child: Text(Language.of(context).kickMember, style: TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        showMaterialScrollPicker<NameID>(
+                          context: context,
+                          title: Language.of(context).selectKickMember,
+                          items: golfers,
+                          showDivider: false,
+                          selectedItem: golfers[0],
+                          onChanged: (value) => setState(() => _selectedGolfer = value),
+                        ).then((value) {
+                          if (_selectedGolfer != null)
+                            removeGolferActivity(actDoc, _selectedGolfer.toID());
+                          Navigator.of(context).pop(true);
+                        });
+                      }
+                  )
+              )
+            ])
           ]);
         }));
   });
