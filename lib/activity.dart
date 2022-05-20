@@ -423,7 +423,12 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             lastDate: DateTime.now().add(Duration(days: 180)),
                             //onChanged: (value) => setState(() => _selectedDate = value),
                           ).then((date) {
-                            if (date != null) showMaterialTimePicker(context: context, title: Language.of(context).pickTime, selectedTime: TimeOfDay.now()).then((time) => setState(() => print(_selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))));
+                            if (date != null) showMaterialTimePicker(
+                              context: context, 
+                              title: Language.of(context).pickTime, 
+                              selectedTime: TimeOfDay.now()).then((time) => 
+                                setState(() => _selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute)))
+                              ;
                           });
                         }),
                     const SizedBox(width: 5),
@@ -549,7 +554,12 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
                             lastDate: DateTime.now().add(Duration(days: 180)),
                             //onChanged: (value) => setState(() => _selectedDate = value),
                           ).then((date) {
-                            if (date != null) showMaterialTimePicker(context: context, title: Language.of(context).pickTime, selectedTime: TimeOfDay.now()).then((time) => setState(() => print(_selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))));
+                            if (date != null) showMaterialTimePicker(
+                              context: context, 
+                              title: Language.of(context).pickTime, 
+                              selectedTime: TimeOfDay.now()).then((time) => 
+                                setState(() => _selectedDate = DateTime(date.year, date.month, date.day, time!.hour, time.minute))
+                              );
                           });
                         }),
                     const SizedBox(width: 5),
