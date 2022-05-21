@@ -387,12 +387,12 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             return ElevatedButton(
                               child: Text(Language.of(context).golfCourses),
                               onPressed: () {
-                                showMaterialScrollPicker<NameID>(
+                                showMaterialScrollPicker<CourseItem>(
                                   context: context,
                                   title: Language.of(context).selectCourse,
-                                  items: coursesItems,
+                                  items: courses,
                                   showDivider: false,
-                                  selectedItem: coursesItems[0], //_selectedCourse,
+                                  selectedItem: courses[0], //_selectedCourse,
                                   onChanged: (value) => setState(() => _selectedCourse = value),
                                 ).then((value) => setState(() => _courseName = value == null ? '' : value.toString()));
                               }
