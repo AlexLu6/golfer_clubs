@@ -39,7 +39,7 @@ Future<List>? getOrderedCourse() {
   print('Enter getOrdered');
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
-      print('add one item');
+      print('add one item: '+result.data()['name']);
       theList.add(CourseItem(
         result.data()['cid'], 
         result.data()['name'], 
@@ -54,6 +54,8 @@ Future<List>? getOrderedCourse() {
       theList.sort((a, b) =>
         ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
           square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt());
+    
+  
     return theList;
   });
 }
