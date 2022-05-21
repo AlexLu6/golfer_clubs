@@ -36,8 +36,10 @@ Future<bool> locationGranted() {
 
 Future<List>? getOrderedCourse() { 
 //  _here = GeoPoint(24.8242056,120.9992925);
+  print('Enter getOrdered');
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
+      print('add one item');
       theList.add(CourseItem(
         result.data()['cid'], 
         result.data()['name'], 
