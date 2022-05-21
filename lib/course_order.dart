@@ -20,6 +20,7 @@ double square(double a, double b) => (a*a)+(b*b);
 late Position _here;
 //  _here = GeoPoint(24.8242056,120.9992925);
 bool granted = false;
+List<CourseItem> theList = [];
 
 Future<bool> locationGranted() {
   return Geolocator.requestPermission().then((value) {
@@ -35,7 +36,6 @@ Future<bool> locationGranted() {
 }
 
 Future<List>? getOrderedCourse() { 
-  List<CourseItem> theList = [];
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
       theList.add(CourseItem(
@@ -55,5 +55,5 @@ void sortByDistance(List someList) {
   if (granted)
   someList.sort((a, b) =>
     ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
-      square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt());
+      square(b.lat() - _here.latitude, b.lon() - _here.longitude))*100000).toInt());
 }
