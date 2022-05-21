@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'dart:math';
 
 class CourseItem {
   const CourseItem(this.cid, this.name, this.photo, this.loc, this.zones);
@@ -15,6 +14,8 @@ class CourseItem {
   double lat() => loc.latitude;
   double lon() => loc.longitude;
 }
+
+double square(double a, double b) => (a-b)*(a-b);
 
 Future<List<CourseItem>>? getOrderedCourse() {
   var theList = [];
@@ -38,8 +39,8 @@ Future<List<CourseItem>>? getOrderedCourse() {
       ));
     });
     theList.sort((a, b) =>
-      ((pow(a.lat() - _here.latitude, 2) + pow(a.lon() - _here.longitude, 2) -
-        pow(b.lat() - _here.latitude, 2) - pow(b.lon() - _here.longitude, 2))*10000).toInt()
+      ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
+        square(b.lat() - _here.latitude, b.lon() - _here.longitude))*10000).toInt()
     );
     return theList as List<CourseItem>;
   });
