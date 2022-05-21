@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   prefs = await SharedPreferences.getInstance();
-
+  await locationGranted();
   runApp(MyApp());
 }
 
@@ -57,9 +57,6 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
-
-
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
@@ -175,10 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text(Language.of(context).golfCourses),
               leading: Icon(Icons.golf_course),
               onTap: () async {
-                await locationGranted().then((value) {
                   setState(() => _currentPageIndex = 4);
                   Navigator.of(context).pop();
-                });
               }),
           ListTile(
               title: Text(Language.of(context).myScores),
