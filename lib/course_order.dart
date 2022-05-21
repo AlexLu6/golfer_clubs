@@ -35,7 +35,7 @@ Future<bool> locationGranted() {
 
 Future<List>? getOrderedCourse() {
   List<CourseItem> theList = []; 
-//  GeoPoint _here = GeoPoint(24.8242056,120.9992925);
+//  _here = GeoPoint(24.8242056,120.9992925);
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
       theList.add(CourseItem(
@@ -47,8 +47,8 @@ Future<List>? getOrderedCourse() {
         result.data()
       ));
     });
-    if (granted)
-      theList.sort((a, b) =>
+    if (!granted) _here = Position(longitude: 24.8242056, latitude: 120.9992925, timestamp: DateTime.now(), accuracy: 0, altitude: 0, heading: 0, speed: 0, speedAccuracy: 0);
+    theList.sort((a, b) =>
         ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
           square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt());
     return theList;
