@@ -13,12 +13,14 @@ import 'firebase_options.dart';
 import 'locale/language.dart';
 import 'locale/app_localizations_delegate.dart';
 import 'activity.dart';
+import 'course_order.dart';
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   prefs = await SharedPreferences.getInstance();
+  await locationGranted();
 
   runApp(MyApp());
 }
@@ -176,7 +178,8 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 setState(() => _currentPageIndex = 4);
                 Navigator.of(context).pop();
-              }),
+                }
+          ),
           ListTile(
               title: Text(Language.of(context).myScores),
               leading: Icon(Icons.format_list_numbered),
@@ -538,35 +541,36 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget? golfCourseBody() {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').snapshots(),
+    return FutureBuilder(
+        future: getOrderedCourse(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           } else {
-            return ListView(
-                children: snapshot.data!.docs.map((doc) {
-                  if ((doc.data()! as Map)["photo"] == null) {
-                    return LinearProgressIndicator();
-                  } else {
-                    return Card(
-                        child: ListTile(
-                          leading: Image.network((doc.data()! as Map)["photo"]),
-                          title: Text((doc.data()! as Map)["region"] + ' ' + (doc.data()! as Map)["name"], style: TextStyle(fontSize: 18)),
-                          subtitle: Text((((doc.data()! as Map)["zones"]).length * 9).toString() + ' Holes'),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap: () async {
-                            if (((doc.data()! as Map)["zones"]).length > 2) {
-                              List zones = await selectZones(context, doc.data()! as Map);
-                              if (zones.isNotEmpty) Navigator.push(context, newScorePage(doc.data()! as Map, userName, zone0: zones[0], zone1: zones[1]));
-                            } else
-                              Navigator.push(context, newScorePage(doc.data()! as Map, userName));
-                          },
-                        ));
-                  }
-                }).toList());
+            List<CourseItem> courses = snapshot.data as List<CourseItem>;
+            sortByDistance(courses);
+            return ListView.builder(
+                itemCount: courses.length,
+                itemBuilder: (BuildContext context2, int i) {
+                  return Card(child: ListTile(
+                      leading: Image.network(courses[i].photo),
+                      title: Text(courses[i].name),
+                      subtitle: Text((courses[i].zones* 9).toString() + ' Holes'),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () async {
+                        if (courses[i].zones > 2) {
+                          List zones = await selectZones(context, courses[i].doc);
+                          if (zones.isNotEmpty)
+                            Navigator.push(context, newScorePage(courses[i].doc, userName, zone0: zones[0], zone1: zones[1]));
+                        } else
+                          Navigator.push(context, newScorePage(courses[i].doc, userName));
+                      }
+                  ));
+                }
+            );
           }
-        });
+        }
+    );
   }
 
   ListView myScoreBody() {
