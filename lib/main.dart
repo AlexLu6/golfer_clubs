@@ -543,12 +543,9 @@ class _MyHomePageState extends State<MyHomePage> {
       future: getOrderedCourse(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          print(snapshot.hasData);
           return const CircularProgressIndicator();
         } else {
-          print(snapshot.hasData);
           List<CourseItem> courses = snapshot.data as List<CourseItem>;
-          print(courses);
           return ListView.builder(
             itemCount: courses.length,
             itemBuilder: (BuildContext context2, int i) {
@@ -557,8 +554,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Text(courses[i].name),
                 subtitle: Text((courses[i].zones* 9).toString() + ' Holes'),
                 trailing: Icon(Icons.keyboard_arrow_right),
-                onTap: () {
-
+                onTap: () async {
+                  if (courses[i].zones > 2) {
+                    List zones = await selectZones(context, courses[i].doc);
+                    if (zones.isNotEmpty) 
+                      Navigator.push(context, newScorePage(courses[i].doc, userName, zone0: zones[0], zone1: zones[1]));               
+                  } else
+                      Navigator.push(context, newScorePage(courses[i].doc, userName));
                 }
               ));
             }

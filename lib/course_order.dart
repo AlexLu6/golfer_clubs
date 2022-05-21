@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 
 class CourseItem {
-  const CourseItem(this.cid, this.name, this.photo, this.loc, this.zones);
+  const CourseItem(this.cid, this.name, this.photo, this.loc, this.zones, this.doc);
   final int cid;
   final String name;
   final String photo;
   final GeoPoint loc;
   final int zones;
+  final Map doc;
   @override
   String toString() => name;
   int toID() => cid;
@@ -35,7 +36,8 @@ Future<List>? getOrderedCourse() {
         result.data()['name'], 
         result.data()['photo'], 
         result.data()['location'], 
-        result.data()['zones'].length
+        result.data()['zones'].length,
+        result.data()
       ));
     });
     theList.sort((a, b) =>
