@@ -546,6 +546,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return const CircularProgressIndicator();
         else {
           List<CourseItem> courses = snapshot.data as List<CourseItem>;
+          print(courses);
           return ListView.builder(
             itemCount: courses.length,
             itemBuilder: (BuildContext context, int i) {
