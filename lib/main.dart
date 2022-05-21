@@ -546,7 +546,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return const CircularProgressIndicator();
         } else {
           List<CourseItem> courses = snapshot.data as List<CourseItem>;
-          return ListView.builder(
+          return courses.length > 0 ? ListView.builder(
             itemCount: courses.length,
             itemBuilder: (BuildContext context2, int i) {
               return Card(child: ListTile(
@@ -564,11 +564,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               ));
             }
-          );
-        }
-      }
-    );
-/*    return StreamBuilder<QuerySnapshot>(
+          ) :  StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -596,7 +592,11 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             }).toList());
           }
-        }); */
+        });
+        }
+      }
+    );
+
   }
 
   ListView myScoreBody() {
