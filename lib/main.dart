@@ -541,9 +541,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget? golfCourseBody() {
     late Position _currentPosition;
     Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-      .then((Position position) =>
-          _currentPosition = position);
-    print(_currentPosition);
+      .then((Position position) {
+          _currentPosition = position;
+          print(_currentPosition);
+      });
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').snapshots(),
         builder: (context, snapshot) {
