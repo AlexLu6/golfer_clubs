@@ -39,8 +39,8 @@ Future<List<CourseItem>>? getOrderedCourse() {
       ));
     });
     theList.sort((a, b) =>
-      (square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
-       square(b.lat() - _here.latitude, b.lon() - _here.longitude)).toInt()
+      ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
+        square(b.lat() - _here.latitude, b.lon() - _here.longitude))*100000).toInt()
     );
     print(theList);
     return theList;
