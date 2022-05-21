@@ -52,7 +52,6 @@ Future<List>? getOrderedCourse() {
 }
 
 void sortByDistance(List someList) {
-  print(_here);
   if (granted)
   someList.sort((a, b) =>
     ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
