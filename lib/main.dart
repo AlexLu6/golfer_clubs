@@ -175,9 +175,10 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text(Language.of(context).golfCourses),
               leading: Icon(Icons.golf_course),
               onTap: () async {
-                await locationGranted();
-                setState(() => _currentPageIndex = 4);
-                Navigator.of(context).pop();
+                await locationGranted().then((value) {
+                  setState(() => _currentPageIndex = 4);
+                  Navigator.of(context).pop();
+                });
               }),
           ListTile(
               title: Text(Language.of(context).myScores),
