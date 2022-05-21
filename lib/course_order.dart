@@ -38,8 +38,8 @@ Future<List<CourseItem>>? getOrderedCourse() {
       ));
     });
     theList.sort((a, b) =>
-      (pow(a.lat() - _here.latitude, 2) + pow(a.lon() - _here.longitude, 2) -
-       pow(b.lat() - _here.latitude, 2) + pow(b.lon() - _here.longitude, 2)).toInt()
+      ((pow(a.lat() - _here.latitude, 2) + pow(a.lon() - _here.longitude, 2) -
+        pow(b.lat() - _here.latitude, 2) + pow(b.lon() - _here.longitude, 2))*10000).toInt()
     );
     return theList as List<CourseItem>;
   });
