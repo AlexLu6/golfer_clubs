@@ -18,8 +18,8 @@ class CourseItem {
 
 double square(double a, double b) => (a*a)+(b*b);
 late Position _here;
+//  _here = GeoPoint(24.8242056,120.9992925);
 bool granted = false;
-List<CourseItem> theList = [];
 
 Future<bool> locationGranted() {
   return Geolocator.requestPermission().then((value) {
@@ -35,7 +35,7 @@ Future<bool> locationGranted() {
 }
 
 Future<List>? getOrderedCourse() { 
-//  _here = GeoPoint(24.8242056,120.9992925);
+  List<CourseItem> theList = [];
   print('Enter getOrdered');
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
