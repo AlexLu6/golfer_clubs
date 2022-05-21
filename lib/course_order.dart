@@ -17,7 +17,7 @@ class CourseItem {
 
 double square(double a, double b) => (a*a)+(b*b);
 
-Future<List<CourseItem>>? getOrderedCourse() {
+Future<List>? getOrderedCourse() {
   List<CourseItem> theList = [];
 /*  late Position _here;
   Geolocator.requestPermission().then((value) {
@@ -40,7 +40,7 @@ Future<List<CourseItem>>? getOrderedCourse() {
     });
     theList.sort((a, b) =>
       ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
-        square(b.lat() - _here.latitude, b.lon() - _here.longitude))*10000000).toInt()
+        square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt()
     );
     print(theList);
     return theList;
