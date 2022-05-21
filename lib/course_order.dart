@@ -21,14 +21,6 @@ double square(double a, double b) => (a*a)+(b*b);
 Future<List>? getOrderedCourse() {
   List<CourseItem> theList = [];
   late Position _here;
-  bool granted = false;
-  Geolocator.requestPermission().then((value) {
-    if (value == LocationPermission.whileInUse || value == LocationPermission.always) {
-      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-        .then((Position position) => _here = position);
-      granted = true;
-    }
-  }); 
 //  GeoPoint _here = GeoPoint(24.8242056,120.9992925);
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
@@ -41,11 +33,17 @@ Future<List>? getOrderedCourse() {
         result.data()
       ));
     });
-    if (granted)
-      theList.sort((a, b) =>
-        ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
-          square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt()
-      );
+
+    Geolocator.requestPermission().then((value) {
+      if (value == LocationPermission.whileInUse || value == LocationPermission.always) {
+        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
+          .then((Position position) => _here = position);
+        theList.sort((a, b) =>
+          ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
+            square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt()
+        );
+      }
+    }); 
     return theList;
   });
 }
