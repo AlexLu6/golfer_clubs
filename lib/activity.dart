@@ -8,6 +8,7 @@ import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
 import 'editable2.dart';
+import 'course_order.dart';
 import 'locale/language.dart';
 
 Widget activityBody() {
@@ -353,8 +354,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
         });
 }
 
-List<NameID> coursesItems = [];
-
 _NewActivityPage newActivityPage(bool isMan, int gid, int uid) {
   return _NewActivityPage(isMan, gid, uid);
 }
@@ -369,14 +368,6 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
           int _fee = 2500, _max = 4;
           var activity = FirebaseFirestore.instance.collection('ClubActivities');
 
-          if (coursesItems.isEmpty)
-            FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').get().then((value) {
-              value.docs.forEach((result) {
-                var items = result.data();
-                coursesItems.add(NameID(items['name'] as String, items['cid'] as int));
-              });
-            });
-
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).createNewActivity), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
@@ -384,19 +375,31 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                 children: <Widget>[
                   const SizedBox(height: 12.0),
                   Flexible(
-                      child: Row(children: <Widget>[
-                    ElevatedButton(
-                        child: Text(Language.of(context).golfCourses),
-                        onPressed: () {
-                          showMaterialScrollPicker<NameID>(
-                            context: context,
-                            title: Language.of(context).selectCourse,
-                            items: coursesItems,
-                            showDivider: false,
-                            selectedItem: coursesItems[0], //_selectedCourse,
-                            onChanged: (value) => setState(() => _selectedCourse = value),
-                          ).then((value) => setState(() => _courseName = value == null ? '' : value.toString()));
-                        }),
+                    child: Row(children: <Widget>[
+                      FutureBuilder(
+                        future: getOrderedCourse(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const CircularProgressIndicator();
+                          } else {
+                            List<CourseItem> courses = snapshot.data as List<CourseItem>;
+                            sortByDistance(courses);
+                            return ElevatedButton(
+                              child: Text(Language.of(context).golfCourses),
+                              onPressed: () {
+                                showMaterialScrollPicker<NameID>(
+                                  context: context,
+                                  title: Language.of(context).selectCourse,
+                                  items: coursesItems,
+                                  showDivider: false,
+                                  selectedItem: coursesItems[0], //_selectedCourse,
+                                  onChanged: (value) => setState(() => _selectedCourse = value),
+                                ).then((value) => setState(() => _courseName = value == null ? '' : value.toString()));
+                              }
+                            );
+                          }
+                        }
+                      ),
                     const SizedBox(width: 5),
                     Flexible(
                         child: TextFormField(
