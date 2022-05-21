@@ -542,14 +542,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return FutureBuilder(
       future: getOrderedCourse(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
+        if (!snapshot.hasData) {
+          print(snapshot.connectionState);
           return const CircularProgressIndicator();
-        else {
+        } else {
           List<CourseItem> courses = snapshot.data as List<CourseItem>;
           print(courses);
           return ListView.builder(
             itemCount: courses.length,
-            itemBuilder: (BuildContext context, int i) {
+            itemBuilder: (BuildContext context2, int i) {
               return Card(child: ListTile(
                 leading: Image.network(courses[i].photo),
                 title: Text(courses[i].name),
