@@ -559,11 +559,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 trailing: Icon(Icons.keyboard_arrow_right),
                 onTap: () async {
                   if (courses[i].zones > 2) {
-                    List zones = await selectZones(context, courses[i].doc);
+                    List zones = await selectZones(context2, courses[i].doc);
                     if (zones.isNotEmpty) 
-                      Navigator.push(context, newScorePage(courses[i].doc, userName, zone0: zones[0], zone1: zones[1]));               
+                      Navigator.push(context2, newScorePage(courses[i].doc, userName, zone0: zones[0], zone1: zones[1]));               
                   } else
-                      Navigator.push(context, newScorePage(courses[i].doc, userName));
+                      Navigator.push(context2, newScorePage(courses[i].doc, userName));
                 }
               ));
             }
