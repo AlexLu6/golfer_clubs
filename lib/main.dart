@@ -339,8 +339,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 }
             }
+        )
       ),
-    ));
+    );
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.only(left: 24.0, right: 24.0),
