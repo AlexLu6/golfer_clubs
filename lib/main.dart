@@ -543,7 +543,7 @@ class _MyHomePageState extends State<MyHomePage> {
       future: getOrderedCourse(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          print(snapshot.connectionState);
+          print(snapshot.hasData);
           return const CircularProgressIndicator();
         } else {
           List<CourseItem> courses = snapshot.data! as List<CourseItem>;
