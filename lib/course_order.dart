@@ -49,12 +49,12 @@ Future<List>? getOrderedCourse() {
         result.data()
       ));
     });
- 
-      theList.sort((a, b) =>
-        ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
-          square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt());
-    
-  
     return theList;
   });
+}
+
+void sortByDistance(List someList){
+  someList.sort((a, b) =>
+    ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
+      square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt());
 }
