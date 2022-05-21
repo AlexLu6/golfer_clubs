@@ -546,7 +546,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return const CircularProgressIndicator();
         } else {
           List<CourseItem> courses = snapshot.data as List<CourseItem>;
-          return courses.length > 0 ? ListView.builder(
+          return ListView.builder(
             itemCount: courses.length,
             itemBuilder: (BuildContext context2, int i) {
               return Card(child: ListTile(
@@ -564,39 +564,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               ));
             }
-          ) :  StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          } else {
-            return ListView(
-              children: snapshot.data!.docs.map((doc) {
-              if ((doc.data()! as Map)["photo"] == null) {
-                return LinearProgressIndicator();
-              } else {
-                return Card(
-                  child: ListTile(
-                  leading: Image.network((doc.data()! as Map)["photo"]),
-                  title: Text((doc.data()! as Map)["region"] + ' ' + (doc.data()! as Map)["name"], style: TextStyle(fontSize: 18)),
-                  subtitle: Text((((doc.data()! as Map)["zones"]).length * 9).toString() + ' Holes'),
-                  trailing: Icon(Icons.keyboard_arrow_right),
-                  onTap: () async {
-                    if (((doc.data()! as Map)["zones"]).length > 2) {
-                      List zones = await selectZones(context, doc.data()! as Map);
-                      if (zones.isNotEmpty) Navigator.push(context, newScorePage(doc.data()! as Map, userName, zone0: zones[0], zone1: zones[1]));
-                    } else
-                      Navigator.push(context, newScorePage(doc.data()! as Map, userName));
-                  },
-                ));
-              }
-            }).toList());
-          }
-        });
+          ); 
         }
       }
     );
-
   }
 
   ListView myScoreBody() {
