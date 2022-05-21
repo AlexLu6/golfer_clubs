@@ -52,8 +52,8 @@ Future<List>? getOrderedCourse() {
 }
 
 void sortByDistance(List someList) {
-  //if (granted)
-  GeoPoint _here = GeoPoint(24.8242056,120.9992925);
+  if (granted)
+  //GeoPoint _here = GeoPoint(24.8242056,120.9992925);
   someList.sort((a, b) =>
     ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
       square(b.lat() - _here.latitude, b.lon() - _here.longitude))*100000).toInt());
