@@ -19,7 +19,7 @@ double square(double a, double b) => (a-b)*(a-b);
 
 Future<List<CourseItem>>? getOrderedCourse() {
   var theList = [];
-  late Position _here;
+/*  late Position _here;
   Geolocator.requestPermission().then((value) {
     if (value == LocationPermission.whileInUse || value == LocationPermission.always)
       Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
@@ -27,7 +27,7 @@ Future<List<CourseItem>>? getOrderedCourse() {
             _here = position;
             print(_here);
       });
-  });
+  });*/ GeoPoint _here = GeoPoint(24.8280462,120.9991027);
   FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
       theList.add(CourseItem(
