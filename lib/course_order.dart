@@ -15,7 +15,7 @@ class CourseItem {
   double lon() => loc.longitude;
 }
 
-double square(double a, double b) => (a*a-b*b);
+double square(double a, double b) => (a*a)+(b*b);
 
 Future<List<CourseItem>>? getOrderedCourse() {
   List<CourseItem> theList = [];
