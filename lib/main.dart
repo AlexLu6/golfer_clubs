@@ -14,6 +14,7 @@ import 'firebase_options.dart';
 import 'locale/language.dart';
 import 'locale/app_localizations_delegate.dart';
 import 'activity.dart';
+import 'course_order.dart';
 
 void main() async {
 
@@ -539,28 +540,43 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget? golfCourseBody() {
-    late Position _currentPosition;
-    Geolocator.requestPermission().then((value) {
-      if (value == LocationPermission.whileInUse || value == LocationPermission.always)
-        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-          .then((Position position) {
-              _currentPosition = position;
-              print(_currentPosition);
-        });
-    });
-    return StreamBuilder<QuerySnapshot>(
+    return FutureBuilder(
+      future: getOrderedCourse(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return const LinearProgressIndicator();
+        else {
+          List<CourseItem> courses = snapshot.data as List<CourseItem>;
+          return ListView.builder(
+            itemCount: courses.length,
+            itemBuilder: (BuildContext context, int i) {
+              return Card(child: ListTile(
+                leading: Image.network(courses[i].photo),
+                title: Text(courses[i].name),
+                subtitle: Text((courses[i].zones* 9).toString() + ' Holes'),
+                trailing: Icon(Icons.keyboard_arrow_right),
+                onTap: () {
+
+                }
+              ));
+            }
+          );
+        }
+      }
+    );
+/*    return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           } else {
             return ListView(
-                children: snapshot.data!.docs.map((doc) {
+              children: snapshot.data!.docs.map((doc) {
               if ((doc.data()! as Map)["photo"] == null) {
                 return LinearProgressIndicator();
               } else {
                 return Card(
-                    child: ListTile(
+                  child: ListTile(
                   leading: Image.network((doc.data()! as Map)["photo"]),
                   title: Text((doc.data()! as Map)["region"] + ' ' + (doc.data()! as Map)["name"], style: TextStyle(fontSize: 18)),
                   subtitle: Text((((doc.data()! as Map)["zones"]).length * 9).toString() + ' Holes'),
@@ -576,7 +592,7 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             }).toList());
           }
-        });
+        }); */
   }
 
   ListView myScoreBody() {
