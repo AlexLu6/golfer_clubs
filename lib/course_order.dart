@@ -30,7 +30,7 @@ Future<List>? getOrderedCourse() {
   });*/ GeoPoint _here = GeoPoint(24.8242056,120.9992925);
   return FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
-      theList.add(new CourseItem(
+      theList.add(CourseItem(
         result.data()['cid'], 
         result.data()['name'], 
         result.data()['photo'], 
