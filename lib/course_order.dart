@@ -30,7 +30,7 @@ Future<List>? getOrderedCourse() {
   });*/ GeoPoint _here = GeoPoint(24.8242056,120.9992925);
   FirebaseFirestore.instance.collection('GolfCourses').get().then((value) {
     value.docs.forEach((result) {
-      theList.add(CourseItem(
+      theList.add(new CourseItem(
         result.data()['cid'], 
         result.data()['name'], 
         result.data()['photo'], 
@@ -38,11 +38,11 @@ Future<List>? getOrderedCourse() {
         result.data()['zones'].length
       ));
     });
-  }).whenComplete(() {
     theList.sort((a, b) =>
       ((square(a.lat() - _here.latitude, a.lon() - _here.longitude) -
         square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt()
     );
+  }).whenComplete(() {
     print(theList);
     return theList;
   });
