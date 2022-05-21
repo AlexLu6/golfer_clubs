@@ -43,7 +43,8 @@ Future<List>? getOrderedCourse() {
             square(b.lat() - _here.latitude, b.lon() - _here.longitude))*1000000).toInt()
         );
       }
-    }); 
-    return theList;
+      return theList;
+    });
+    return [];     
   });
 }
