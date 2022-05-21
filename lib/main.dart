@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:emojis/emoji.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
@@ -538,6 +539,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget? golfCourseBody() {
+    late Position _currentPosition;
+    Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
+      .then((Position position) =>
+          _currentPosition = position);
+    print(_currentPosition);
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('GolfCourses').orderBy('region').snapshots(),
         builder: (context, snapshot) {

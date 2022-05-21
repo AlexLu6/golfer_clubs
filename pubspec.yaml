@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.0.15
-#  geolocator: ^8.2.1
+  geolocator: ^8.2.1
   cloud_firestore: ^3.1.15
   firebase_storage: ^10.2.16
   firebase_core: ^1.17.0
