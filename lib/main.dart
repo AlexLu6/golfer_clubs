@@ -189,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Icon(Icons.exit_to_app),
               onTap: () {
                 setState(() {
-                  isRegistered = isUpdate = !isExpired;
+                  isRegistered = isUpdate = false;
                   userName = '';
                   userPhone = '';
                   golferID = 0;
