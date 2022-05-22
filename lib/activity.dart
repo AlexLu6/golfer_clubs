@@ -11,7 +11,7 @@ import 'editable2.dart';
 import 'course_order.dart';
 import 'locale/language.dart';
 
-String netPhoto='';
+String netPhoto='https://wallpaper.dog/large/20480874.jpg';
 Widget activityBody() {
   Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
   var allActivities = [];
@@ -53,10 +53,8 @@ Widget activityBody() {
                               builder: (context, snapshot3) {
                                 if (!snapshot3.hasData)
                                   return const CircularProgressIndicator();
-                                else {
-                                  netPhoto = snapshot3.data!.toString();
-                                  return Image.network(netPhoto);
-                                }
+                                else 
+                                  return Image.network(snapshot3.data!.toString());
                               }),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
@@ -770,7 +768,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
               appBar: AppBar(title: Text(Language.of(context).enterScore), elevation: 1.0),
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                 return Container(
-                  decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(course['photo']), fit: BoxFit.cover)),
+                  decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(netPhoto), fit: BoxFit.cover)),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   const SizedBox(height: 10.0),
                   Row(
