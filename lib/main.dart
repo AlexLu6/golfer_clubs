@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         isExpired = items['expired'].compareTo(Timestamp.now()) < 0;
         setState(() => isRegistered = true);
-        _currentPageIndex = myActivities.length > 0 ? 3 : myGroups.length > 0 ? 2 : 1;
+        _currentPageIndex = isExpired ? 7 : myActivities.length > 0 ? 3 : myGroups.length > 0 ? 2 : 1;
       });
     });
     super.initState();
@@ -101,7 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).activities, //"My Activities",
       Language.of(context).golfCourses, //"Golf courses",
       Language.of(context).myScores, //"My Scores",
-      Language.of(context).usage  // "Program Usage"
+      Language.of(context).usage,  // "Program Usage"
+      Language.of(context).purchase
     ];
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
               : _currentPageIndex == 3  ? activityBody()
               : _currentPageIndex == 4  ? golfCourseBody()
               : _currentPageIndex == 5  ? myScoreBody()  
-              : usageBody()),
+              : _currentPageIndex == 6  ? usageBody() : purchaseBody()
+          ),
       drawer: isRegistered ? golfDrawer() : null,
       floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
           ? FloatingActionButton(
@@ -136,14 +138,14 @@ class _MyHomePageState extends State<MyHomePage> {
             currentAccountPicture: GestureDetector(
                 onTap: () {
                   setState(() => isUpdate = true);
-                  _currentPageIndex = 0;
+                  _currentPageIndex = isExpired ? 7 : 0;
                   Navigator.of(context).pop();
                 },
                 child: CircleAvatar(backgroundImage: NetworkImage(userSex == gendre.Male ? maleGolfer : femaleGolfer))),
             decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(drawerPhoto))),
             onDetailsPressed: () {
               setState(() => isUpdate = true);
-              _currentPageIndex = 0;
+              _currentPageIndex = isExpired ? 7 : 0;
               Navigator.of(context).pop();
             },
           ),
@@ -151,21 +153,21 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text(Language.of(context).groups),
               leading: Icon(Icons.group),
               onTap: () {
-                setState(() => _currentPageIndex = 1);
+                setState(() => _currentPageIndex = isExpired ? 7 : 1);
                 Navigator.of(context).pop();
               }),
           ListTile(
               title: Text(Language.of(context).myGroup),
               leading: Icon(Icons.group),
               onTap: () {
-                setState(() => _currentPageIndex = 2);
+                setState(() => _currentPageIndex = isExpired ? 7 : 2);
                 Navigator.of(context).pop();
               }),
           ListTile(
               title: Text(Language.of(context).activities),
               leading: Icon(Icons.sports_golf),
               onTap: () {
-                setState(() => _currentPageIndex = 3);
+                setState(() => _currentPageIndex = isExpired ? 7 : 3);
                 Navigator.of(context).pop();
               }),
           ListTile(
@@ -195,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   myGroups.clear();
                   myActivities.clear();
                   myScores.clear();
-                  _currentPageIndex = 0;
+                  _currentPageIndex = isExpired ? 7 : 0;
                 });
                 Navigator.of(context).pop();
               }),
@@ -226,6 +228,10 @@ class _MyHomePageState extends State<MyHomePage> {
           );
       }
     );
+  }
+
+  Widget purchaseBody() {
+    return Text('You need to upgrade a new version!');
   }
 
   ListView registerBody() {
@@ -301,6 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     storeMyGroup();
                     storeMyActivities();
                     storeMyScores();
+                    isExpired = items['expired'].compareTo(Timestamp.now()) < 0;
                   });
                 }).whenComplete(() {
                     if (uID == 0) {
@@ -331,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                       }
                     }
-                    _currentPageIndex = 1;
+                    _currentPageIndex = isExpired ? 7 : 1;
                     setState(() => isRegistered = true);
                     prefs!.setInt('golferID', golferID);
                   });
