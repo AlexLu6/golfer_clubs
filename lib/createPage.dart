@@ -117,7 +117,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
       appBar: AppBar(title: Text(Language.of(context).groupActivity + ':' + _gName), elevation: 1.0),
       body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
         return StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: _gID).snapshots(),
+          stream: FirebaseFirestore.instance.collection('ClubActivities').orderBy('teeOff').where('gid', isEqualTo: _gID).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();
