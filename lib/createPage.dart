@@ -117,7 +117,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
         appBar: AppBar(title: Text(Language.of(context).groupActivity + ':' + _gName), elevation: 1.0),
         body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: _gID).snapshots(),
+              stream: FirebaseFirestore.instance.collection('ClubActivities').orderBy('teeOff').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();
@@ -128,8 +128,8 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                           return LinearProgressIndicator();
                         } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                           FirebaseFirestore.instance.collection('ClubActivities').doc(doc.id).delete(); //anyone can delete outdated activity
-                          return LinearProgressIndicator();
-                        } else if (myActivities.indexOf(doc.id) >= 0) {
+                          return SizedBox.shrink();
+                        } else if ((doc.data()! as Map)["gid"] != _gID || myActivities.indexOf(doc.id) >= 0) {
                           return SizedBox.shrink();
                         } else {
                           String cName = '';

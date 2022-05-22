@@ -11,6 +11,8 @@ import 'editable2.dart';
 import 'course_order.dart';
 import 'locale/language.dart';
 
+String netPhoto='';
+
 Widget activityBody() {
   Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
   var allActivities = [];
@@ -52,12 +54,13 @@ Widget activityBody() {
                               builder: (context, snapshot3) {
                                 if (!snapshot3.hasData)
                                   return const CircularProgressIndicator();
-                                else
-                                  return Image.network(snapshot3.data!.toString());
+                                else {
+                                  netPhoto = snapshot3.data!.toString();
+                                  return Image.network(netPhoto);
+                                }
                               }),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
-
                             Navigator.push(context, ShowActivityPage(doc, golferID, await groupName((doc.data()! as Map)['gid'] as int)!, await isManager((doc.data()! as Map)['gid'] as int, golferID), userHandicap)).then((value) async {
                               var glist = doc.get('golfers');
                               if (value == -1) {
@@ -118,7 +121,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
     List buildRows() {
       var oneRow = {};
       int idx = 0;
-//            for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
       for (var e in activity.data()!['golfers']) {
         if (idx % 4 == 0) {
           oneRow = Map();
@@ -230,6 +233,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
         appBar: AppBar(title: Text(title), elevation: 1.0),
         body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return Container(
+              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(netPhoto), fit: BoxFit.cover)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                 const SizedBox(height: 16.0),
                 Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + '\t' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
@@ -767,6 +771,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
         appBar: AppBar(title: Text(Language.of(context).enterScore), elevation: 1.0),
         body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return Container(
+              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(course['photo']), fit: BoxFit.cover)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                 const SizedBox(height: 10.0),
                 Row(
