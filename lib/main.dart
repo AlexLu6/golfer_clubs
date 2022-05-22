@@ -231,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget purchaseBody() {
-    return Text('You need to upgrade a new version!');
+    return Text('You need to upgrade to a new version!');
   }
 
   ListView registerBody() {
