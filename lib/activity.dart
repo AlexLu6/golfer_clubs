@@ -257,7 +257,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       trHeight: 16,
                       tdAlignment: TextAlign.center,
                       thAlignment: TextAlign.center,
-                      columnRatio: 0.2,
+                      columnRatio: 0.21,
                       columns: [
                         {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
                         {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
