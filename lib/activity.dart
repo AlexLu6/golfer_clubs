@@ -227,6 +227,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             }
             eidx++;
           }
+          print('alreadyIn: $alreadyIn isBackup: $isBackup');
 
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
