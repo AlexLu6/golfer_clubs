@@ -119,7 +119,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
           List buildRows() {
             var oneRow = {};
             int idx = 0;
-//            for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
             for (var e in activity.data()!['golfers']) {
               if (idx % 4 == 0) {
                 oneRow = Map();
@@ -259,7 +259,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       thAlignment: TextAlign.center,
                       columnRatio: 0.21,
                       columns: [
-                        {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.11},
+                        {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.1},
                         {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
                         {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
                         {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
