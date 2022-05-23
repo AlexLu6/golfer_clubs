@@ -11,7 +11,7 @@ import 'editable2.dart';
 import 'course_order.dart';
 import 'locale/language.dart';
 
-String netPhoto= 'https://media.tehrantimes.com/d/t/2021/05/09/4/3763811.jpg'; // 'https://wallpaper.dog/large/20480874.jpg';
+String netPhoto = 'https://wallpaper.dog/large/20480874.jpg';
 Widget activityBody() {
   Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
   var allActivities = [];
