@@ -213,7 +213,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             if (e['uid'] as int == uId) {
               uIdx = eidx;
               alreadyIn = true;
-              isBackup = eidx < (activity.data()!['max'] as int);
+              isBackup = eidx >= (activity.data()!['max'] as int);
               uName = e['name'];
               if (myActivities.indexOf(activity.id) < 0) {
                 myActivities.add(activity.id);
