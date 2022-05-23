@@ -227,7 +227,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             }
             eidx++;
           }
-          print('alreadyIn: $alreadyIn isBackup: $isBackup');
 
           return Scaffold(
               appBar: AppBar(title: Text(title), elevation: 1.0),
@@ -235,9 +234,9 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                 return Container(
                   decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(netPhoto), fit: BoxFit.cover)),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 10.0),
                   Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + '\t' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 10.0),
                   FutureBuilder(
                       future: courseBody(activity.data()!['cid'] as int),
                       builder: (context, snapshot2) {
