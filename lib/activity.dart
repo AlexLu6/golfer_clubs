@@ -233,7 +233,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                 return Container(
                   decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(netPhoto), fit: BoxFit.cover)),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   const SizedBox(height: 10.0),
                   Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + '\t' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 10.0),
