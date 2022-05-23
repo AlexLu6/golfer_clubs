@@ -111,7 +111,7 @@ ShowActivityPage showActivityPage(var activity, int uId, String title, bool edit
 class ShowActivityPage extends MaterialPageRoute<int> {
   ShowActivityPage(var activity, int uId, String title, bool editable, double handicap)
       : super(builder: (BuildContext context) {
-          bool alreadyIn = false, scoreReady = false, scoreDone = false;
+          bool alreadyIn = false, scoreReady = false, scoreDone = false, isBackup = false;
           String uName = '';
           int uIdx = 0;
           var rows = [];
@@ -213,6 +213,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
             if (e['uid'] as int == uId) {
               uIdx = eidx;
               alreadyIn = true;
+              isBackup = eidx < (activity.data()!['max'] as int);
               uName = e['name'];
               if (myActivities.indexOf(activity.id) < 0) {
                 myActivities.add(activity.id);
@@ -268,7 +269,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                     ))
                   ),
                   Visibility(
-                    visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !scoreReady,
+                    visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !isBackup && !scoreReady,
                     child: ElevatedButton(
                       child: Text(Language.of(context).subGroup),
                       onPressed: () {
@@ -304,7 +305,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                     ))
                   ),
                   Visibility(
-                    visible: teeOffPass && alreadyIn && !scoreDone,
+                    visible: teeOffPass && alreadyIn && !isBackup && !scoreDone,
                     child : ElevatedButton(
                       child: Text(Language.of(context).enterScore),
                       onPressed: () async {
