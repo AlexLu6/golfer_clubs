@@ -263,7 +263,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                         {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
                         {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
                         {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
-                        {"title": "D", 'index': 5, 'key': 'c4', 'editable': false, 'widthFactor':0.2}
+                        {"title": "D", 'index': 5, 'key': 'c4', 'editable': false}
                       ],
                       rows: buildRows(),
                     ))
