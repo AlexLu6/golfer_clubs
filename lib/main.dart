@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: [
         const Locale('en'),
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW')
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
       ],
       onGenerateTitle: (context) => Language.of(context).appTitle,
       debugShowCheckedModeBanner: false,
