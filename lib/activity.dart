@@ -11,7 +11,7 @@ import 'editable2.dart';
 import 'course_order.dart';
 import 'locale/language.dart';
 
-String netPhoto='';
+String netPhoto='https://wallpaper.dog/large/20478405.jpg';
 
 Widget activityBody() {
   Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
@@ -32,7 +32,7 @@ Widget activityBody() {
                 } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                   myActivities.remove(doc.id);
                   storeMyActivities();
-                  return LinearProgressIndicator();
+                  return SizedBox.shrink();
                 } else {
                   allActivities.add(doc.id);
                   return Card(
@@ -54,10 +54,8 @@ Widget activityBody() {
                               builder: (context, snapshot3) {
                                 if (!snapshot3.hasData)
                                   return const CircularProgressIndicator();
-                                else {
-                                  netPhoto = snapshot3.data!.toString();
-                                  return Image.network(netPhoto);
-                                }
+                                else
+                                  return Image.network(snapshot3.data!.toString());
                               }),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
@@ -113,7 +111,7 @@ ShowActivityPage showActivityPage(var activity, int uId, String title, bool edit
 class ShowActivityPage extends MaterialPageRoute<int> {
   ShowActivityPage(var activity, int uId, String title, bool editable, double handicap)
       : super(builder: (BuildContext context) {
-    bool alreadyIn = false, scoreReady = false, scoreDone = false;
+    bool alreadyIn = false, scoreReady = false, scoreDone = false, isBackup = false;
     String uName = '';
     int uIdx = 0;
     var rows = [];
@@ -204,7 +202,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
         glist[uIdx]['total'] = myScores[0]['total'];
         glist[uIdx]['net'] = myScores[0]['total'] - handicap;
         FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
-          'golfers': glist
+          'golfers[$uIdx]': glist
         }).whenComplete(() => Navigator.of(context).pop(0));
       });
     }
@@ -215,6 +213,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
       if (e['uid'] as int == uId) {
         uIdx = eidx;
         alreadyIn = true;
+        isBackup = eidx >= (activity.data()!['max'] as int);
         uName = e['name'];
         if (myActivities.indexOf(activity.id) < 0) {
           myActivities.add(activity.id);
@@ -260,7 +259,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           thAlignment: TextAlign.center,
                           columnRatio: 0.2,
                           columns: [
-                            {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.14},
+                            {"title": Language.of(context).tableGroup, 'index': 1, 'key': 'row', 'editable': false, 'widthFactor': 0.15},
                             {"title": "A", 'index': 2, 'key': 'c1', 'editable': false},
                             {"title": "B", 'index': 3, 'key': 'c2', 'editable': false},
                             {"title": "C", 'index': 4, 'key': 'c3', 'editable': false},
@@ -270,7 +269,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                         ))
                 ),
                 Visibility(
-                    visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !scoreReady,
+                    visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !isBackup && !scoreReady,
                     child: ElevatedButton(
                         child: Text(Language.of(context).subGroup),
                         onPressed: () {
@@ -306,7 +305,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                         ))
                 ),
                 Visibility(
-                    visible: teeOffPass && alreadyIn && !scoreDone,
+                    visible: teeOffPass && alreadyIn && !isBackup && !scoreDone,
                     child : ElevatedButton(
                         child: Text(Language.of(context).enterScore),
                         onPressed: () async {
@@ -771,7 +770,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
         appBar: AppBar(title: Text(Language.of(context).enterScore), elevation: 1.0),
         body: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return Container(
-              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(course['photo']), fit: BoxFit.cover)),
+              decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(netPhoto), fit: BoxFit.cover)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                 const SizedBox(height: 10.0),
                 Row(
