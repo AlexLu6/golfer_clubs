@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
               : _currentPageIndex == 6  ? usageBody() : purchaseBody()
           ),
       drawer: isRegistered ? golfDrawer() : null,
-      floatingActionButton: (_currentPageIndex == 1 /*|| _currentPageIndex == 4*/)
+      floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
           ? FloatingActionButton(
               onPressed: () => doBodyAdd(_currentPageIndex),
               child: const Icon(Icons.add),
