@@ -31,7 +31,7 @@ Widget activityBody() {
                 } else if ((doc.data()! as Map)["teeOff"].compareTo(deadline) < 0) {
                   myActivities.remove(doc.id);
                   storeMyActivities();
-                  return LinearProgressIndicator();
+                  return SizedBox.shrink();
                 } else {
                   allActivities.add(doc.id);
                   return Card(
