@@ -202,7 +202,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
               glist[uIdx]['total'] = myScores[0]['total'];
               glist[uIdx]['net'] = myScores[0]['total'] - handicap;
               FirebaseFirestore.instance.collection('ClubActivities').doc(activity.id).update({
-                'golfers': glist
+                'golfers[$uIdx]': glist[uIdx]
               }).whenComplete(() => Navigator.of(context).pop(0));
             });           
           }
