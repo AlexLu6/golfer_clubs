@@ -498,7 +498,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
           if (subIntGroups.length == 0 || ( subIntGroups[subIntGroups.length - 1].length > 0 && 
               subIntGroups.length < ((max+3) >> 2) && alreadyIn < 0))
               subIntGroups.add([]);
-print(subIntGroups);
+
           return Scaffold(
               appBar: AppBar(title: Text(Language.of(context).subGroup), elevation: 1.0),
               body: ListView.builder(
