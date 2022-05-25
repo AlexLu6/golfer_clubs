@@ -220,12 +220,12 @@ class _MyHomePageState extends State<MyHomePage> {
         if (!snapshot.hasData)
           return const CircularProgressIndicator();
         else
-          return InteractiveViewer(
+          return Flexible(child: InteractiveViewer(
             //panEnabled: false,
             minScale: 0.8,
             maxScale: 2.5,
             child: Image.network(snapshot.data!.toString())
-          );
+          ));
       }
     );
   }
