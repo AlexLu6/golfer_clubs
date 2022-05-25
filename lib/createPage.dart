@@ -495,7 +495,7 @@ class SubGroupPage extends MaterialPageRoute<bool> {
               if (subIntGroups[i][j] == uId) alreadyIn = i;
             }
           }
-          if (subIntGroups[subIntGroups.length - 1].length > 0 && 
+          if (subIntGroups.length > 0 && subIntGroups[subIntGroups.length - 1].length > 0 && 
               subIntGroups.length < ((max+3) >> 2) && alreadyIn < 0) 
               subIntGroups.add([]);
 
