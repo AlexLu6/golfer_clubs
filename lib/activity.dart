@@ -79,7 +79,8 @@ Widget activityBody() {
                                   'golfers': glist,
                                   'subgroups': subGroups
                                 });
-                                setState(() {});
+                                print(myActivities);
+//                                setState(() {});
                               } else if (value == 1) {
                                 glist.add({
                                   'uid': golferID,
