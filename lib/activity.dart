@@ -11,7 +11,7 @@ import 'editable2.dart';
 import 'course_order.dart';
 import 'locale/language.dart';
 
-String netPhoto = 'https://wallpaper.dog/large/20478405.jpg';
+String netPhoto = 'https://wallpaper.dog/large/5552053.jpg';
 Widget activityBody() {
   Timestamp deadline = Timestamp.fromDate(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
   var allActivities = [];
