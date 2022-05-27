@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
@@ -23,12 +22,12 @@ Future<void> initPlatformState() async {
   }
   print('platformVersion: $platformVersion');
   // prepare
-  var result = await FlutterInappPurchase.instance.initConnection;
+  var result = await FlutterInappPurchase.instance.initialize();
   print('result: $result');
 
   // refresh items for android
   try {
-    String msg = await FlutterInappPurchase.instance.consumeAllItems;
+    String msg = await FlutterInappPurchase.instance.consumeAll();
     print('consumeAllItems: $msg');
   } catch (err) {
     print('consumeAllItems error: $err');
@@ -73,13 +72,21 @@ Widget purchaseBody() {
         return const CircularProgressIndicator();
       else {
         _items = snapshot.data! as List<IAPItem>;
-        return Text(
-          'platformVersion: $platformVersion \t items: ${_items.length}\n' +
-          '${_items[0].title!.substring(0, 11)}  Price: ${_items[0].price} ${_items[0].currency}\n' +
-          '${_items[1].title!.substring(0, 11)}  Price: ${_items[1].price} ${_items[0].currency}\n' +
-          '${_items[2].title!.substring(0, 11)}  Price: ${_items[2].price} ${_items[0].currency}\n' +
-          '${_items[0].description}'
+        return ListView.builder(
+          itemCount: _items.length,
+          itemBuilder: (BuildContext context2, int i) {
+            return Card(child: ListTile(
+              title: Text('${_items[i].title!.substring(0, 11)} :   ${_items[i].price} ${_items[i].currency}'),
+              trailing: Icon(Icons.money_sharp),
+              onTap: () async {
+                await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!).then((value) {
+
+                });
+              },
+            ));
+          }
         );
+        
       }
     });
 }
