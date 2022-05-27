@@ -85,6 +85,7 @@ Widget purchaseBody() {
           itemBuilder: (BuildContext context2, int i) {
             return Card(child: ListTile(
               title: Text('${_items[i].title!.substring(0, 11)} :   ${_items[i].price} ${_items[i].currency}'),
+              subtitle: Text('${_items[i].productId}'),
               trailing: Icon(Icons.payment),
               onTap: () async {
                 await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!).then((value) {
