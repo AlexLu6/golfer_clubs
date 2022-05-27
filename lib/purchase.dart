@@ -75,9 +75,10 @@ Widget purchaseBody() {
         _items = snapshot.data! as List<IAPItem>;
         return Text(
           'platformVersion: $platformVersion \t items: ${_items.length}\n' +
-          '${_items[0].title}  Price: ${_items[0].price}\n' +
-          '${_items[1].title}  Price: ${_items[1].price}\n' +
-          '${_items[2].title}  Price: ${_items[2].price}\n'
+          '${_items[0].title!.substring(0, 20)}  Price: ${_items[0].price}\n' +
+          '${_items[1].title!.substring(0, 20)}  Price: ${_items[1].price}\n' +
+          '${_items[2].title!.substring(0, 20)}  Price: ${_items[2].price}\n' +
+          '${_items[0].description}'
         );
       }
     });
