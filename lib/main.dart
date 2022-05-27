@@ -14,6 +14,7 @@ import 'locale/language.dart';
 import 'locale/app_localizations_delegate.dart';
 import 'activity.dart';
 import 'course_order.dart';
+import 'purchase.dart';
 
 void main() async {
 
@@ -66,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    initPlatformState();
     golferID = prefs!.getInt('golferID') ?? 0;
     userHandicap = prefs!.getDouble('handicap') ?? initHandicap;
     expiredDate = prefs!.getString('expired')?? '';
@@ -228,10 +230,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ))]);
       }
     );
-  }
-
-  Widget purchaseBody() {
-    return Text('You need to upgrade to a new version!');
   }
 
   ListView registerBody() {
