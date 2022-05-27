@@ -93,7 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     super.initState();
   }
-
+  @override
+  void dispose() async{
+    super.dispose();
+    closePlatformState();
+  }
   @override
   Widget build(BuildContext context) {
     List<String> appTitle = [

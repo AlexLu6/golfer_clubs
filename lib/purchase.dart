@@ -10,7 +10,7 @@ late StreamSubscription _purchaseUpdatedSubscription;
 late StreamSubscription _purchaseErrorSubscription;
 late StreamSubscription _conectionSubscription;
 String? platformVersion = 'Unknown';
-
+bool isConnected = false;
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {
 //  String? platformVersion;
@@ -20,33 +20,41 @@ Future<void> initPlatformState() async {
   } on PlatformException {
     platformVersion = 'Failed to get platform version.';
   }
-  print('platformVersion: $platformVersion');
+  //print('platformVersion: $platformVersion');
   // prepare
   var result = await FlutterInappPurchase.instance.initialize();
-  print('result: $result');
+  //print('result: $result');
 
   // refresh items for android
   try {
     String msg = await FlutterInappPurchase.instance.consumeAll();
-    print('consumeAllItems: $msg');
+    //print('consumeAllItems: $msg');
   } catch (err) {
-    print('consumeAllItems error: $err');
+    //print('consumeAllItems error: $err');
   }
 
   _conectionSubscription =
       FlutterInappPurchase.connectionUpdated.listen((connected) {
-    print('connected: $connected');
+        isConnected = connected.connected!;
+        //print('connected: $connected');
   });
 
   _purchaseUpdatedSubscription =
       FlutterInappPurchase.purchaseUpdated.listen((productItem) {
-    print('purchase-updated: $productItem');
+    //print('purchase-updated: $productItem');
   });
 
   _purchaseErrorSubscription =
       FlutterInappPurchase.purchaseError.listen((purchaseError) {
-    print('purchase-error: $purchaseError');
+    //print('purchase-error: $purchaseError');
   });
+}
+
+Future<void> closePlatformState() async {
+  _purchaseUpdatedSubscription.cancel();
+  _purchaseErrorSubscription.cancel();
+  _conectionSubscription.cancel();
+  await FlutterInappPurchase.instance.finalize();
 }
 
 Widget purchaseBody() {
@@ -64,7 +72,7 @@ Widget purchaseBody() {
         ];
 
   List<IAPItem> _items = [];
-  List<PurchasedItem> _purchases = [];
+  //List<PurchasedItem> _purchases = [];
   return FutureBuilder(
     future: FlutterInappPurchase.instance.getProducts(_productLists),
     builder: (context, snapshot) {
@@ -80,7 +88,8 @@ Widget purchaseBody() {
               trailing: Icon(Icons.money_sharp),
               onTap: () async {
                 await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!).then((value) {
-
+                  print(value);
+                  // if paid valide, extend yhe expired date 1 month, season, or year more
                 });
               },
             ));
