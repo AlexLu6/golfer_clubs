@@ -127,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
           ? FloatingActionButton(
               onPressed: () => doBodyAdd(_currentPageIndex),
-              child: const Icon(Icons.add),
+              child: Icon(_currentPageIndex == 1 ? Icons.group_add : Icons.add),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
