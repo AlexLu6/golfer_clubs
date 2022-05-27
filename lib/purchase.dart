@@ -26,15 +26,6 @@ Future<void> initPlatformState() async {
   var result = await FlutterInappPurchase.instance.initConnection;
   print('result: $result');
 
-  // If the widget was removed from the tree while the asynchronous platform
-  // message was in flight, we want to discard the reply rather than calling
-  // setState to update our non-existent appearance.
-//  if (!mounted) return;
-
-//  setState(() {
-//    _platformVersion = platformVersion!;
-//  });
-
   // refresh items for android
   try {
     String msg = await FlutterInappPurchase.instance.consumeAllItems;
@@ -75,11 +66,14 @@ Widget purchaseBody() {
 
   List<IAPItem> _items = [];
   List<PurchasedItem> _purchases = [];
-/*
-  List<IAPItem> items = await FlutterInappPurchase.instance.getProducts(_productLists);
-    for (var item in items) {
-      print('${item.toString()}');
-      _items.add(item);
-    }*/
-  return Text('platformVersion: $platformVersion \n items: ${_items.length}');
+  return FutureBuilder(
+    future: FlutterInappPurchase.instance.getProducts(_productLists),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData)
+        return const CircularProgressIndicator();
+      else {
+        _items = snapshot.data! as List<IAPItem>;
+        return Text('platformVersion: $platformVersion \t items: ${_items.length}');
+      }
+    });
 }
