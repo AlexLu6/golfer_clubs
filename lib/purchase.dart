@@ -73,7 +73,12 @@ Widget purchaseBody() {
         return const CircularProgressIndicator();
       else {
         _items = snapshot.data! as List<IAPItem>;
-        return Text('platformVersion: $platformVersion \t items: ${_items.length}');
+        return Text(
+          'platformVersion: $platformVersion \t items: ${_items.length}\n' +
+          'Prodcut ID: ${_items[0].productId} + Price: ${_items[0].price}\n' +
+          'Prodcut ID: ${_items[1].productId} + Price: ${_items[1].price}\n' +
+          'Prodcut ID: ${_items[2].productId} + Price: ${_items[2].price}\n'
+        );
       }
     });
 }
