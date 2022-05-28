@@ -512,7 +512,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 return SizedBox.shrink();
                               else
                                 return (snapshot3.data! as int) > 0 ? 
-                                  Badge(badgeColor: Colors.blue ,badgeContent: Text('${snapshot3.data! as int}'), child: Icon(Icons.add_outlined)) :
+                                  Badge(badgeColor: Colors.blue ,badgeContent: Text('${snapshot3.data! as int}'), child: Icon(Icons.keyboard_arrow_right)) :
                                   Icon(Icons.keyboard_arrow_right);
                             }),
                         onTap: () {
