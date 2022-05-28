@@ -118,6 +118,18 @@ void removeMemberAllActivities(int gid, int uid) {
   });
 }
 
+Future<int> notMyActivities(int gid) {
+  int res = 0;
+  return FirebaseFirestore.instance.collection('ClubActivities').where('gid', isEqualTo: gid)
+    .get().then((value) {
+      value.docs.forEach((doc) {
+        if (myActivities.indexOf(doc.id) < 0)
+          res++;
+      });
+      return res;
+    });
+}
+
 void removeMember(int gid, int uid) {
   FirebaseFirestore.instance.collection('GolferClubs').where('gid', isEqualTo: gid).get().then((value) {
     value.docs.forEach((result) {

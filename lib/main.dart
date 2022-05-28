@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:emojis/emoji.dart';
+import 'package:badges/badges.dart';
 import 'dataModel.dart';
 import 'createPage.dart';
 import 'firebase_options.dart';
@@ -504,7 +505,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             }),
                         leading: Image.network(groupPhoto),
                         /*Icon(Icons.group), */
-                        trailing: Icon(Icons.keyboard_arrow_right),
+                        trailing: FutureBuilder(
+                            future:notMyActivities(_gID),
+                            builder: (context, snapshot3) {
+                              if (!snapshot3.hasData)
+                                return SizedBox.shrink();
+                              else
+                                return (snapshot3.data! as int) > 0 ? Badge(badgeContent: Text('${snapshot3.data! as int}'), child: Icon(Icons.add_outlined)) :
+                                  Icon(Icons.keyboard_arrow_right);
+                            }),
                         onTap: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
                           Navigator.push(context, groupActPage(doc, golferID, userName, userSex, userHandicap));
