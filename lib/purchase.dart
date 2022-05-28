@@ -56,7 +56,17 @@ Future<void> closePlatformState() async {
   _conectionSubscription.cancel();
   await FlutterInappPurchase.instance.finalize();
 }
-
+/*
+validateReceipt() async {
+  var receiptBody = {
+    'receipt-data': '', //purchased.transactionReceipt,
+    'password': '******'
+  };
+  bool isTest = true;
+  var result = await validateReceiptIos(receiptBody, isTest);
+//  console.log(result);
+}
+*/
 Widget purchaseBody() {
 
   final List<String> _productLists = defaultTargetPlatform == TargetPlatform.android ||  kIsWeb // Platform.isAndroid
@@ -90,7 +100,7 @@ Widget purchaseBody() {
               onTap: () async {
                 await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!).then((value) {
                   print(value);
-                  // if paid valide, extend yhe expired date 1 month, season, or year more
+                  // if paid valide, extend the expired date 1 month, season, or year more
                 });
               },
             ));

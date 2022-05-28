@@ -110,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).usage,  // "Program Usage"
       Language.of(context).purchase
     ];
+    isExpired = Timestamp.fromDate(DateTime.parse(expiredDate)).compareTo(Timestamp.now()) < 0;
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle[_currentPageIndex]),
@@ -127,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: (_currentPageIndex == 1 || _currentPageIndex == 4)
           ? FloatingActionButton(
               onPressed: () => doBodyAdd(_currentPageIndex),
-              child: Icon(_currentPageIndex == 1 ? Icons.group_add : Icons.add),
+              child: Icon(Icons.add),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
