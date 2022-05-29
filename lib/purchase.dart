@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:flutter/foundation.dart'
   show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'dataModel.dart';
 
 late StreamSubscription _purchaseUpdatedSubscription;
 late StreamSubscription _purchaseErrorSubscription;
 late StreamSubscription _conectionSubscription;
 String? platformVersion = 'Unknown';
-bool isConnected = false;
+bool isConnected = false, isErr = false, isOK = false;
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {
 //  String? platformVersion;
@@ -41,11 +42,13 @@ Future<void> initPlatformState() async {
 
   _purchaseUpdatedSubscription =
       FlutterInappPurchase.purchaseUpdated.listen((productItem) {
+        isOK = true;
     //print('purchase-updated: $productItem');
   });
 
   _purchaseErrorSubscription =
       FlutterInappPurchase.purchaseError.listen((purchaseError) {
+        isErr = true;
     //print('purchase-error: $purchaseError');
   });
 }
@@ -101,6 +104,14 @@ Widget purchaseBody() {
                 await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!).then((value) {
                   print(value);
                   // if paid valide, extend the expired date 1 month, season, or year more
+                  if (isOK) {
+                    DateTime expireDate = DateTime.now().add(Duration(days: i == 0 ? 30 : i == 1 ? 91 : 365));
+                    Timestamp expire = Timestamp.fromDate(expireDate);
+                    FirebaseFirestore.instance.collection('Golfers').doc(golferDoc).update({
+                        "expired": expire
+                    });
+                    FlutterInappPurchase.instance.consumeAll();
+                  }
                 });
               },
             ));

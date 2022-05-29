@@ -14,6 +14,7 @@ int golferID = 0;
 String userName = '', userPhone = '', expiredDate = '', theLocale ='';
 gendre userSex = gendre.Male;
 double userHandicap = initHandicap;
+var golferDoc;
 
 class NameID {
   const NameID(this.name, this.id);

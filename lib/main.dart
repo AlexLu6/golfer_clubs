@@ -64,8 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _gID = 1;
   bool isRegistered = false, isUpdate = false, isExpired = false;
-  var _golferDoc;
-
+  
   @override
   void initState() {
     initPlatformState();
@@ -77,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     loadMyScores();
     FirebaseFirestore.instance.collection('Golfers').where('uid', isEqualTo: golferID).get().then((value) {
       value.docs.forEach((result) {
-        _golferDoc = result.id;
+        golferDoc = result.id;
         var items = result.data();
         userName = items['name'];
         userPhone = items['phone'];
@@ -300,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   .get().then((value) {
                   value.docs.forEach((result) {
                     var items = result.data();
-                    _golferDoc = result.id;
+                    golferDoc = result.id;
                     uID = items['uid'];
                     theLocale = items['locale'];
                     expiredDate = items['expired'].toDate().toString();
@@ -316,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }).whenComplete(() {
                     if (uID == 0) {
                       if (isUpdate) {
-                        FirebaseFirestore.instance.collection('Golfers').doc(_golferDoc).update({
+                        FirebaseFirestore.instance.collection('Golfers').doc(golferDoc).update({
                           "name": userName,
                           "phone": userPhone,
                           "sex": userSex == gendre.Male ? 1 : 2,
