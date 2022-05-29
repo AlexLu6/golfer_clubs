@@ -63,7 +63,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
   int _gID = 1;
-  bool isRegistered = false, isUpdate = false, isExpired = false;
+  bool isRegistered = false, isUpdate = false;
   
   @override
   void initState() {

@@ -15,6 +15,7 @@ String userName = '', userPhone = '', expiredDate = '', theLocale ='';
 gendre userSex = gendre.Male;
 double userHandicap = initHandicap;
 var golferDoc;
+bool isExpired = false;
 
 class NameID {
   const NameID(this.name, this.id);

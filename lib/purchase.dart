@@ -110,6 +110,7 @@ Widget purchaseBody() {
                     FirebaseFirestore.instance.collection('Golfers').doc(golferDoc).update({
                         "expired": expire
                     });
+                    isExpired = false;
                     FlutterInappPurchase.instance.consumeAll();
                   }
                 });
