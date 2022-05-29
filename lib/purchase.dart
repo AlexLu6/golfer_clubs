@@ -24,12 +24,12 @@ Future<void> initPlatformState() async {
   //print('platformVersion: $platformVersion');
   // prepare
   var result = await FlutterInappPurchase.instance.initialize();
-  //print('result: $result');
+  print('result: $result');
 
   // refresh items for android
   try {
     String msg = await FlutterInappPurchase.instance.consumeAll();
-    //print('consumeAllItems: $msg');
+    print('consumeAllItems: $msg');
   } catch (err) {
     //print('consumeAllItems error: $err');
   }
@@ -111,6 +111,8 @@ Widget purchaseBody() {
                         "expired": expire
                     });
                     isExpired = false;
+                    expiredDate = expireDate.toString();
+                    prefs!.setString('expired', expiredDate);                
                     FlutterInappPurchase.instance.consumeAll();
                   }
                 });
