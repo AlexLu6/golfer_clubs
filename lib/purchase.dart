@@ -11,7 +11,7 @@ late StreamSubscription _purchaseUpdatedSubscription;
 late StreamSubscription _purchaseErrorSubscription;
 late StreamSubscription _conectionSubscription;
 String? platformVersion = 'Unknown';
-bool isConnected = false, isErr = false, isOK = false;
+bool isConnected = false;
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {
 //  String? platformVersion;
@@ -42,13 +42,26 @@ Future<void> initPlatformState() async {
 
   _purchaseUpdatedSubscription =
       FlutterInappPurchase.purchaseUpdated.listen((productItem) {
-        isOK = true;
-    print('purchase-updated: $productItem');
+        int idx = productItem!.productId == 'golfer_consume_1_month' ? 0 :
+                  productItem.productId == 'golfer_consume_1_season' ? 1 :
+                  productItem.productId == 'golfer_consume_1_season' ? 2 : 3;
+        if (idx == 3)
+          idx = productItem.productId == 'golfer_1_month_fee' ? 0 :
+                productItem.productId == 'golfer_1_season_fee' ? 1 : 2;
+ 
+          DateTime expireDate = DateTime.now().add(Duration(days: idx == 0 ? 30 : idx == 1 ? 91 : 365));
+          Timestamp expire = Timestamp.fromDate(expireDate);
+          FirebaseFirestore.instance.collection('Golfers').doc(golferDoc).update({
+              "expired": expire
+          });
+          isExpired = false;
+          expiredDate = expireDate.toString();
+          prefs!.setString('expired', expiredDate);                
+          FlutterInappPurchase.instance.consumeAll();
   });
 
   _purchaseErrorSubscription =
       FlutterInappPurchase.purchaseError.listen((purchaseError) {
-        isErr = true;
     print('purchase-error: $purchaseError');
   });
 }
@@ -101,21 +114,7 @@ Widget purchaseBody() {
               subtitle: Text('${_items[i].productId}'),
               trailing: Icon(Icons.payment),
               onTap: () async {
-                await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!).then((value) {
-                  print(value);
-                  // if paid valide, extend the expired date 1 month, season, or year more
-                  if (isOK) {
-                    DateTime expireDate = DateTime.now().add(Duration(days: i == 0 ? 30 : i == 1 ? 91 : 365));
-                    Timestamp expire = Timestamp.fromDate(expireDate);
-                    FirebaseFirestore.instance.collection('Golfers').doc(golferDoc).update({
-                        "expired": expire
-                    });
-                    isExpired = false;
-                    expiredDate = expireDate.toString();
-                    prefs!.setString('expired', expiredDate);                
-                    FlutterInappPurchase.instance.consumeAll();
-                  }
-                });
+                await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!);
               },
             ));
           }
