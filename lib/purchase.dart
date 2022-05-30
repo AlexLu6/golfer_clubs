@@ -23,33 +23,33 @@ Future<void> initPlatformState() async {
   }*/
   //print('platformVersion: $platformVersion');
   // prepare
-//  var result = await FlutterInappPurchase.instance.initialize();
-//  print('result: $result');
+  var result = await FlutterInappPurchase.instance.initialize();
+  print('result: $result');
 
   // refresh items for android
   try {
     String msg = await FlutterInappPurchase.instance.consumeAll();
     print('consumeAllItems: $msg');
   } catch (err) {
-    //print('consumeAllItems error: $err');
+    print('consumeAllItems error: $err');
   }
 
   _conectionSubscription =
       FlutterInappPurchase.connectionUpdated.listen((connected) {
         isConnected = connected.connected!;
-        //print('connected: $connected');
+        print('connected: $connected');
   });
 
   _purchaseUpdatedSubscription =
       FlutterInappPurchase.purchaseUpdated.listen((productItem) {
         isOK = true;
-    //print('purchase-updated: $productItem');
+    print('purchase-updated: $productItem');
   });
 
   _purchaseErrorSubscription =
       FlutterInappPurchase.purchaseError.listen((purchaseError) {
         isErr = true;
-    //print('purchase-error: $purchaseError');
+    print('purchase-error: $purchaseError');
   });
 }
 
