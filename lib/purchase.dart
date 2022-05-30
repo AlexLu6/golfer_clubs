@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:flutter/foundation.dart'
   show defaultTargetPlatform, kIsWeb, TargetPlatform;
@@ -73,16 +72,16 @@ Future<void> closePlatformState() async {
   await FlutterInappPurchase.instance.finalize();
 }
 /*
-validateReceipt() async {
+validateReceipt(String transactionReceipt) async {
   var receiptBody = {
-    'receipt-data': '', //purchased.transactionReceipt,
+    'receipt-data': transactionReceipt,
     'password': '******'
   };
   bool isTest = true;
   var result = await validateReceiptIos(receiptBody, isTest);
 //  console.log(result);
-}
-*/
+}*/
+
 Widget purchaseBody() {
 
   final List<String> _productLists = defaultTargetPlatform == TargetPlatform.android ||  kIsWeb // Platform.isAndroid
