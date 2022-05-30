@@ -16,11 +16,11 @@ bool isConnected = false, isErr = false, isOK = false;
 Future<void> initPlatformState() async {
 //  String? platformVersion;
   // Platform messages may fail, so we use a try/catch PlatformException.
-  try {
+/*  try {
     platformVersion = await FlutterInappPurchase.instance.platformVersion;
   } on PlatformException {
     platformVersion = 'Failed to get platform version.';
-  }
+  }*/
   //print('platformVersion: $platformVersion');
   // prepare
   var result = await FlutterInappPurchase.instance.initialize();
