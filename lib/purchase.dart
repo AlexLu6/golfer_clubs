@@ -23,8 +23,8 @@ Future<void> initPlatformState() async {
   }*/
   //print('platformVersion: $platformVersion');
   // prepare
-  var result = await FlutterInappPurchase.instance.initialize();
-  print('result: $result');
+//  var result = await FlutterInappPurchase.instance.initialize();
+//  print('result: $result');
 
   // refresh items for android
   try {
