@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).usage,  // "Program Usage"
       Language.of(context).purchase
     ];
-    isExpired = Timestamp.fromDate(DateTime.parse(expiredDate)).compareTo(Timestamp.now()) < 0;
+    isExpired = Timestamp.fromDate(DateTime.parse(expiredDate.substring(0, 16))).compareTo(Timestamp.now()) < 0;
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle[_currentPageIndex]),
