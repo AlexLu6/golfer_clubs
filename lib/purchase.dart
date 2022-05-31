@@ -76,7 +76,7 @@ Future<void> closePlatformState() async {
 void validateReceipt(String transactionReceipt) async {
   var receiptBody = {
     'receipt-data': transactionReceipt,
-    'password': '******'
+    'password': '2928JRDN8X'
   };
   bool isTest = true;
   var result = await FlutterInappPurchase.instance.validateReceiptIos(receiptBody: receiptBody, isTest: isTest);
