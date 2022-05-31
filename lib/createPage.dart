@@ -75,16 +75,17 @@ class _GroupActPage extends MaterialPageRoute<bool> {
   _GroupActPage(var groupDoc, int uID, String _name, gendre _sex, double _handicap)
       : super(builder: (BuildContext context) {
 
-    Future<bool?> grantApplyDialog(String name) {
-      return showDialog<bool>(
+    Future<int?> grantApplyDialog(String name) {
+      return showDialog<int>(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text(Language.of(context).reply),
             content: Text(name + Language.of(context).applyGroup),
             actions: <Widget>[
-              TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(true)),
-              TextButton(child: Text("Reject"), onPressed: () => Navigator.of(context).pop(true))
+              TextButton(child: Text("OK"), onPressed: () => Navigator.of(context).pop(1)),
+              TextButton(child: Text("Reject"), onPressed: () => Navigator.of(context).pop(-1)),
+              TextButton(child: Text("Skip"), onPressed: () => Navigator.of(context).pop(0))
             ],
           );
         }
@@ -98,12 +99,12 @@ class _GroupActPage extends MaterialPageRoute<bool> {
         value.docs.forEach((result) async {
               // grant or refuse the apply of e['uid']
           var e = result.data();
-          bool? ans = await grantApplyDialog(await golferName(e['uid'] as int)!);
-          if (ans!) {
+          int? ans = await grantApplyDialog(await golferName(e['uid'] as int)!);
+          if (ans! > 0) {
             FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id)
               .update({'response': 'OK'});
             addMember(_gID, e['uid'] as int);
-          } else
+          } else if (ans < 0)
             FirebaseFirestore.instance.collection('ApplyQueue').doc(result.id)
               .update({'response': 'No'});
         });

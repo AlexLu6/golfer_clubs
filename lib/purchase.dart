@@ -86,7 +86,7 @@ void validateReceipt(String transactionReceipt) async {
 
 Widget purchaseBody() {
 
-  final List<String> _productLists = defaultTargetPlatform == TargetPlatform.android ||  kIsWeb // Platform.isAndroid
+  final List<String> _productLists = defaultTargetPlatform == TargetPlatform.android ||  kIsWeb // FlutterInappPurchase.Platform.isAndroid
       ? [
           'golfer_1_month_fee',
           'golfer_1_season_fee',
