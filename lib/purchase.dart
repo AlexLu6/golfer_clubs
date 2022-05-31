@@ -15,12 +15,12 @@ bool isConnected = false;
 Future<void> initPlatformState() async {
 //  String? platformVersion;
   // Platform messages may fail, so we use a try/catch PlatformException.
-/*  try {
+//  try {
     platformVersion = await FlutterInappPurchase.instance.platformVersion;
-  } on PlatformException {
-    platformVersion = 'Failed to get platform version.';
-  }*/
-  //print('platformVersion: $platformVersion');
+//  } on PlatformException {
+//    platformVersion = 'Failed to get platform version.';
+//  }
+  print('platformVersion: $platformVersion');
   // prepare
   var result = await FlutterInappPurchase.instance.initialize();
   print('result: $result');
@@ -57,6 +57,7 @@ Future<void> initPlatformState() async {
           expiredDate = expireDate.toString();
           prefs!.setString('expired', expiredDate);                
           FlutterInappPurchase.instance.consumeAll();
+          validateReceipt(productItem.transactionReceipt!);
   });
 
   _purchaseErrorSubscription =
@@ -71,16 +72,16 @@ Future<void> closePlatformState() async {
   _conectionSubscription.cancel();
   await FlutterInappPurchase.instance.finalize();
 }
-/*
-validateReceipt(String transactionReceipt) async {
+
+void validateReceipt(String transactionReceipt) async {
   var receiptBody = {
     'receipt-data': transactionReceipt,
     'password': '******'
   };
   bool isTest = true;
-  var result = await validateReceiptIos(receiptBody, isTest);
+  var result = await FlutterInappPurchase.instance.validateReceiptIos(receiptBody: receiptBody, isTest: isTest);
 //  console.log(result);
-}*/
+}
 
 Widget purchaseBody() {
 
