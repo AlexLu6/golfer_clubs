@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:flutter/foundation.dart'
   show defaultTargetPlatform, kIsWeb, TargetPlatform;
@@ -15,11 +16,11 @@ bool isConnected = false;
 Future<void> initPlatformState() async {
 //  String? platformVersion;
   // Platform messages may fail, so we use a try/catch PlatformException.
-//  try {
+  try {
     platformVersion = await FlutterInappPurchase.instance.platformVersion;
-//  } on PlatformException {
-//    platformVersion = 'Failed to get platform version.';
-//  }
+  } on PlatformException {
+    platformVersion = 'Failed to get platform version.';
+  }
   print('platformVersion: $platformVersion');
   // prepare
   var result = await FlutterInappPurchase.instance.initialize();
@@ -80,7 +81,7 @@ void validateReceipt(String transactionReceipt) async {
   };
   bool isTest = true;
   var result = await FlutterInappPurchase.instance.validateReceiptIos(receiptBody: receiptBody, isTest: isTest);
-//  console.log(result);
+  print(result);
 }
 
 Widget purchaseBody() {
