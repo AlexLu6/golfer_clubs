@@ -70,4 +70,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-storage'
+    def billing_version = "5.0.0"
+    implementation "com.android.billingclient:billing:$billing_version"
 }
