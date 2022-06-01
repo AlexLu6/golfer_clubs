@@ -85,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
         if (expiredDate == '') {
           expiredDate = items['expired'].toDate().toString();
           prefs!.setString('expired', expiredDate);
-          print(expiredDate);
         }
         isExpired = items['expired'].compareTo(Timestamp.now()) < 0;
         setState(() => isRegistered = true);
@@ -111,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Language.of(context).usage,  // "Program Usage"
       Language.of(context).purchase
     ];
+    print(expiredDate);
     if (expiredDate.length > 0)
     isExpired = Timestamp.fromDate(DateTime.parse(expiredDate.substring(0, 16))).compareTo(Timestamp.now()) < 0;
     return Scaffold(
