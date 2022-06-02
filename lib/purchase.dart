@@ -58,7 +58,7 @@ Future<void> initPlatformState() async {
           expiredDate = expireDate.toString();
           prefs!.setString('expired', expiredDate);                
           FlutterInappPurchase.instance.consumeAll();
-          validateReceipt(productItem.transactionReceipt!);
+          validateReceipt(productItem);
   });
 
   _purchaseErrorSubscription =
@@ -74,13 +74,22 @@ Future<void> closePlatformState() async {
   await FlutterInappPurchase.instance.finalize();
 }
 
-void validateReceipt(String transactionReceipt) async {
+void validateReceipt(PurchasedItem purchased) async {
   var receiptBody = {
-    'receipt-data': transactionReceipt,
+    'receipt-data': purchased.transactionReceipt!,
     'password': '2928JRDN8X'
   };
   bool isTest = true;
-  var result = await FlutterInappPurchase.instance.validateReceiptIos(receiptBody: receiptBody, isTest: isTest);
+  var result;
+  String accessToken ='';
+  if (defaultTargetPlatform == TargetPlatform.android)
+    result = await FlutterInappPurchase.instance.validateReceiptAndroid(
+      packageName: 'com.niahome.golferclub', 
+      productId: purchased.productId!, 
+      productToken: purchased.purchaseToken!, 
+      accessToken: accessToken);
+  else 
+    result = await FlutterInappPurchase.instance.validateReceiptIos(receiptBody: receiptBody, isTest: isTest);
   print(result);
 }
 
