@@ -269,6 +269,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       rows: buildRows(),
                     ))
                   ),
+                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
                   Visibility(
                     visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !isBackup && !scoreReady,
                     child: ElevatedButton(
@@ -305,7 +306,6 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       rows: buildScoreRows(),
                     ))
                   ),
-                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
                   Visibility(
                     visible: teeOffPass && alreadyIn && !isBackup && !scoreDone,
                     child : ElevatedButton(
