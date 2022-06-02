@@ -369,7 +369,7 @@ class _MyHomePageState extends State<MyHomePage> {
           visible:isRegistered,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
             Text(Language.of(context).handicap + ": " + userHandicap.toString().substring(0, min(userHandicap.toString().length, 5)), style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(expiredDate.substring(0, 10))
+            Text('Expired: ' + expiredDate.substring(0, 10))
           ])
         ),
         SizedBox(height: 10.0),
