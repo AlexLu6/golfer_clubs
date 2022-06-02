@@ -305,6 +305,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       rows: buildScoreRows(),
                     ))
                   ),
+                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
                   Visibility(
                     visible: teeOffPass && alreadyIn && !isBackup && !scoreDone,
                     child : ElevatedButton(
@@ -338,8 +339,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                       onPressed: () => Navigator.of(context).pop(1)
                     )
                   ),
-                  const SizedBox(height: 4.0),
-                  Text(Language.of(context).actRemarks + activity.data()!['remarks']),
+                  const SizedBox(height: 4.0)
                 ]));
               }),
               floatingActionButton: Visibility(
