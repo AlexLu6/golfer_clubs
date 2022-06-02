@@ -270,6 +270,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                     ))
                   ),
                   Text(Language.of(context).actRemarks + activity.data()!['remarks']),
+                  const SizedBox(height: 4.0),
                   Visibility(
                     visible: ((activity.data()!['golfers'] as List).length > 4) && alreadyIn && !isBackup && !scoreReady,
                     child: ElevatedButton(
