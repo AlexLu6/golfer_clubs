@@ -365,9 +365,16 @@ class _MyHomePageState extends State<MyHomePage> {
         SizedBox(height: 8.0),
         golferSex,
         SizedBox(height: 8.0),
-        Text(isRegistered ? Language.of(context).handicap + ": " + userHandicap.toString().substring(0, min(userHandicap.toString().length, 5)) : '', style: TextStyle(fontWeight: FontWeight.bold)),
+        Visibility(
+          visible:isRegistered,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+            Text(Language.of(context).handicap + ": " + userHandicap.toString().substring(0, min(userHandicap.toString().length, 5)), style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(expiredDate.substring(0, 10))
+          ])
+        ),
         SizedBox(height: 10.0),
-        loginButton
+        loginButton,
+        SizedBox(height: 10.0)
       ],
     );
   }
