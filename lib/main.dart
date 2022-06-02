@@ -248,10 +248,10 @@ class _MyHomePageState extends State<MyHomePage> {
     Locale myLocale = Localizations.localeOf(context);
     final golferName = TextFormField(
       initialValue: userName,
-//      key: Key(_name),
+//      key: Key(userName),
       showCursor: true,
       onChanged: (String value) => setState(() => userName = value),
-      //keyboardType: TextInputType.name,
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(labelText: Language.of(context).name, hintText: Language.of(context).realName, icon: Icon(Icons.person), border: UnderlineInputBorder()),
     );
 
