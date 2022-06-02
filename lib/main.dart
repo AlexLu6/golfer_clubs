@@ -281,15 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   }))),
     ], mainAxisAlignment: MainAxisAlignment.center);
     final loginButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: Material(
-        borderRadius: BorderRadius.circular(30.0),
-        shadowColor: Colors.lightBlueAccent.shade100,
-        elevation: 5.0,
-        child: MaterialButton(
-            minWidth: 200.0,
-            height: 45.0,
-            color: Colors.green,
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: ElevatedButton(
             child: Text(
               isUpdate ? Language.of(context).modify : Language.of(context).register,
               style: TextStyle(color: Colors.white, fontSize: 20.0),
@@ -350,7 +343,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
             }
         )
-      ),
     );
     return ListView(
       shrinkWrap: true,
