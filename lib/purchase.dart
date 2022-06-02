@@ -124,7 +124,8 @@ Widget purchaseBody() {
               subtitle: Text('${_items[i].productId}'),
               trailing: Icon(Icons.payment),
               onTap: () async {
-                await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!);
+                if (isExpired)
+                  await FlutterInappPurchase.instance.requestPurchase(_items[i].productId!);
               },
             ));
           }
