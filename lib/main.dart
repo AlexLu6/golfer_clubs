@@ -358,7 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         SizedBox(height: 8.0),
         logo,
-        SizedBox(height: 24.0),
+        SizedBox(height: 16.0),
         golferName,
         SizedBox(height: 8.0),
         golferPhone,
