@@ -83,11 +83,12 @@ void validateReceipt(PurchasedItem purchased) async {
   var result;
   String accessToken ='';
   if (defaultTargetPlatform == TargetPlatform.android)
-    result = await FlutterInappPurchase.instance.validateReceiptAndroid(
+/*    result = await FlutterInappPurchase.instance.validateReceiptAndroid(
       packageName: 'com.niahome.golferclub', 
       productId: purchased.productId!, 
       productToken: purchased.purchaseToken!, 
-      accessToken: accessToken);
+      accessToken: accessToken);*/
+      result = await FlutterInappPurchase.instance.consumePurchaseAndroid(purchased.purchaseToken!);
   else 
     result = await FlutterInappPurchase.instance.validateReceiptIos(receiptBody: receiptBody, isTest: isTest);
   print(result);
