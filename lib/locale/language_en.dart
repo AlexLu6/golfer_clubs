@@ -21,7 +21,7 @@ class LanguageEn extends Language {
   String get femaleNote => '(F)';
   String get register => 'Register';
   String get modify => 'Modify';
-  String get handicap => 'Handicap';
+  String get handicap => 'Handicap: ';
 
   String get region => 'Region: ';
   String get manager => 'Manager: ';
@@ -40,6 +40,7 @@ class LanguageEn extends Language {
   String get store => 'Store';
   String get total => 'Total';
   String get net => 'Net';
+  String get expired => 'Expired: ';
 
   String get createNewActivity => 'Create New Activity';
   String get editActivity => 'Edit Activity';

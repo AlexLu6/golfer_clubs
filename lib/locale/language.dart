@@ -44,6 +44,7 @@ abstract class Language {
   String get store;
   String get total;
   String get net;
+  String get expired;
 
   String get createNewActivity;
   String get editActivity;

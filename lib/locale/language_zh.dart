@@ -21,7 +21,7 @@ class LanguageZh extends Language {
   String get femaleNote => '(女)';
   String get register => '註冊';
   String get modify => '修改';
-  String get handicap => '差點';
+  String get handicap => '差點: ';
 
   String get region => '地區: ';
   String get manager => '總幹事: ';
@@ -40,6 +40,7 @@ class LanguageZh extends Language {
   String get store => '儲存';
   String get total => '總桿';
   String get net => '淨桿';
+  String get expired => '效期: ';
 
   String get createNewActivity => '建立新活動';
   String get editActivity => '修改活動';
