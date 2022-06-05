@@ -77,7 +77,7 @@ Future<void> closePlatformState() async {
 void validateReceipt(PurchasedItem purchased) async {
   var receiptBody = {
     'receipt-data': purchased.transactionReceipt!,
-    'password': '2928JRDN8X'
+    'password': 'MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgezW3JgrQgyWVwfrUFs9pNylWNsQSrT+3h/+BLrCoitOgCgYIKoZIzj0DAQehRANCAAQiTdJ9Nk3TFJi5EE37IbPF1QfdIma+uXfQK0M8hs3XdbPNmPwjM/x2yAFWComxE6LudI9nLIJ7XQGb/Pfk9csr'
   };
   bool isTest = true;
   var result;
