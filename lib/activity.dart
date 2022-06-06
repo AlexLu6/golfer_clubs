@@ -385,6 +385,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                         future: getOrderedCourse(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
+                            locationGranted();
                             return const CircularProgressIndicator();
                           } else {
                             List<CourseItem> courses = snapshot.data as List<CourseItem>;

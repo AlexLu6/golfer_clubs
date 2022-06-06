@@ -560,9 +560,10 @@ class _MyHomePageState extends State<MyHomePage> {
       future: getOrderedCourse(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
+          locationGranted();
           return const CircularProgressIndicator();
         } else {
-          List<CourseItem> courses = snapshot.data as List<CourseItem>;
+          List<CourseItem> courses = snapshot.data as List<CourseItem>;         
           sortByDistance(courses);
           return ListView.builder(
             itemCount: courses.length,
