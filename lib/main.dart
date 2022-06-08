@@ -261,6 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //      key: Key(_phone),
       onChanged: (String value) => setState(() => userPhone = value.trim()),
       keyboardType: TextInputType.phone,
+      style: TextStyle(fontSize: 24),
       decoration: InputDecoration(labelText: Language.of(context).mobile, icon: Icon(Icons.phone), border: UnderlineInputBorder()),
     );
     final golferSex = Row(children: <Widget>[
