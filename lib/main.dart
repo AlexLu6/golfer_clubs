@@ -252,7 +252,8 @@ class _MyHomePageState extends State<MyHomePage> {
       showCursor: true,
       onChanged: (String value) => setState(() => userName = value.trim()),
       keyboardType: TextInputType.name,
-      decoration: InputDecoration(labelText: Language.of(context).name, labelStyle: TextStyle(fontSize: 24), hintText: Language.of(context).realName, icon: Icon(Icons.person), border: UnderlineInputBorder()),
+      style: TextStyle(fontSize: 24),
+      decoration: InputDecoration(labelText: Language.of(context).name, hintText: Language.of(context).realName, icon: Icon(Icons.person), border: UnderlineInputBorder()),
     );
 
     final golferPhone = TextFormField(
