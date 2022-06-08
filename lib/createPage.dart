@@ -24,13 +24,13 @@ class _NewGroupPage extends MaterialPageRoute<bool> {
                     child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   TextFormField(
                     showCursor: true,
-                    onChanged: (String value) => setState(() => _groupName = value),
+                    onChanged: (String value) => setState(() => _groupName = value.trim()),
                     //keyboardType: TextInputType.name,
                     decoration: InputDecoration(labelText: Language.of(context).groupName, icon: Icon(Icons.group), border: UnderlineInputBorder()),
                   ),
                   TextFormField(
                     showCursor: true,
-                    onChanged: (String value) => setState(() => _region = value),
+                    onChanged: (String value) => setState(() => _region = value.trim()),
                     //keyboardType: TextInputType.name,
                     decoration: InputDecoration(labelText: Language.of(context).groupActRegion, icon: Icon(Icons.place), border: UnderlineInputBorder()),
                   ),
@@ -253,14 +253,14 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
                   TextFormField(
                     showCursor: true,
                     initialValue: (groupDoc.data()! as Map)['Name'],
-                    onChanged: (String value) => setState(() => _groupName = value),
+                    onChanged: (String value) => setState(() => _groupName = value.trim()),
                     //keyboardType: TextInputType.name,
                     decoration: InputDecoration(labelText: Language.of(context).groupName, icon: Icon(Icons.group), border: UnderlineInputBorder()),
                   ),
                   TextFormField(
                     showCursor: true,
                     initialValue: (groupDoc.data()! as Map)['region'],
-                    onChanged: (String value) => setState(() => _region = value),
+                    onChanged: (String value) => setState(() => _region = value.trim()),
                     //keyboardType: TextInputType.name,
                     decoration: InputDecoration(labelText: Language.of(context).groupActRegion, icon: Icon(Icons.place), border: UnderlineInputBorder()),
                   ),
@@ -388,13 +388,13 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                 TextFormField(
                   showCursor: true,
-                  onChanged: (String value) => _courseName = value,
+                  onChanged: (String value) => _courseName = value.trim(),
                   //keyboardType: TextInputType.name,
                   decoration: InputDecoration(labelText: Language.of(context).courseName, icon: Icon(Icons.golf_course), border: UnderlineInputBorder()),
                 ),
                 TextFormField(
                   showCursor: true,
-                  onChanged: (String value) => _region = value,
+                  onChanged: (String value) => _region = value.trim(),
                   decoration: InputDecoration(labelText: "Region:", icon: Icon(Icons.place), border: UnderlineInputBorder()),
                 ),
                 TextFormField(
@@ -409,7 +409,7 @@ class _NewGolfCoursePage extends MaterialPageRoute<bool> {
                 ),
                 TextFormField(
                   showCursor: true,
-                  onChanged: (String value) => _photoURL = value,
+                  onChanged: (String value) => _photoURL = value.trim(),
                   //keyboardType: TextInputType.name,
                   decoration: InputDecoration(labelText: "Photo URL:", icon: Icon(Icons.photo), border: UnderlineInputBorder()),
                 ),
