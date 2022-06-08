@@ -506,7 +506,7 @@ class _NewActivityPage extends MaterialPageRoute<bool> {
                             "fee": _fee,
                             "remarks": _remarks,
                             'subgroups': [],
-                            "golfers": _includeMe ? [{"uid": uid, "name": name, "scores": []}] : []
+                            "golfers": _includeMe ? [{"uid": uid, "name": name! + ((userSex == gendre.Female) ? Language.of(context).femaleNote : ''), "scores": []}] : []
                           }).then((value) {
                             if (_includeMe) {
                               myActivities.add(value.id);
