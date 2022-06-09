@@ -534,10 +534,11 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
             blist.add(element['uid']);
           });
           if (blist.length > 0)
-            FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
+            FirebaseFirestore.instance.collection('Golfers').get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
-                if (((actDoc.data()! as Map)['golfers'] as List).indexOf(items['uid'] as int) < 0)
+                int uid = items['uid'] as int;
+                if ((blist.indexOf(uid) >= 0) && (((actDoc.data()! as Map)['golfers'] as List).indexOf(uid) < 0))
                   golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
               });
             });
