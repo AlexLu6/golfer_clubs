@@ -487,7 +487,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: snapshot.data!.docs.map((doc) {
                     if ((doc.data()! as Map)["Name"] == null) {
                       return const LinearProgressIndicator();
-                    } else if (myGroups.contains((doc.data()! as Map)["gid"] as int)) {
+                    } else if (!myGroups.contains((doc.data()! as Map)["gid"] as int)) {
                       return const SizedBox.shrink();
                     } else {
                       _gID = (doc.data()! as Map)["gid"] as int;
