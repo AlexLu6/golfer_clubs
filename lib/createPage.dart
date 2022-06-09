@@ -237,10 +237,11 @@ class _EditGroupPage extends MaterialPageRoute<bool> {
           var blist = (groupDoc.data()! as Map)['members'] as List;
 
           if (golfers.isEmpty) {
-            FirebaseFirestore.instance.collection('Golfers').where('uid', whereIn: blist).get().then((value) {
+            FirebaseFirestore.instance.collection('Golfers').get().then((value) {
               value.docs.forEach((result) {
                 var items = result.data();
-                if (((groupDoc.data()! as Map)['managers'] as List).indexOf(items['uid'] as int) < 0)
+                int uid = items['uid'] as int;
+                if ((blist.indexOf(uid) >= 0) && (((groupDoc.data()! as Map)['managers'] as List).indexOf(uid) < 0))
                   golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
               });
             });
