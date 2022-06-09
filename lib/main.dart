@@ -478,7 +478,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget? myGroupBody() {
     return myGroups.isEmpty ? ListView()
         : StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('GolferClubs').where('gid', whereIn: myGroups).snapshots(),
+            stream: FirebaseFirestore.instance.collection('GolferClubs').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator();
@@ -487,6 +487,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: snapshot.data!.docs.map((doc) {
                     if ((doc.data()! as Map)["Name"] == null) {
                       return const LinearProgressIndicator();
+                    } else if (myGroups.contains((doc.data()! as Map)["gid"] as int)) {
+                      return const SizedBox.shrink();
                     } else {
                       _gID = (doc.data()! as Map)["gid"] as int;
                       if (((doc.data()! as Map)["members"] as List).indexOf(golferID) < 0) {
