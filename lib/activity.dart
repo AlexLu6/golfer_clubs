@@ -538,7 +538,7 @@ class _EditActivityPage extends MaterialPageRoute<bool> {
               value.docs.forEach((result) {
                 var items = result.data();
                 int uid = items['uid'] as int;
-                if ((blist.indexOf(uid) >= 0) && (((actDoc.data()! as Map)['golfers'] as List).indexOf(uid) < 0))
+                if (blist.indexOf(uid) >= 0)
                   golfers.add(NameID(items['name'] + '(' + items['phone'] + ')', items['uid'] as int));
               });
             });
