@@ -521,7 +521,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             }),
                         onTap: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
-                          Navigator.push(context, groupActPage(doc, golferID, userName, userSex, userHandicap));
+                          Navigator.push(context, groupActPage(doc, golferID, userName, userSex, userHandicap)).then((value) {
+                            setState(() {
+                            // update badge
+                            });
+                          });
                         },
                         onLongPress: () {
                           _gID = (doc.data()! as Map)["gid"] as int;
