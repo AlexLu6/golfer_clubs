@@ -820,7 +820,7 @@ class _NewScorePage extends MaterialPageRoute<bool> {
                             });
                             if (complete) {
                               myScores.insert(0, {
-                                'date': DateTime.now().toString().substring(0, 16),
+                                'date': DateTime.now().toString().substring(0, 11),
                                 'course': course['name'] + (course['zones'].length > 2 ? '(${course['zones'][zone0]['name']}, ${course['zones'][zone1]['name']})' : ''),
                                 'pars': pars,
                                 'scores': scores,
