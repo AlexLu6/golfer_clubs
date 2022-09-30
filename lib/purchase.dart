@@ -81,7 +81,7 @@ void validateReceipt(PurchasedItem purchased) async {
     'receipt-data': purchased.transactionReceipt!,
     'password': 'MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgezW3JgrQgyWVwfrUFs9pNylWNsQSrT+3h/+BLrCoitOgCgYIKoZIzj0DAQehRANCAAQiTdJ9Nk3TFJi5EE37IbPF1QfdIma+uXfQK0M8hs3XdbPNmPwjM/x2yAFWComxE6LudI9nLIJ7XQGb/Pfk9csr'
   };
-  bool isTest = true;
+  bool isTest = false;
   var result;
   String accessToken ='';
   if (defaultTargetPlatform == TargetPlatform.android)
