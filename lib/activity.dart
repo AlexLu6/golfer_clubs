@@ -45,8 +45,8 @@ Widget activityBody() {
                                   return Text(snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
                               }),
                           subtitle: Text(Language.of(context).teeOff + ((doc.data()! as Map)['teeOff']).toDate().toString().substring(0, 16) + '\n' + 
-                                        Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + 
-                                        Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + "\t" + 
+                                        Language.of(context).max + (doc.data()! as Map)['max'].toString() + ' ' + 
+                                        Language.of(context).now + ((doc.data()! as Map)['golfers'] as List).length.toString() + " " + 
                                         Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
                           leading: FutureBuilder(
                               future: coursePhoto((doc.data()! as Map)['cid'] as int),
@@ -236,7 +236,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                   decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(netPhoto), fit: BoxFit.cover)),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   const SizedBox(height: 10.0),
-                  Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + '\t' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
+                  Text(Language.of(context).teeOff + activity.data()!['teeOff'].toDate().toString().substring(0, 16) + ' ' + Language.of(context).fee + activity.data()!['fee'].toString(), style: TextStyle(fontSize: 20)),
                   const SizedBox(height: 10.0),
                   FutureBuilder(
                       future: courseBody(activity.data()!['cid'] as int),
@@ -245,7 +245,7 @@ class ShowActivityPage extends MaterialPageRoute<int> {
                           return const LinearProgressIndicator();
                         else {
                           course = snapshot2.data! as Map;
-                          return Text(course['name'] + "\t" + Language.of(context).max + activity.data()!['max'].toString(), style: TextStyle(fontSize: 20));
+                          return Text(course['name'] + " " + Language.of(context).max + activity.data()!['max'].toString(), style: TextStyle(fontSize: 20));
                         }
                       }),
                   const SizedBox(height: 10.0),
