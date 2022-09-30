@@ -145,7 +145,7 @@ class _GroupActPage extends MaterialPageRoute<bool> {
                                 return Text(cName = snapshot2.data!.toString(), style: TextStyle(fontSize: 20));
                             }
                           ),
-                        subtitle: Text(Language.of(context).teeOff + (doc.data()! as Map)['teeOff']!.toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + '\t' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List<dynamic>).length.toString() + "\t" + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
+                        subtitle: Text(Language.of(context).teeOff + (doc.data()! as Map)['teeOff']!.toDate().toString().substring(0, 16) + '\n' + Language.of(context).max + (doc.data()! as Map)['max'].toString() + ' ' + Language.of(context).now + ((doc.data()! as Map)['golfers'] as List<dynamic>).length.toString() + " " + Language.of(context).fee + (doc.data()! as Map)['fee'].toString()),
                         leading: FutureBuilder(
                           future: coursePhoto((doc.data()! as Map)['cid'] as int),
                           builder: (context, snapshot3) {
